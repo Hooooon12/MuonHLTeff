@@ -43,6 +43,7 @@ void calculateEff_fix(TString input, TString output){
 
     fChain->Add(input);
 
+    double genEventWeight;
     int truePU;
     int nGenParticle;
     int genParticle_ID[5000];
@@ -97,6 +98,7 @@ void calculateEff_fix(TString input, TString output){
     vector<double> *hltIter3IterL3FromL1MuonTrack_eta = 0;
     vector<double> *hltIter3IterL3FromL1MuonTrack_phi = 0;
     
+    fChain->SetBranchAddress("genEventWeight",&genEventWeight);
     fChain->SetBranchAddress("truePU",&truePU);
     fChain->SetBranchAddress("nGenParticle",&nGenParticle);
     fChain->SetBranchAddress("genParticle_ID",&genParticle_ID);

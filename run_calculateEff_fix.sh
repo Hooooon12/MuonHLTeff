@@ -18,6 +18,10 @@ while read -r line;
                 MYLIST+=($word);
             done;
 
+        if [[ ${MYLIST[0]} == *"#"* ]]; then
+            continue;
+        fi
+
         ####Test code start####
         SCRIPT=condor_calculateEff_fix_${MYLIST[2]}.sh
         echo "#!/bin/bash" > $SCRIPT
