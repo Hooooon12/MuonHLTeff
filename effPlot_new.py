@@ -14,13 +14,41 @@ import os, array #JH : to use rebin, see https://root-forum.cern.ch/t/how-to-reb
 import argparse
 from ROOT import *
 
+def TGraph_To_TH1(hist_frame, graph):
+  this_hist = hist_frame.Clone()
+  Nbins = hist_frame.GetNbinsX()
+
+  for i in range(Nbins+2):
+    this_hist.SetBinContent(i, 0)
+    this_hist.SetBinError(i, 0)
+
+  for i in range(graph.GetN()):
+    this_hist.SetBinContent(i+1,graph.GetY()[i])
+
+  #sanity check
+  #print Nbins, graph.GetN()
+  #if not Nbins == graph.GetN():
+  #  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  #  return
+  #print "original graph contents / converted hist contents"
+  #for i in range(graph.GetN()):
+  #  print graph.GetY()[i] / this_hist.GetBinContent(i+1)
+  #  if not graph.GetY()[i] / this_hist.GetBinContent(i+1) == 1.:
+  #    print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  #    return
+
+  return this_hist
+
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--process', nargs='*', dest="proc", default=["DY","TT","Jpsi","QCD"], help="physics process: DY, TT, Jpsi, QCD")
 parser.add_argument('-f', '--filter', nargs='*', dest="fltr", default=["WP","N"], help="filtering method: WP, N")
-parser.add_argument('-m', '--measure', nargs='*', dest="measure", default=["trackeff","eff","purity","profile","Ntrackfrac"], help="what to measure: trackeff, eff, purity, profile, Ntrackfrac")
+parser.add_argument('-m', '--measure', nargs='*', dest="measure", default=["trackeff","eff","purity","dR","profile","Ntrackfrac"], help="what to measure: trackeff, eff, purity, profile, Ntrackfrac")
 parser.add_argument('-v', '--variable', nargs='*', dest="var", default=["pt","eta","phi","truePU"], help="measure as a function of: pt, eta, phi, truePU")
 parser.add_argument('-d', '--denominator', nargs='*', dest="den", default=["hardP","hardP_L1"], help="denominator of efficiency: hardP, hardP_L1")
-parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3"], help="numerator of efficiency or denominator of purity: L3NoID, L3")
+parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1", "L1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1), L1")
 parser.add_argument('-t', '--trigger', nargs='*', dest="trig", default=["single","double"], help="which trigger to check: single(IsoMu24), double(Mu17Mu8)")
 args = parser.parse_args()
 
@@ -37,7 +65,6 @@ Xtitle = {'pt' : "#scale[1.8]{p_{T}(#mu) [GeV]}", 'eta' : "#scale[1.8]{#eta(#mu)
 #pt Xaxis range
 Xrange = {'single' : [20., 200.], 'double' : [5., 200.], 'Jpsi' : [0., 22.], 'QCD' : [0., 55.]}
 
-
 #Graph colors
 graphColors = [kRed+1, kRed-2, kAzure+2, kAzure-1, kViolet+5]
 
@@ -47,12 +74,12 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
   #Call the input root files
   if this_fltr == "WP":
     #this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_WP02.root","result_"+this_proc+"_WP04.root","result_"+this_proc+"_WP10.root"]
-    this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_WP02.root","Run3_result_"+this_proc+"_WP04.root","Run3_result_"+this_proc+"_WP10.root"]
-    #this_files = ["fix_Run3_result_"+this_proc+"_WP00.root","fix_Run3_result_"+this_proc+"_WP02.root","fix_Run3_result_"+this_proc+"_WP04.root","fix_Run3_result_"+this_proc+"_WP10.root"]
+    #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_WP02.root","Run3_result_"+this_proc+"_WP04.root","Run3_result_"+this_proc+"_WP10.root"]
+    this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_WP02.root","new_Run3_result_"+this_proc+"_WP04.root","new_Run3_result_"+this_proc+"_WP10.root"]
   elif this_fltr == "N":
     #this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_N50.root","result_"+this_proc+"_N10.root","result_"+this_proc+"_N5.root"]
-    this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_N50.root","Run3_result_"+this_proc+"_N10.root","Run3_result_"+this_proc+"_N5.root","Run3_result_"+this_proc+"_N0.root"]
-    #this_files = ["fix_Run3_result_"+this_proc+"_WP00.root","fix_Run3_result_"+this_proc+"_N50.root","fix_Run3_result_"+this_proc+"_N10.root","fix_Run3_result_"+this_proc+"_N5.root","fix_Run3_result_"+this_proc+"_N0.root"]
+    #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_N50.root","Run3_result_"+this_proc+"_N10.root","Run3_result_"+this_proc+"_N5.root","Run3_result_"+this_proc+"_N0.root"]
+    this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_N50.root","new_Run3_result_"+this_proc+"_N10.root","new_Run3_result_"+this_proc+"_N5.root"]#,"new_Run3_result_"+this_proc+"_N0.root"] #JH : Comment here when measuring Iter2 track eff
   
   files = [TFile.Open(this_files[i]) for i in range(len(this_files))]
   
@@ -95,8 +122,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
     if this_measure == "purity":
       ptval = array.array('d', [20, 25, 30, 40, 50, 60, 120, 200]) #JH : To adjust y range (relatively low purity at low pt makes plot range inconsistent)
     if this_proc == "Jpsi":
-      #ptval = array.array('d', [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20]) #JH
-      ptval = array.array('d', [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) #JH
+      ptval = array.array('d', [2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20]) #JH
+      #ptval = array.array('d', [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) #JH
     if this_proc == "QCD":
       ptval = array.array('d', [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]) #JH
     etaval = array.array('d', [-2.4, -2.1, -1.6, -1.2, -0.9, -0.3, -0.2, 0.2, 0.3, 0.9, 1.2, 1.6, 2.1, 2.4])
@@ -118,7 +145,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #  print i,"th bin center :", den_var_eff_nums[0].GetBinCenter(i),", content :", den_var_eff_nums[0].GetBinContent(i)
 
 
-      ####First, check the denominators are consistent each other among the WPs.
+    ######First, check the denominators are consistent each other among the WPs.
       c_den_var = TCanvas("c_den_var","c_den_var",200,200,900,800)
       c_den_var.cd()
       
@@ -235,18 +262,12 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         gr_ratio_den_var.Draw(option_rat)
         gr_ratio_den_vars.append(gr_ratio_den_var) #JH : I really don't know why but this appending prevent the bug (???)
 
-      c_den_var.SaveAs("new_Run3_newplots/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
+      #c_den_var.SaveAs("new_Run3_newplots/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
+      c_den_var.SaveAs("test/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
 
 
 
-
-
-
-
-
-
-
-      ####Then, check whether the numerators also show the efficiency-increasing behavior.
+    ######Then, check whether the numerators also show the efficiency-increasing behavior.
       c_den_var_num = TCanvas("c_den_var_num","c_den_var_num",200,200,900,800)
       c_den_var_num.cd()
       
@@ -337,7 +358,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
         gr_ratio_den_var_num = TGraphAsymmErrors(len(vals[this_var])-1)
         #gr_ratio_den_var_num.Divide(den_var_eff_nums[irat],den_var_eff_nums[0],"cl=0.683 b(1,1) mode") #JH : BayesDivide. see https://root.cern.ch/doc/master/classTGraphAsymmErrors.html#a78cd209f4da9a169848ab23f539e1c94
-        gr_ratio_den_var_num.Divide(den_var_eff_nums[irat],den_var_eff_nums[0],"pois") #JH : "pois" interpret two histos as independent, not the efficiency. (which will return error if >1. see https://root.cern.ch/doc/master/classTGraphAsymmErrors.html#a78cd209f4da9a169848ab23f539e1c94)
+        gr_ratio_den_var_num.Divide(den_var_eff_nums[irat],den_var_eff_nums[0],"pois") #JH : "pois" interpret two histos as independent, not the efficiency. (which will return "<TROOT::TEfficiency::CheckEntries>: Histograms are not consistent: passed bin content > total bin content" error if >1. see https://root.cern.ch/doc/master/classTGraphAsymmErrors.html#a78cd209f4da9a169848ab23f539e1c94)
        
         gr_ratio_den_var_num.SetMarkerStyle(20)
         gr_ratio_den_var_num.SetMarkerColor(graphColors[irat])
@@ -358,24 +379,22 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
             gr_ratio_den_var_num.GetXaxis().SetRangeUser(Xrange[this_trig][0],Xrange[this_trig][1]) #JH : Xrange['single'] or Xrange['double']
             if this_proc == "Jpsi" or this_proc == "QCD":
               gr_ratio_den_var_num.GetXaxis().SetRangeUser(Xrange[this_proc][0],Xrange[this_proc][1]) #JH
-          #yran1 = TMath.MinElement(len(gr_ratio_den_var_num.GetY()),gr_ratio_den_var_num.GetY())*0.98 #JH
-          #yran2 = TMath.MaxElement(len(gr_ratio_den_var_num.GetY()),gr_ratio_den_var_num.GetY())*1.02 #JH
-          #gr_ratio_den_var_num.GetYaxis().SetRangeUser(yran1,yran2) #JH
-          gr_ratio_den_var_num.GetYaxis().SetRangeUser(0.999,1.001) #JH
+          if "Iter2" in this_num:
+            yran1 = TMath.MinElement(len(gr_ratio_den_var_num.GetY()),gr_ratio_den_var_num.GetY())*0.95 #JH
+            yran2 = TMath.MaxElement(len(gr_ratio_den_var_num.GetY()),gr_ratio_den_var_num.GetY())*2. #JH : Iter2 eff drop
+            gr_ratio_den_var_num.GetYaxis().SetRangeUser(yran1,yran2) #JH
+          else:
+            gr_ratio_den_var_num.GetYaxis().SetRangeUser(0.999,1.001) #JH
 
         gr_ratio_den_var_num.Draw(option_rat)
         gr_ratio_den_var_nums.append(gr_ratio_den_var_num) #JH : I really don't know why but this appending prevent the bug (???)
 
-      c_den_var_num.SaveAs("new_Run3_newplots/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
+      #c_den_var_num.SaveAs("new_Run3_newplots/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
+      c_den_var_num.SaveAs("test/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
 
 
 
-
-
-
-
-
-      ####Now start to calculate efficiency
+    ######Now start to calculate efficiency
 
       #print "canvas name : " + this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num  
       c_den_var_eff_num = TCanvas("c_den_var_eff_num","c_den_var_eff_num",200,200,900,800)
@@ -409,10 +428,6 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           gr_den_var_eff_num.GetXaxis().SetLabelSize(0.)
           gr_den_var_eff_num.GetYaxis().SetLabelSize(0.025)
           gr_den_var_eff_num.GetYaxis().SetTitle("Efficiency")
-          #if this_trig == "single":
-          #  gr_den_var_eff_num.GetXaxis().SetRangeUser(20.,200.) #JH : TODO
-          #if this_trig == "double":
-          #  gr_den_var_eff_num.GetXaxis().SetRangeUser(5.,200.) #JH : TODO
           if this_var == "pt": #JH : You need this line, because I want to customize ONLY pt bins, not other bins.
             gr_den_var_eff_num.GetXaxis().SetRangeUser(Xrange[this_trig][0],Xrange[this_trig][1]) #JH : Xrange['single'] or Xrange['double']
             if this_proc == "Jpsi" or this_proc == "QCD":
@@ -422,6 +437,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           if this_proc == "Jpsi":
             if this_fltr == "N":
               yran2 = TMath.MaxElement(len(gr_den_var_eff_num.GetY()),gr_den_var_eff_num.GetY())*1.05
+          if "Iter2" in this_num:
+            yran1 = TMath.MinElement(len(gr_den_var_eff_num.GetY()),gr_den_var_eff_num.GetY())*0.95 #JH : You cannot use gr.GetMinimum() or gr.GetMaximum. see https://root-forum.cern.ch/t/tgraph-getmaximum-getminimum/8867/2
+            yran2 = TMath.MaxElement(len(gr_den_var_eff_num.GetY()),gr_den_var_eff_num.GetY())*2. #JH : Iter2 eff drop
+
           gr_den_var_eff_num.GetYaxis().SetRangeUser(yran1,yran2) #JH : TODO
           
         gr_den_var_eff_num.Draw(option_gr)
@@ -470,6 +489,15 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       for irat in reversed(range(len(this_den_vars))):
         option_rat = "P SAME"
 
+        #JH : Use below if you want to use Divide (exploit various errors). but meaningless if ratio > 1. Then you can only use "pois" error, not the other errors.
+
+        #hist_den_var_eff_nums = []
+        #for i in range(len(gr_den_var_eff_nums)):
+        #  hist_den_var_eff_nums.append(TGraph_To_TH1(den_var_eff_nums[0], gr_den_var_eff_nums[i]))
+
+        #gr_ratio_den_var_eff_num = TGraphAsymmErrors(len(vals[this_var])-1)
+        #gr_ratio_den_var_eff_num.Divide(hist_den_var_eff_nums[irat],hist_den_var_eff_nums[0],"pois") #JH : "pois" interpret two histos as independent, not the efficiency. (which will return "<TROOT::TEfficiency::CheckEntries>: Histograms are not consistent: passed bin content > total bin content" error if >1. see https://root.cern.ch/doc/master/classTGraphAsymmErrors.html#a78cd209f4da9a169848ab23f539e1c94)
+
         gr_ratio_den_var_eff_num = TGraphErrors(len(vals[this_var])-1)
         for i in range(gr_den_var_eff_nums[0].GetN()):
           #print i,"th x :",gr_den_var_eff_nums[0].GetX()[i],", y :",gr_den_var_eff_nums[0].GetY()[i] #JH
@@ -491,10 +519,6 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           gr_ratio_den_var_eff_num.GetYaxis().SetLabelSize(0.05)
           gr_ratio_den_var_eff_num.GetYaxis().SetTitle("#scale[1.8]{Ratio to Nocut}")
           gr_ratio_den_var_eff_num.GetYaxis().SetTitleOffset(0.8)
-          #if this_trig == "single":
-          #  gr_ratio_den_var_eff_num.GetXaxis().SetRangeUser(20,200) #JH : TODO
-          #elif this_trig == "double":
-          #  gr_ratio_den_var_eff_num.GetXaxis().SetRangeUser(5,200) #JH : TODO
           if this_var == "pt":
             gr_ratio_den_var_eff_num.GetXaxis().SetRangeUser(Xrange[this_trig][0],Xrange[this_trig][1]) #JH : Xrange['single'] or Xrange['double']
             if this_proc == "Jpsi" or this_proc == "QCD":
@@ -504,6 +528,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           if this_proc == "Jpsi":
             if this_fltr == "N":
               yran2 = TMath.MaxElement(len(gr_ratio_den_var_eff_num.GetY()),gr_ratio_den_var_eff_num.GetY())*1.05 #JH : TODO
+          if "Iter2" in this_num:
+            yran1 = TMath.MinElement(len(gr_ratio_den_var_eff_num.GetY()),gr_ratio_den_var_eff_num.GetY())*0.95 #JH : You cannot use gr.GetMinimum() or gr.GetMaximum. see https://root-forum.cern.ch/t/tgraph-getmaximum-getminimum/8867/2
+            yran2 = TMath.MaxElement(len(gr_ratio_den_var_eff_num.GetY()),gr_ratio_den_var_eff_num.GetY())*2. #JH : Iter2 eff drop
+
           gr_ratio_den_var_eff_num.GetYaxis().SetRangeUser(yran1,yran2) #JH : TODO
           #gr_ratio_den_var_eff_num.GetYaxis().SetRangeUser(0.9,1.1) #JH : TODO
 
@@ -512,7 +540,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
       #c_den_var_eff_num.SaveAs("Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
       #c_den_var_eff_num.SaveAs("fix_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
-      c_den_var_eff_num.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
+      #c_den_var_eff_num.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
+      c_den_var_eff_num.SaveAs("test/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
 
    
 ######purity#####       
@@ -643,7 +672,121 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
       #c_num_var_purity.SaveAs("Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
       #c_num_var_purity.SaveAs("fix_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
-      c_num_var_purity.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
+      #c_num_var_purity.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
+
+
+########dR########
+    if this_measure == "dR":
+
+      txt_CMS = TText(0.1,0.905,"CMS simulation")
+      txt_CMS.SetNDC()
+
+      if not this_var is "pt" : continue
+
+      if "L1" in this_num and not "Iter" in this_num:
+        AtVtx_iter = ["","AtVtx_"]
+      else:
+        AtVtx_iter = [""]
+        this_trigLabel = ""
+
+      for AtVtx in AtVtx_iter:
+        ####Call 2D histos...####
+        print "Getting",this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D","..."
+        this_den_var_dR_nums_2D = [files[i].Get(this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D") for i in range(len(files))]
+        den_var_dR_nums_2D = [this_den_var_dR_nums_2D[i].RebinX(10) for i in range(len(this_den_var_dR_nums_2D))] #JH : variable binning not supported for TH2
+        ####Call profiles...####
+        print "Also getting",this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"pf","..."
+        this_den_var_dR_nums_pf = [files[i].Get(this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"pf") for i in range(len(files))]
+        #den_var_dR_nums_pf = [this_den_var_dR_nums_pf[i].Rebin(len(vals["pt"])-1,'',vals["pt"]) for i in range(len(this_den_var_dR_nums_pf))] #JH : variable binning not supported for TH2
+        den_var_dR_nums_pf = [this_den_var_dR_nums_pf[i].Rebin(2) for i in range(len(this_den_var_dR_nums_pf))] #JH : variable binning not supported for TH2
+
+        ####Draw 2D histo####
+        for i in range(len(files)):
+
+          if "WP" in this_files[i]:
+            this_WP = this_files[i][-9:-5] #JH : WPXX
+          elif "_N" in this_files[i]:
+            this_WP = this_files[i].split('.')[-2].split('_')[-1] #JH : N* ....
+
+          os.system("mkdir -p test/dR/"+this_proc+"/"+this_WP)
+          os.system("mkdir -p test/dR/"+this_proc+"/profile")
+
+          c_dR_2D = TCanvas("c_dR_2D","c_dR_2D",200,200,900,800)
+          c_dR_2D.cd()
+
+          den_var_dR_nums_2D[i].SetStats(0)
+          den_var_dR_nums_2D[i].GetXaxis().SetRangeUser(0,200)
+          den_var_dR_nums_2D[i].GetYaxis().SetRangeUser(0,5)
+          den_var_dR_nums_2D[i].Draw("COLZ")
+          
+          txt_CMS.Draw()
+          if this_proc == "DY":
+            txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.5]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
+          if this_proc == "TT":
+            txt_sample.DrawLatexNDC(0.58,0.91,"#scale[0.5]{TTbar_14TeV_TuneCP5_Pythia8 (14TeV)}")
+          if this_proc == "Jpsi":
+            txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.5]{JpsiToMuMu_JpsiPt8_TuneCP5_14TeV-pythia8 (14TeV)}")
+          if this_proc == "QCD":
+            txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.4]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
+
+          c_dR_2D.SaveAs("test/dR/"+this_proc+"/"+this_WP+"/"+this_proc+"_"+this_WP+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D.png")
+
+
+        ####Draw the profile####
+        c_dR_pf = TCanvas("c_dR_pf","c_dR_pf",200,200,900,800)
+        c_dR_pf.cd()
+
+        #p_dR_pf = TPad("p_dR_pf","p_dR_pf",0,0.3,1,1)
+        #p_dR_pf.SetBottomMargin(0.01)
+        #p_dR_pf.Draw()
+        #p_dR_pf.cd()
+
+        lg_dR_pf = TLegend(0.7,0.1,0.9,0.3)
+
+        for i in reversed(range(len(files))):
+          option_pf = "P SAME"
+
+          den_var_dR_nums_pf[i].SetMarkerStyle(20)
+          den_var_dR_nums_pf[i].SetMarkerColor(graphColors[i])
+          den_var_dR_nums_pf[i].SetLineColor(graphColors[i])
+          den_var_dR_nums_pf[i].SetLineWidth(3)
+
+          if i == len(files)-1:
+            #option_pf = "AP"
+            option_pf = ""
+
+            den_var_dR_nums_pf[i].SetTitle("")
+            den_var_dR_nums_pf[i].SetStats(0)
+            den_var_dR_nums_pf[i].GetXaxis().SetTickLength(0.025)
+            den_var_dR_nums_pf[i].GetXaxis().SetLabelSize(0.025)
+            den_var_dR_nums_pf[i].GetYaxis().SetLabelSize(0.025)
+            den_var_dR_nums_pf[i].GetYaxis().SetTitle("dR")
+            den_var_dR_nums_pf[i].GetXaxis().SetRangeUser(0,200) #JH : Xrange['single'] or Xrange['double']
+            #den_var_dR_nums_pf[i].GetXaxis().SetRangeUser(Xrange['double'][0],Xrange['double'][1]) #JH : Xrange['single'] or Xrange['double']
+            #if this_proc == "Jpsi" or this_proc == "QCD":
+            #  den_var_dR_nums_pf[i].GetXaxis().SetRangeUser(Xrange[this_proc][0],Xrange[this_proc][1]) #JH
+            #den_var_dR_nums_pf[i].GetYaxis().SetRangeUser(0,5)
+            
+          den_var_dR_nums_pf[i].Draw(option_pf)
+
+          lg_dR_pf.AddEntry(den_var_dR_nums_pf[i],lg_names[i])
+
+        lg_dR_pf.Draw()
+        
+        txt_CMS.Draw()
+        if this_proc == "DY":
+          txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.5]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
+        if this_proc == "TT":
+          txt_sample.DrawLatexNDC(0.58,0.91,"#scale[0.5]{TTbar_14TeV_TuneCP5_Pythia8 (14TeV)}")
+        if this_proc == "Jpsi":
+          txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.5]{JpsiToMuMu_JpsiPt8_TuneCP5_14TeV-pythia8 (14TeV)}")
+        if this_proc == "QCD":
+          txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.4]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
+
+        c_dR_pf.SaveAs("test/dR/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"profile.png")
+
+
+
 
 
 """

@@ -208,7 +208,7 @@ void do_trackeff_pt(vector<Object> gens, vector< vector<Object> > Tracks, double
         for(int k=0; k<Tracks[this_step].size(); k++){
           if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
             if(gens.at(j).DeltaR(Tracks[this_step].at(k)) < dR){
-              FillHist(gens.at(j).Tag()+"_pt_eff_"+Tracks[this_step].at(k).Tag(),gens.at(j).Pt(),weight,1500,0,1500);
+              FillHist(gens.at(j).Tag()+"_pt_eff_"+Tracks[this_step].at(k).Tag(),gens.at(j).Pt(),weight,3000,0,1500);
               this_matched.push_back(k);
               break;
             }
