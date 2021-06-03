@@ -85,6 +85,21 @@ void match(Object gens, Object L1){
 }
 
 
+bool PtCompare(TLorentzVector p1, TLorentzVector p2){ return (p1.Pt() > p2.Pt()); }
+
+void check_Jpsi_dR(vector<Object> gens, double weight){
+
+  if(gens.size() != 2){
+    return;
+  }
+
+  sort(gens.begin(), gens.end(), PtCompare);
+
+  FillHist(gens.at(0).Tag()+"_pt1_dR_"+gens.at(0).Tag()+"_2D",gens.at(0).Pt(),gens.at(0).DeltaR(gens.at(1)),weight,3000,0,1500,1000,0,10);
+  FillHist(gens.at(0).Tag()+"_pt2_dR_"+gens.at(0).Tag()+"_2D",gens.at(1).Pt(),gens.at(0).DeltaR(gens.at(1)),weight,3000,0,1500,1000,0,10);
+
+}
+
 
 void draw_dR(vector<Object> gens, vector<Object> recos, double weight){
 
@@ -112,7 +127,7 @@ void draw_dR(vector<Object> gens, vector<Object> recos, double weight){
     }
     if(Matched != -1){
       //cout << j << "th " << gens.at(j).Tag() << ", " << Matched << "th " << recos.at(Matched).Tag() << " : dR = " << gens.at(j).DeltaR(recos.at(Matched)) << endl;
-      FillHist(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_2D",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,100,0,10);
+      FillHist(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_2D",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,1000,0,10);
       FillProf(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_pf",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,0,10);
       this_matched.push_back(Matched);
     }
@@ -935,6 +950,7 @@ void calculateEff_new(TString input, TString output){
     if(input.Contains("Jpsi")){
       this_gens = JpsiCand;
       this_gens_above = JpsiCand_above;
+			check_Jpsi_dR(this_gens, genEventWeight);
     }
     else if(input.Contains("QCD")){
       this_gens = Finals;
@@ -945,71 +961,39 @@ void calculateEff_new(TString input, TString output){
       this_gens_above = hardPs_above;
     }
 
-
-
-    //if(input.Contains("Jpsi")){
-    //  if(JpsiCand.size() > 0){
-    //    do_eff_den_pt(JpsiCand, genEventWeight); 
-    //    do_trackeff_pt(JpsiCand, Tracks, 0.3, genEventWeight, "all");
-    //    do_eff_num_pt(JpsiCand, L3Muons_NoID, 0.1, genEventWeight);
-    //    do_eff_num_pt(JpsiCand, L3Muons, 0.1, genEventWeight);
-    //              
-    //    do_eff_den_others(JpsiCand_above, genEventWeight); 
-    //    do_trackeff_others(JpsiCand_above, Tracks, 0.3, genEventWeight, "all");
-    //    do_eff_num_others(JpsiCand_above, L3Muons_NoID, 0.1, genEventWeight);
-    //    do_eff_num_others(JpsiCand_above, L3Muons, 0.1, genEventWeight);
-    //  }
-    //}
-   
-    //else if(input.Contains("QCD")){
-    //  do_eff_den_pt(Finals, genEventWeight); 
-    //  do_trackeff_pt(Finals, Tracks, 0.3, genEventWeight, "all");
-    //  do_eff_num_pt(Finals, L3Muons_NoID, 0.1, genEventWeight);
-    //  do_eff_num_pt(Finals, L3Muons, 0.1, genEventWeight);
-    //            
-    //  do_eff_den_others(Finals_above, genEventWeight); 
-    //  do_trackeff_others(Finals_above, Tracks, 0.3, genEventWeight, "all");
-    //  do_eff_num_others(Finals_above, L3Muons_NoID, 0.1, genEventWeight);
-    //  do_eff_num_others(Finals_above, L3Muons, 0.1, genEventWeight);
-    //}
-
-    //else{
-
   //====================================Efficiency vs pt========================================//
  
-      do_eff_den_pt(this_gens, genEventWeight); 
-      do_trackeff_pt(this_gens, Tracks, 0.3, genEventWeight, "all");
-      do_eff_num_pt(this_gens, L3Muons_NoID, 0.1, genEventWeight);
-      do_eff_num_pt(this_gens, L3Muons, 0.1, genEventWeight);
+    do_eff_den_pt(this_gens, genEventWeight); 
+    do_trackeff_pt(this_gens, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_pt(this_gens, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_pt(this_gens, L3Muons, 0.1, genEventWeight);
 
-      do_eff_den_pt(hardPs_L1matched, genEventWeight); 
-      do_trackeff_pt(hardPs_L1matched, Tracks, 0.3, genEventWeight, "all");
-      do_eff_num_pt(hardPs_L1matched, L3Muons_NoID, 0.1, genEventWeight);
-      do_eff_num_pt(hardPs_L1matched, L3Muons, 0.1, genEventWeight);
+    do_eff_den_pt(hardPs_L1matched, genEventWeight); 
+    do_trackeff_pt(hardPs_L1matched, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_pt(hardPs_L1matched, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_pt(hardPs_L1matched, L3Muons, 0.1, genEventWeight);
 
-      do_eff_den_pt(hardPs_L1matched_med, genEventWeight); 
-      do_trackeff_pt(hardPs_L1matched_med, Tracks, 0.3, genEventWeight, "all");
-      do_eff_num_pt(hardPs_L1matched_med, L3Muons_NoID, 0.1, genEventWeight);
-      do_eff_num_pt(hardPs_L1matched_med, L3Muons, 0.1, genEventWeight);
+    do_eff_den_pt(hardPs_L1matched_med, genEventWeight); 
+    do_trackeff_pt(hardPs_L1matched_med, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_pt(hardPs_L1matched_med, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_pt(hardPs_L1matched_med, L3Muons, 0.1, genEventWeight);
 
   //====================================Efficiency vs eta, phi, truePU========================================//
 
-      do_eff_den_others(this_gens_above, genEventWeight); 
-      do_trackeff_others(this_gens_above, Tracks, 0.3, genEventWeight, "all");
-      do_eff_num_others(this_gens_above, L3Muons_NoID, 0.1, genEventWeight);
-      do_eff_num_others(this_gens_above, L3Muons, 0.1, genEventWeight);
+    do_eff_den_others(this_gens_above, genEventWeight); 
+    do_trackeff_others(this_gens_above, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_others(this_gens_above, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_others(this_gens_above, L3Muons, 0.1, genEventWeight);
 
-      do_eff_den_others(hardPs_above_L1matched, genEventWeight); 
-      do_trackeff_others(hardPs_above_L1matched, Tracks, 0.3, genEventWeight, "all");
-      do_eff_num_others(hardPs_above_L1matched, L3Muons_NoID, 0.1, genEventWeight);
-      do_eff_num_others(hardPs_above_L1matched, L3Muons, 0.1, genEventWeight);
+    do_eff_den_others(hardPs_above_L1matched, genEventWeight); 
+    do_trackeff_others(hardPs_above_L1matched, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_others(hardPs_above_L1matched, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_others(hardPs_above_L1matched, L3Muons, 0.1, genEventWeight);
 
-      do_eff_den_others(hardPs_above_L1matched_med, genEventWeight); 
-      do_trackeff_others(hardPs_above_L1matched_med, Tracks, 0.3, genEventWeight, "all");
-      do_eff_num_others(hardPs_above_L1matched_med, L3Muons_NoID, 0.1, genEventWeight);
-      do_eff_num_others(hardPs_above_L1matched_med, L3Muons, 0.1, genEventWeight);
-
-    //}
+    do_eff_den_others(hardPs_above_L1matched_med, genEventWeight); 
+    do_trackeff_others(hardPs_above_L1matched_med, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_others(hardPs_above_L1matched_med, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_others(hardPs_above_L1matched_med, L3Muons, 0.1, genEventWeight);
 
   //==========================================Purity====================================================//
 
@@ -1033,627 +1017,6 @@ void calculateEff_new(TString input, TString output){
     draw_dR(this_gens, L3Muons_NoID, genEventWeight);
     draw_dR(this_gens, L3Muons, genEventWeight);
     
-
-
-
-/*
-    //==Eff 1-1. hard procecss muon-tracker track matching==//
-    for(int j=0; j<hardPs.size(); j++){
-      FillHist("hardP_pt",hardPs.at(j).Pt(),1.,1500,0,1500);
-      int matched = 0;
-      for(int k=0; k<L3OITracks.size(); k++){
-        if(hardPs.at(j).DeltaR(L3OITracks.at(k)) < 0.3){
-          //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs.at(j).DeltaR(L3OITracks.at(k)) << endl;
-          //cout << "pt: " << hardPs.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-          matched = 1;
-          FillHist("hardP_pt_trackeff_step1",hardPs.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_pt_trackeff_step2",hardPs.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_pt_trackeff_step3",hardPs.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_pt_trackeff_step4",hardPs.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_pt_trackeff_step5",hardPs.at(j).Pt(),1.,1500,0,1500);
-          break;
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3Tracks.size(); k++){
-          if(hardPs.at(j).DeltaR(Iter0L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3track within dR: " << hardPs.at(j).DeltaR(Iter0L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs.at(j).Pt() << " vs " << Iter0L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_pt_trackeff_step2",hardPs.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_pt_trackeff_step3",hardPs.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_pt_trackeff_step4",hardPs.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_pt_trackeff_step5",hardPs.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3Tracks.size(); k++){
-          if(hardPs.at(j).DeltaR(Iter2L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3track within dR: " << hardPs.at(j).DeltaR(Iter2L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs.at(j).Pt() << " vs " << Iter2L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_pt_trackeff_step3",hardPs.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_pt_trackeff_step4",hardPs.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_pt_trackeff_step5",hardPs.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3FromL1Tracks.size(); k++){
-          if(hardPs.at(j).DeltaR(Iter0L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3FromL1track within dR: " << hardPs.at(j).DeltaR(Iter0L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs.at(j).Pt() << " vs " << Iter0L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_pt_trackeff_step4",hardPs.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_pt_trackeff_step5",hardPs.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3FromL1Tracks.size(); k++){
-          if(hardPs.at(j).DeltaR(Iter2L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3FromL1track within dR: " << hardPs.at(j).DeltaR(Iter2L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs.at(j).Pt() << " vs " << Iter2L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_pt_trackeff_step5",hardPs.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 1) Nmatched_hardP_tracks_pt+=1;
-    }
-  
-    //==Eff 1-2-1. hard procecss muon-L3 muon(NoID) matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs.size(); j++){
-      for(int k=0; k<L3Muons_NoID.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs.at(j).DeltaR(L3Muons_NoID.at(k)) < 0.1){
-            //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs.at(j).DeltaR(L3OITracks.at(k)) << endl;
-            //cout << "pt: " << hardPs.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-            Nmatched_hardP_L3NoID_pt+=1;
-            FillHist("hardP_pt_eff_L3NoID",hardPs.at(j).Pt(),1.,1500,0,1500);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 1-2-2. hard procecss muon-L3 muon matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs.size(); j++){
-      for(int k=0; k<L3Muons.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs.at(j).DeltaR(L3Muons.at(k)) < 0.1){
-            //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs.at(j).DeltaR(L3OITracks.at(k)) << endl;
-            //cout << "pt: " << hardPs.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-            Nmatched_hardP_L3_pt+=1;
-            FillHist("hardP_pt_eff_L3",hardPs.at(j).Pt(),1.,1500,0,1500);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-  
-    //==Eff 2-1. hard process muon matched with fine L1-tracker track matching==//
-    for(int j=0; j<hardPs_L1matched.size(); j++){
-      FillHist("hardP_L1_pt",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-      int matched = 0;
-      for(int k=0; k<L3OITracks.size(); k++){
-        if(hardPs_L1matched.at(j).DeltaR(L3OITracks.at(k)) < 0.3){
-          //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs_L1matched.at(j).DeltaR(L3OITracks.at(k)) << endl;
-          //cout << "pt: " << hardPs_L1matched.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-          matched = 1;
-          FillHist("hardP_L1_pt_trackeff_step1",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_L1_pt_trackeff_step2",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_L1_pt_trackeff_step3",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_L1_pt_trackeff_step4",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-          FillHist("hardP_L1_pt_trackeff_step5",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-          break;
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3Tracks.size(); k++){
-          if(hardPs_L1matched.at(j).DeltaR(Iter0L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3track within dR: " << hardPs_L1matched.at(j).DeltaR(Iter0L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_L1matched.at(j).Pt() << " vs " << Iter0L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_pt_trackeff_step2",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_L1_pt_trackeff_step3",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_L1_pt_trackeff_step4",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_L1_pt_trackeff_step5",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3Tracks.size(); k++){
-          if(hardPs_L1matched.at(j).DeltaR(Iter2L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3track within dR: " << hardPs_L1matched.at(j).DeltaR(Iter2L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_L1matched.at(j).Pt() << " vs " << Iter2L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_pt_trackeff_step3",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_L1_pt_trackeff_step4",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_L1_pt_trackeff_step5",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3FromL1Tracks.size(); k++){
-          if(hardPs_L1matched.at(j).DeltaR(Iter0L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3FromL1track within dR: " << hardPs_L1matched.at(j).DeltaR(Iter0L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_L1matched.at(j).Pt() << " vs " << Iter0L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_pt_trackeff_step4",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            FillHist("hardP_L1_pt_trackeff_step5",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3FromL1Tracks.size(); k++){
-          if(hardPs_L1matched.at(j).DeltaR(Iter2L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3FromL1track within dR: " << hardPs_L1matched.at(j).DeltaR(Iter2L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_L1matched.at(j).Pt() << " vs " << Iter2L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_pt_trackeff_step5",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            break;
-          }
-        }
-      }
-      if(matched == 1) Nmatched_hardP_L1_tracks_pt+=1;
-    }
-  
-    //==Eff 2-2-1. hard procecss muon matched with fine L1-L3 muon(NoID) matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_L1matched.size(); j++){
-      for(int k=0; k<L3Muons_NoID.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_L1matched.at(j).DeltaR(L3Muons_NoID.at(k)) < 0.1){
-            Nmatched_hardP_L1_L3NoID_pt+=1;
-            FillHist("hardP_L1_pt_eff_L3NoID",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-2-2. hard procecss muon matched with fine L1-L3 muon matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_L1matched.size(); j++){
-      for(int k=0; k<L3Muons.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_L1matched.at(j).DeltaR(L3Muons.at(k)) < 0.1){
-            Nmatched_hardP_L1_L3_pt+=1;
-            FillHist("hardP_L1_pt_eff_L3",hardPs_L1matched.at(j).Pt(),1.,1500,0,1500);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-3-1. hard procecss muon matched with medium L1-L3 muon(NoID) matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_L1matched_med.size(); j++){
-      FillHist("hardP_L1_med_pt",hardPs_L1matched_med.at(j).Pt(),1.,1500,0,1500);
-      for(int k=0; k<L3Muons_NoID.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_L1matched_med.at(j).DeltaR(L3Muons_NoID.at(k)) < 0.1){
-            FillHist("hardP_L1_med_pt_eff_L3NoID",hardPs_L1matched_med.at(j).Pt(),1.,1500,0,1500);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-3-2. hard procecss muon matched with medium L1-L3 muon matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_L1matched_med.size(); j++){
-      for(int k=0; k<L3Muons.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_L1matched_med.at(j).DeltaR(L3Muons.at(k)) < 0.1){
-            FillHist("hardP_L1_med_pt_eff_L3",hardPs_L1matched_med.at(j).Pt(),1.,1500,0,1500);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
- 
-  //====================================Efficiency vs eta, phi, truePU========================================//
-  
-    //==Eff 1-1. hard procecss muon-tracker track matching==//
-    for(int j=0; j<hardPs_above.size(); j++){
-      FillHist("hardP_eta",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-      FillHist("hardP_phi",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-      FillHist("hardP_truePU",truePU,1.,100,0,100);
-      int matched = 0;
-      for(int k=0; k<L3OITracks.size(); k++){
-        if(hardPs_above.at(j).DeltaR(L3OITracks.at(k)) < 0.3){
-          //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs_above.at(j).DeltaR(L3OITracks.at(k)) << endl;
-          //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-          matched = 1;
-          FillHist("hardP_eta_trackeff_step1",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_eta_trackeff_step2",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_eta_trackeff_step3",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_eta_trackeff_step4",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_eta_trackeff_step5",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_phi_trackeff_step1",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_phi_trackeff_step2",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_phi_trackeff_step3",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_phi_trackeff_step4",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_phi_trackeff_step5",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_truePU_trackeff_step1",truePU,1.,100,0,100);
-          FillHist("hardP_truePU_trackeff_step2",truePU,1.,100,0,100);
-          FillHist("hardP_truePU_trackeff_step3",truePU,1.,100,0,100);
-          FillHist("hardP_truePU_trackeff_step4",truePU,1.,100,0,100);
-          FillHist("hardP_truePU_trackeff_step5",truePU,1.,100,0,100);
-          break;
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3Tracks.size(); k++){
-          if(hardPs_above.at(j).DeltaR(Iter0L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3track within dR: " << hardPs_above.at(j).DeltaR(Iter0L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << Iter0L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_eta_trackeff_step2",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_eta_trackeff_step3",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_eta_trackeff_step4",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_eta_trackeff_step5",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_phi_trackeff_step2",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_phi_trackeff_step3",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_phi_trackeff_step4",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_phi_trackeff_step5",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_truePU_trackeff_step2",truePU,1.,100,0,100);
-            FillHist("hardP_truePU_trackeff_step3",truePU,1.,100,0,100);
-            FillHist("hardP_truePU_trackeff_step4",truePU,1.,100,0,100);
-            FillHist("hardP_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3Tracks.size(); k++){
-          if(hardPs_above.at(j).DeltaR(Iter2L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3track within dR: " << hardPs_above.at(j).DeltaR(Iter2L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << Iter2L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_eta_trackeff_step3",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_eta_trackeff_step4",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_eta_trackeff_step5",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_phi_trackeff_step3",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_phi_trackeff_step4",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_phi_trackeff_step5",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_truePU_trackeff_step3",truePU,1.,100,0,100);
-            FillHist("hardP_truePU_trackeff_step4",truePU,1.,100,0,100);
-            FillHist("hardP_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3FromL1Tracks.size(); k++){
-          if(hardPs_above.at(j).DeltaR(Iter0L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3FromL1track within dR: " << hardPs_above.at(j).DeltaR(Iter0L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << Iter0L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_eta_trackeff_step4",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_eta_trackeff_step5",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_phi_trackeff_step4",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_phi_trackeff_step5",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_truePU_trackeff_step4",truePU,1.,100,0,100);
-            FillHist("hardP_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3FromL1Tracks.size(); k++){
-          if(hardPs_above.at(j).DeltaR(Iter2L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3FromL1track within dR: " << hardPs_above.at(j).DeltaR(Iter2L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << Iter2L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_eta_trackeff_step5",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_phi_trackeff_step5",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 1) Nmatched_hardP_tracks_others+=1;
-    }
-  
-    //==Eff 1-2-1. hard procecss muon-L3 muon(NoID) matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_above.size(); j++){
-      for(int k=0; k<L3Muons_NoID.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_above.at(j).DeltaR(L3Muons_NoID.at(k)) < 0.1){
-            //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs_above.at(j).DeltaR(L3OITracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-            Nmatched_hardP_L3NoID_others+=1;
-            FillHist("hardP_eta_eff_L3NoID",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_phi_eff_L3NoID",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_truePU_eff_L3NoID",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 1-2-2. hard procecss muon-L3 muon matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_above.size(); j++){
-      for(int k=0; k<L3Muons.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_above.at(j).DeltaR(L3Muons.at(k)) < 0.1){
-            //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs_above.at(j).DeltaR(L3OITracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-            Nmatched_hardP_L3_others+=1;
-            FillHist("hardP_eta_eff_L3",hardPs_above.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_phi_eff_L3",hardPs_above.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_truePU_eff_L3",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-  
-    //==Eff 2-1. hard process muon matched with fine L1-tracker track matching==//
-    for(int j=0; j<hardPs_above_L1matched.size(); j++){
-      FillHist("hardP_L1_eta",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-      FillHist("hardP_L1_phi",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-      FillHist("hardP_L1_truePU",truePU,1.,100,0,100);
-      int matched = 0;
-      for(int k=0; k<L3OITracks.size(); k++){
-        if(hardPs_above_L1matched.at(j).DeltaR(L3OITracks.at(k)) < 0.3){
-          //cout << j << "th hardP muon matched with " << k << "th L3OItrack within dR: " << hardPs_above_L1matched.at(j).DeltaR(L3OITracks.at(k)) << endl;
-          //cout << "pt: " << hardPs_above_L1matched.at(j).Pt() << " vs " << L3OITracks.at(k).Pt() << endl;
-          matched = 1;
-          FillHist("hardP_L1_eta_trackeff_step1",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_L1_eta_trackeff_step2",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_L1_eta_trackeff_step3",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_L1_eta_trackeff_step4",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_L1_eta_trackeff_step5",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-          FillHist("hardP_L1_phi_trackeff_step1",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_L1_phi_trackeff_step2",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_L1_phi_trackeff_step3",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_L1_phi_trackeff_step4",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_L1_phi_trackeff_step5",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-          FillHist("hardP_L1_truePU_trackeff_step1",truePU,1.,100,0,100);
-          FillHist("hardP_L1_truePU_trackeff_step2",truePU,1.,100,0,100);
-          FillHist("hardP_L1_truePU_trackeff_step3",truePU,1.,100,0,100);
-          FillHist("hardP_L1_truePU_trackeff_step4",truePU,1.,100,0,100);
-          FillHist("hardP_L1_truePU_trackeff_step5",truePU,1.,100,0,100);
-          break;
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3Tracks.size(); k++){
-          if(hardPs_above_L1matched.at(j).DeltaR(Iter0L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3track within dR: " << hardPs_above_L1matched.at(j).DeltaR(Iter0L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above_L1matched.at(j).Pt() << " vs " << Iter0L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_eta_trackeff_step2",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_eta_trackeff_step3",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_eta_trackeff_step4",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_eta_trackeff_step5",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_phi_trackeff_step2",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_phi_trackeff_step3",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_phi_trackeff_step4",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_phi_trackeff_step5",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_truePU_trackeff_step2",truePU,1.,100,0,100);
-            FillHist("hardP_L1_truePU_trackeff_step3",truePU,1.,100,0,100);
-            FillHist("hardP_L1_truePU_trackeff_step4",truePU,1.,100,0,100);
-            FillHist("hardP_L1_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3Tracks.size(); k++){
-          if(hardPs_above_L1matched.at(j).DeltaR(Iter2L3Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3track within dR: " << hardPs_above_L1matched.at(j).DeltaR(Iter2L3Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above_L1matched.at(j).Pt() << " vs " << Iter2L3Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_eta_trackeff_step3",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_eta_trackeff_step4",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_eta_trackeff_step5",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_phi_trackeff_step3",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_phi_trackeff_step4",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_phi_trackeff_step5",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_truePU_trackeff_step3",truePU,1.,100,0,100);
-            FillHist("hardP_L1_truePU_trackeff_step4",truePU,1.,100,0,100);
-            FillHist("hardP_L1_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter0L3FromL1Tracks.size(); k++){
-          if(hardPs_above_L1matched.at(j).DeltaR(Iter0L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter0L3FromL1track within dR: " << hardPs_above_L1matched.at(j).DeltaR(Iter0L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above_L1matched.at(j).Pt() << " vs " << Iter0L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_eta_trackeff_step4",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_eta_trackeff_step5",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_phi_trackeff_step4",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_phi_trackeff_step5",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_truePU_trackeff_step4",truePU,1.,100,0,100);
-            FillHist("hardP_L1_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-      if(matched == 0){
-        for(int k=0; k<Iter2L3FromL1Tracks.size(); k++){
-          if(hardPs_above_L1matched.at(j).DeltaR(Iter2L3FromL1Tracks.at(k))<0.3){
-            //cout << j << "th hardP muon matched with " << k << "th Iter2L3FromL1track within dR: " << hardPs_above_L1matched.at(j).DeltaR(Iter2L3FromL1Tracks.at(k)) << endl;
-            //cout << "pt: " << hardPs_above_L1matched.at(j).Pt() << " vs " << Iter2L3FromL1Tracks.at(k).Pt() << endl;
-            matched = 1;
-            FillHist("hardP_L1_eta_trackeff_step5",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_phi_trackeff_step5",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_truePU_trackeff_step5",truePU,1.,100,0,100);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-2-1. hard procecss muon matched with fine L1-L3 muon(NoID) matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_above_L1matched.size(); j++){
-      for(int k=0; k<L3Muons_NoID.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_above_L1matched.at(j).DeltaR(L3Muons_NoID.at(k)) < 0.1){
-            FillHist("hardP_L1_eta_eff_L3NoID",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_phi_eff_L3NoID",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_truePU_eff_L3NoID",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-2-2. hard procecss muon matched with fine L1-L3 muon matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_above_L1matched.size(); j++){
-      for(int k=0; k<L3Muons.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_above_L1matched.at(j).DeltaR(L3Muons.at(k)) < 0.1){
-            FillHist("hardP_L1_eta_eff_L3",hardPs_above_L1matched.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_phi_eff_L3",hardPs_above_L1matched.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_truePU_eff_L3",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-3-1. hard procecss muon matched with medium L1-L3 muon(NoID) matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_above_L1matched_med.size(); j++){
-      FillHist("hardP_L1_med_eta",hardPs_above_L1matched_med.at(j).Eta(),1.,48,-2.4,2.4);
-      FillHist("hardP_L1_med_phi",hardPs_above_L1matched_med.at(j).Phi(),1.,63,-3.15,3.15);
-      FillHist("hardP_L1_med_truePU",truePU,1.,100,0,100);
-      for(int k=0; k<L3Muons_NoID.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_above_L1matched_med.at(j).DeltaR(L3Muons_NoID.at(k)) < 0.1){
-            FillHist("hardP_L1_med_eta_eff_L3NoID",hardPs_above_L1matched_med.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_med_phi_eff_L3NoID",hardPs_above_L1matched_med.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_med_truePU_eff_L3NoID",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Eff 2-3-2. hard procecss muon matched with medium L1-L3 muon matching==//
-    this_matched.clear();
-    for(int j=0; j<hardPs_above_L1matched_med.size(); j++){
-      for(int k=0; k<L3Muons.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardPs_above_L1matched_med.at(j).DeltaR(L3Muons.at(k)) < 0.1){
-            FillHist("hardP_L1_med_eta_eff_L3",hardPs_above_L1matched_med.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("hardP_L1_med_phi_eff_L3",hardPs_above_L1matched_med.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("hardP_L1_med_truePU_eff_L3",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
- 
-
-  //==========================================Purity====================================================//
-  
-    //==Purity 1. L3 muon(NoID)-final muon matching==//
-    this_matched.clear();
-    for(int j=0; j<L3Muons_NoID.size(); j++){
-      FillHist("L3NoID_pt",L3Muons_NoID.at(j).Pt(),1.,1500,0,1500);
-      FillHist("L3NoID_eta",L3Muons_NoID.at(j).Eta(),1.,48,-2.4,2.4);
-      FillHist("L3NoID_phi",L3Muons_NoID.at(j).Phi(),1.,63,-3.15,3.15);
-      FillHist("L3NoID_truePU",truePU,1.,100,0,100);
-      for(int k=0; k<Finals.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(L3Muons_NoID.at(j).DeltaR(Finals.at(k)) < 0.1){
-            Nmatched_L3NoID_Final+=1;
-            FillHist("L3NoID_pt_purity",L3Muons_NoID.at(j).Pt(),1.,1500,0,1500);
-            FillHist("L3NoID_eta_purity",L3Muons_NoID.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("L3NoID_phi_purity",L3Muons_NoID.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("L3NoID_truePU_purity",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-  
-    //==Purity 2. L3 muon-final muon matching==//
-    this_matched.clear();
-    for(int j=0; j<L3Muons.size(); j++){
-      FillHist("L3_pt",L3Muons.at(j).Pt(),1.,1500,0,1500);
-      FillHist("L3_eta",L3Muons.at(j).Eta(),1.,48,-2.4,2.4);
-      FillHist("L3_phi",L3Muons.at(j).Phi(),1.,63,-3.15,3.15);
-      FillHist("L3_truePU",truePU,1.,100,0,100);
-      for(int k=0; k<Finals.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(L3Muons.at(j).DeltaR(Finals.at(k)) < 0.1){
-            //cout << j << "th L3 muon matched with " << k << "th final muon within dR: " << L3Muons.at(j).DeltaR(Finals.at(k)) << endl;
-            //cout << "pt: " << L3Muons.at(j).Pt() << " vs " << Finals.at(k).Pt() << endl;
-            Nmatched_L3_Final+=1;
-            FillHist("L3_pt_purity",L3Muons.at(j).Pt(),1.,1500,0,1500);
-            FillHist("L3_eta_purity",L3Muons.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("L3_phi_purity",L3Muons.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("L3_truePU_purity",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-
-    //==Purity 3. Iter2FromL1 track-final muon matching==//
-    this_matched.clear();
-    for(int j=0; j<Iter2L3FromL1Tracks.size(); j++){
-      FillHist("Iter2L3FromL1Track_pt",Iter2L3FromL1Tracks.at(j).Pt(),1.,1500,0,1500);
-      FillHist("Iter2L3FromL1Track_eta",Iter2L3FromL1Tracks.at(j).Eta(),1.,48,-2.4,2.4);
-      FillHist("Iter2L3FromL1Track_phi",Iter2L3FromL1Tracks.at(j).Phi(),1.,63,-3.15,3.15);
-      FillHist("Iter2L3FromL1Track_truePU",truePU,1.,100,0,100);
-      for(int k=0; k<Finals.size(); k++){
-        if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(Iter2L3FromL1Tracks.at(j).DeltaR(Finals.at(k)) < 0.1){
-            Nmatched_Iter2FromL1Track_Final+=1;
-            FillHist("Iter2L3FromL1Track_pt_purity",Iter2L3FromL1Tracks.at(j).Pt(),1.,1500,0,1500);
-            FillHist("Iter2L3FromL1Track_eta_purity",Iter2L3FromL1Tracks.at(j).Eta(),1.,48,-2.4,2.4);
-            FillHist("Iter2L3FromL1Track_phi_purity",Iter2L3FromL1Tracks.at(j).Phi(),1.,63,-3.15,3.15);
-            FillHist("Iter2L3FromL1Track_truePU_purity",truePU,1.,100,0,100);
-            this_matched.push_back(k);
-            break;
-          }
-        }
-      }
-    }
-*/
 
     pf_track->Fill(truePU,nhltIter2IterL3MuonTrack);
     pf_trackFromL1->Fill(truePU,nhltIter2IterL3FromL1MuonTrack);

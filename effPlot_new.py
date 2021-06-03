@@ -687,13 +687,15 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         AtVtx_iter = ["","AtVtx_"]
       else:
         AtVtx_iter = [""]
-        this_trigLabel = ""
+        if "med" in this_trigLabel : continue #JH : do not re-run for single and double. The rebinning will be doubled.
 
       for AtVtx in AtVtx_iter:
         ####Call 2D histos...####
         print "Getting",this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D","..."
         this_den_var_dR_nums_2D = [files[i].Get(this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D") for i in range(len(files))]
-        den_var_dR_nums_2D = [this_den_var_dR_nums_2D[i].RebinX(10) for i in range(len(this_den_var_dR_nums_2D))] #JH : variable binning not supported for TH2
+        #den_var_dR_nums_2D = [this_den_var_dR_nums_2D[i].Rebin2D(10,10) for i in range(len(this_den_var_dR_nums_2D))] #JH : variable binning not supported for TH2
+        #den_var_dR_nums_2D = [this_den_var_dR_nums_2D[i].RebinX(10) for i in range(len(this_den_var_dR_nums_2D))] #JH : variable binning not supported for TH2
+        den_var_dR_nums_2D = [this_den_var_dR_nums_2D[i] for i in range(len(this_den_var_dR_nums_2D))] #JH : variable binning not supported for TH2
         ####Call profiles...####
         print "Also getting",this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"pf","..."
         this_den_var_dR_nums_pf = [files[i].Get(this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"pf") for i in range(len(files))]
@@ -708,7 +710,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           elif "_N" in this_files[i]:
             this_WP = this_files[i].split('.')[-2].split('_')[-1] #JH : N* ....
 
-          os.system("mkdir -p test/dR/"+this_proc+"/"+this_WP)
+          os.system("mkdir -p test/dR/"+this_proc+"/"+this_WP+"/logY")
           os.system("mkdir -p test/dR/"+this_proc+"/profile")
 
           c_dR_2D = TCanvas("c_dR_2D","c_dR_2D",200,200,900,800)
@@ -716,7 +718,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
           den_var_dR_nums_2D[i].SetStats(0)
           den_var_dR_nums_2D[i].GetXaxis().SetRangeUser(0,200)
-          den_var_dR_nums_2D[i].GetYaxis().SetRangeUser(0,5)
+          den_var_dR_nums_2D[i].GetYaxis().SetRangeUser(0,1)
+          gPad.SetLogz()
           den_var_dR_nums_2D[i].Draw("COLZ")
           
           txt_CMS.Draw()
