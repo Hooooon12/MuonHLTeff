@@ -43,19 +43,22 @@ def TGraph_To_TH1(hist_frame, graph):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-p', '--process', nargs='*', dest="proc", default=["DY","TT","Jpsi","QCD"], help="physics process: DY, TT, Jpsi, QCD")
+parser.add_argument('-p', '--process', nargs='*', dest="proc", default=["DY","TT","Jpsi","QCD","Zprime"], help="physics process: DY, TT, Jpsi, QCD, Zprime")
 parser.add_argument('-f', '--filter', nargs='*', dest="fltr", default=["WP","N"], help="filtering method: WP, N")
 parser.add_argument('-m', '--measure', nargs='*', dest="measure", default=["trackeff","eff","purity","dR","profile","Ntrackfrac"], help="what to measure: trackeff, eff, purity, profile, Ntrackfrac")
 parser.add_argument('-v', '--variable', nargs='*', dest="var", default=["pt","eta","phi","truePU"], help="measure as a function of: pt, eta, phi, truePU")
 parser.add_argument('-d', '--denominator', nargs='*', dest="den", default=["hardP","hardP_L1"], help="denominator of efficiency: hardP, hardP_L1")
-parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1", "L1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1), L1")
+parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1", "L1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1), L1") #L1 : for dR measurement
+#parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1)")
 parser.add_argument('-t', '--trigger', nargs='*', dest="trig", default=["single","double"], help="which trigger to check: single(IsoMu24), double(Mu17Mu8)")
 args = parser.parse_args()
 
 gROOT.SetBatch(kTRUE)
-#gROOT.SetBatch(kFALSE) #JH
+#gROOT.SetBatch(kFALSE) #JH : if you need plot by plot check
 os.system('mkdir -p new_Run3_newplots/eff_den_valid')
 os.system('mkdir -p new_Run3_newplots/eff_num_valid')
+os.system('mkdir -p Winter21/eff_den_valid')
+os.system('mkdir -p Winter21/eff_num_valid')
 
 #Xaxis title
 Xtitle = {'pt' : "#scale[1.8]{p_{T}(#mu) [GeV]}", 'eta' : "#scale[1.8]{#eta(#mu)}", 'phi' : "#scale[1.8]{#varphi(#mu)}", 'truePU' : "#scale[1.8]{# of truePU}"}
@@ -75,11 +78,15 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
   if this_fltr == "WP":
     #this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_WP02.root","result_"+this_proc+"_WP04.root","result_"+this_proc+"_WP10.root"]
     #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_WP02.root","Run3_result_"+this_proc+"_WP04.root","Run3_result_"+this_proc+"_WP10.root"]
-    this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_WP02.root","new_Run3_result_"+this_proc+"_WP04.root","new_Run3_result_"+this_proc+"_WP10.root"]
+    #this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_WP02.root","new_Run3_result_"+this_proc+"_WP04.root","new_Run3_result_"+this_proc+"_WP10.root"]
+    #this_files = ["Run3_Winter21_DY_WP00_reduced.root"]
+    this_files = ["Run3_Winter21_Zprime6000_WP00.root"]
   elif this_fltr == "N":
     #this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_N50.root","result_"+this_proc+"_N10.root","result_"+this_proc+"_N5.root"]
     #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_N50.root","Run3_result_"+this_proc+"_N10.root","Run3_result_"+this_proc+"_N5.root","Run3_result_"+this_proc+"_N0.root"]
-    this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_N50.root","new_Run3_result_"+this_proc+"_N10.root","new_Run3_result_"+this_proc+"_N5.root"]#,"new_Run3_result_"+this_proc+"_N0.root"] #JH : Comment here when measuring Iter2 track eff
+    #this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_N50.root","new_Run3_result_"+this_proc+"_N10.root","new_Run3_result_"+this_proc+"_N5.root"]#,"new_Run3_result_"+this_proc+"_N0.root"] #JH : Comment here when measuring Iter2 track eff
+    #this_files = ["Run3_Winter21_DY_WP00_reduced.root"]
+    this_files = ["Run3_Winter21_Zprime6000_WP00.root"]
   
   files = [TFile.Open(this_files[i]) for i in range(len(this_files))]
   
@@ -138,12 +145,13 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
 #####Efficiency#####
     if this_measure == "eff":
+      if this_num == "L1" : continue
+
       den_vars = [this_den_vars[i].Rebin(len(vals[this_var])-1,'',vals[this_var]) for i in range(len(this_den_vars))]
       den_var_eff_nums = [this_den_var_eff_nums[i].Rebin(len(vals[this_var])-1,'',vals[this_var]) for i in range(len(this_den_var_eff_nums))]
       #print "current pt binning :", ptval
       #for i in range(den_var_eff_nums[0].GetNbinsX()+2):
       #  print i,"th bin center :", den_var_eff_nums[0].GetBinCenter(i),", content :", den_var_eff_nums[0].GetBinContent(i)
-
 
     ######First, check the denominators are consistent each other among the WPs.
       c_den_var = TCanvas("c_den_var","c_den_var",200,200,900,800)
@@ -194,6 +202,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       lg_den_var.Draw()
       
       txt_CMS.Draw()
+      if this_proc == "Zprime":
+        txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "DY":
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
       if this_proc == "TT":
@@ -202,7 +212,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{JpsiToMuMu_JpsiPt8_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "QCD":
         txt_sample.DrawLatexNDC(0.34,0.91,"#scale[0.6]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
-      if this_proc == "DY" or this_proc == "TT":
+      if this_proc == "DY" or this_proc == "TT" or this_proc == "Zprime":
         if this_den == "hardP_L1":
           if this_trig == "single":
             txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 22GeV}")
@@ -263,7 +273,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         gr_ratio_den_vars.append(gr_ratio_den_var) #JH : I really don't know why but this appending prevent the bug (???)
 
       #c_den_var.SaveAs("new_Run3_newplots/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
-      c_den_var.SaveAs("test/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
+      #c_den_var.SaveAs("test/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
+      c_den_var.SaveAs("Winter21/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
 
 
 
@@ -318,6 +329,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       lg_den_var_num.Draw()
       
       txt_CMS.Draw()
+      if this_proc == "Zprime":
+        txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "DY":
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
       if this_proc == "TT":
@@ -326,7 +339,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{JpsiToMuMu_JpsiPt8_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "QCD":
         txt_sample.DrawLatexNDC(0.34,0.91,"#scale[0.6]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
-      if this_proc == "DY" or this_proc == "TT":
+      if this_proc == "DY" or this_proc == "TT" or this_proc == "Zprime":
         if this_den == "hardP_L1":
           if this_trig == "single":
             txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 22GeV}")
@@ -390,7 +403,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         gr_ratio_den_var_nums.append(gr_ratio_den_var_num) #JH : I really don't know why but this appending prevent the bug (???)
 
       #c_den_var_num.SaveAs("new_Run3_newplots/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
-      c_den_var_num.SaveAs("test/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
+      #c_den_var_num.SaveAs("test/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
+      c_den_var_num.SaveAs("Winter21/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
 
 
 
@@ -451,6 +465,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       lg_den_var_eff_num.Draw()
       
       txt_CMS.Draw()
+      if this_proc == "Zprime":
+        txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "DY":
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
       if this_proc == "TT":
@@ -459,7 +475,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{JpsiToMuMu_JpsiPt8_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "QCD":
         txt_sample.DrawLatexNDC(0.34,0.91,"#scale[0.6]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
-      if this_proc == "DY" or this_proc == "TT":
+      if this_proc == "DY" or this_proc == "TT" or this_proc == "Zprime":
         if this_den == "hardP_L1":
           if this_trig == "single":
             txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 22GeV}")
@@ -489,7 +505,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       for irat in reversed(range(len(this_den_vars))):
         option_rat = "P SAME"
 
-        #JH : Use below if you want to use Divide (exploit various errors). but meaningless if ratio > 1. Then you can only use "pois" error, not the other errors.
+        #JH : Use below if you want to use Divide (exploit various error type). but meaningless if ratio > 1. Then you can only use "pois" error, not the other errors.
 
         #hist_den_var_eff_nums = []
         #for i in range(len(gr_den_var_eff_nums)):
@@ -501,8 +517,11 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         gr_ratio_den_var_eff_num = TGraphErrors(len(vals[this_var])-1)
         for i in range(gr_den_var_eff_nums[0].GetN()):
           #print i,"th x :",gr_den_var_eff_nums[0].GetX()[i],", y :",gr_den_var_eff_nums[0].GetY()[i] #JH
-          gr_ratio_den_var_eff_num.SetPoint(i,gr_den_var_eff_nums[0].GetX()[i],gr_den_var_eff_nums[irat].GetY()[i]/gr_den_var_eff_nums[0].GetY()[i])
-          gr_ratio_den_var_eff_num.SetPointError(i,(vals[this_var][i+1]-vals[this_var][i])/2,0)
+          try:
+            gr_ratio_den_var_eff_num.SetPoint(i,gr_den_var_eff_nums[0].GetX()[i],gr_den_var_eff_nums[irat].GetY()[i]/gr_den_var_eff_nums[0].GetY()[i])
+            gr_ratio_den_var_eff_num.SetPointError(i,(vals[this_var][i+1]-vals[this_var][i])/2,0)
+          except:
+            pass
         
         gr_ratio_den_var_eff_num.SetMarkerStyle(20)
         gr_ratio_den_var_eff_num.SetMarkerColor(graphColors[irat])
@@ -541,11 +560,14 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #c_den_var_eff_num.SaveAs("Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
       #c_den_var_eff_num.SaveAs("fix_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
       #c_den_var_eff_num.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
-      c_den_var_eff_num.SaveAs("test/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
+      #c_den_var_eff_num.SaveAs("test/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
+      c_den_var_eff_num.SaveAs("Winter21/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
 
    
 ######purity#####       
     if this_measure == "purity":
+      if not (this_num == "L3NoID" or this_num == "L3") : continue
+
       num_vars = [this_num_vars[i].Rebin(len(vals[this_var])-1,'',vals[this_var]) for i in range(len(this_num_vars))]
       num_var_puritys = [this_num_var_puritys[i].Rebin(len(vals[this_var])-1,'',vals[this_var]) for i in range(len(this_num_var_puritys))]
       
@@ -580,7 +602,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           option_gr = "AP"
 
           gr_num_var_purity = TGraphAsymmErrors(len(vals[this_var])-1)
-          gr_num_var_purity.Divide(num_var_puritys[3],num_vars[3],"n e0")
+          gr_num_var_purity.Divide(num_var_puritys[igr],num_vars[igr],"n e0")
           gr_num_var_purity.SetMarkerStyle(20)
           gr_num_var_purity.SetMarkerColor(graphColors[igr])
           gr_num_var_purity.SetLineColor(graphColors[igr])
@@ -610,6 +632,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       lg_num_var_purity.Draw()
       
       txt_CMS.Draw()
+      if this_proc == "Zprime":
+        txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8 (14TeV)}")
       if this_proc == "DY":
         txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
       elif this_proc == "TT":
@@ -673,6 +697,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #c_num_var_purity.SaveAs("Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
       #c_num_var_purity.SaveAs("fix_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
       #c_num_var_purity.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
+      c_num_var_purity.SaveAs("Winter21/"+this_proc+"_"+this_fltr+"_"+this_num+"_"+this_var+"_purity.png")
 
 
 ########dR########
@@ -681,7 +706,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       txt_CMS = TText(0.1,0.905,"CMS simulation")
       txt_CMS.SetNDC()
 
-      if not this_var is "pt" : continue
+      if "L1" in this_den : continue #JH : only hardP supported
+      if not this_var is "pt" : continue #JH : only dR vs pt supported
 
       if "L1" in this_num and not "Iter" in this_num:
         AtVtx_iter = ["","AtVtx_"]
@@ -710,8 +736,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           elif "_N" in this_files[i]:
             this_WP = this_files[i].split('.')[-2].split('_')[-1] #JH : N* ....
 
-          os.system("mkdir -p test/dR/"+this_proc+"/"+this_WP+"/logY")
-          os.system("mkdir -p test/dR/"+this_proc+"/profile")
+          #os.system("mkdir -p test/dR/"+this_proc+"/"+this_WP+"/logY")
+          #os.system("mkdir -p test/dR/"+this_proc+"/profile")
 
           c_dR_2D = TCanvas("c_dR_2D","c_dR_2D",200,200,900,800)
           c_dR_2D.cd()
@@ -723,6 +749,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           den_var_dR_nums_2D[i].Draw("COLZ")
           
           txt_CMS.Draw()
+          if this_proc == "Zprime":
+            txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8 (14TeV)}")
           if this_proc == "DY":
             txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.5]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
           if this_proc == "TT":
@@ -732,7 +760,9 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           if this_proc == "QCD":
             txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.4]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
 
-          c_dR_2D.SaveAs("test/dR/"+this_proc+"/"+this_WP+"/"+this_proc+"_"+this_WP+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D.png")
+          #c_dR_2D.SaveAs("test/dR/"+this_proc+"/"+this_WP+"/"+this_proc+"_"+this_WP+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D.png")
+          os.system("mkdir -p Winter21/dR/"+this_proc+"/"+this_WP)
+          c_dR_2D.SaveAs("Winter21/dR/"+this_proc+"/"+this_WP+"/"+this_proc+"_"+this_WP+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"2D.png")
 
 
         ####Draw the profile####
@@ -777,6 +807,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         lg_dR_pf.Draw()
         
         txt_CMS.Draw()
+        if this_proc == "Zprime":
+          txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.6]{ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8 (14TeV)}")
         if this_proc == "DY":
           txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.5]{DYToLL_M-50_TuneCP5_14TeV-pythia8_HCAL (14TeV)}")
         if this_proc == "TT":
@@ -786,7 +818,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         if this_proc == "QCD":
           txt_sample.DrawLatexNDC(0.46,0.91,"#scale[0.4]{QCD_Pt_15to7000_TuneCP5_muEnriched_Flat_14TeV_pythia8 (14TeV)}")
 
-        c_dR_pf.SaveAs("test/dR/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"profile.png")
+        #c_dR_pf.SaveAs("test/dR/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_den+"_"+this_var+"_dR_"+this_num+this_trigLabel+"_"+AtVtx+"profile.png")
 
 
 

@@ -128,6 +128,7 @@ void draw_dR(vector<Object> gens, vector<Object> recos, double weight){
     if(Matched != -1){
       //cout << j << "th " << gens.at(j).Tag() << ", " << Matched << "th " << recos.at(Matched).Tag() << " : dR = " << gens.at(j).DeltaR(recos.at(Matched)) << endl;
       FillHist(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_2D",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,1000,0,10);
+      FillHist(gens.at(j).Tag()+"_ptres_dR_"+recos.at(Matched).Tag()+"_2D",( recos.at(Matched).Pt()-gens.at(j).Pt() ) / gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,10000,0,10,1000,0,10);
       FillProf(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_pf",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,0,10);
       this_matched.push_back(Matched);
     }
@@ -481,8 +482,6 @@ void calculateEff_new(TString input, TString output){
   //  TString input, output;
   //  is >> input;
   //  is >> output;
-
-  if(input.Contains("SKIP")) return;
 
   //==Set tree name and root files==//
   TChain *fChain = new TChain("ntupler/ntuple");
