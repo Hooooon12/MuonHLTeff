@@ -11,7 +11,10 @@
 #\"/data9/Users/wonjun/public/crab_Zprime_M6000_113X_hlt_muon_Run3_mc_20210703/210703_041027/0000/*.root\"	\"Run3_Winter21_Zprime6000_WP00.root\"	Run3_Winter21_Zprime6000_WP00
 # -- DY Winter21 -- #
 #\"/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_20210703/210703_050244/0000/*.root\"	\"Run3_Winter21_DY_WP00.root\"	Run3_Winter21_DY_WP00
-\"/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_20210703/210703_050244/0001/ntuple_1-*.root\"	\"Run3_Winter21_DY_WP00_reduced.root\"	Run3_Winter21_DY_WP00_reduced
+#\"/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_20210703/210703_050244/0001/ntuple_1-*.root\"	\"Run3_Winter21_DY_WP00_reduced.root\"	Run3_Winter21_DY_WP00_reduced
+#\"/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_20210703/210703_050244/0001/ntuple_1-1000.root\"	\"Run3_Winter21_DY_WP00_reduced.root\"	Run3_Winter21_DY_WP00_reduced
+# -- DY Winter20 -- # : for IOFromL1 track eff remeasurement
+#\"/data9/Users/wonjun/public/crab_DYToLL_M50_110X_hlt_muon_Run3_mc_wp00_20210513/210513_155853/0000/*.root\"	\"Run3_Winter20_DY_WP00.root\"	Run3_Winter20_DY_WP00
 #
 #
 #

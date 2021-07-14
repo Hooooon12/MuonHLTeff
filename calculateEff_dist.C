@@ -467,24 +467,29 @@ void do_purity(vector<Object> recos, vector<Object> Finals, double dR, double we
 }
 
 
-void calculateEff_new(TString input, TString output){
+void calculateEff_dist(TString input, TString output){
 
-  //ifstream in(input);
-  //string line;
+  vector<TString> inputs;
+  ifstream in(input);
+  string line;
 
-  //while(getline(in,line)){
-  //  istringstream is(line);
-  //  TString this_line = line;
-  //  if(this_line(0,1)=="#"||this_line=="") continue;
+  while(getline(in,line)){
+    istringstream is(line);
+    TString this_line = line;
+    if(this_line(0,1)=="#"||this_line=="") continue;
 
-  //  TString input, output;
-  //  is >> input;
-  //  is >> output;
+    TString this_input;
+    is >> this_input;
+    inputs.push_back(this_input);
+  }
 
   //==Set tree name and root files==//
   TChain *fChain = new TChain("ntupler/ntuple");
 
-  fChain->Add(input);
+  for (int i=0; i<inputs.size(); i++){
+    fChain->Add(inputs.at(i));
+  }
+
 
   double genEventWeight;
   int truePU;
@@ -1138,8 +1143,6 @@ void calculateEff_new(TString input, TString output){
   }
   delete pf_track;
   delete pf_trackFromL1;
-
-  //}
 
 }
 

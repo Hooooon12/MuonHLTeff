@@ -48,7 +48,7 @@ parser.add_argument('-f', '--filter', nargs='*', dest="fltr", default=["WP","N"]
 parser.add_argument('-m', '--measure', nargs='*', dest="measure", default=["trackeff","eff","purity","dR","profile","Ntrackfrac"], help="what to measure: trackeff, eff, purity, profile, Ntrackfrac")
 parser.add_argument('-v', '--variable', nargs='*', dest="var", default=["pt","eta","phi","truePU"], help="measure as a function of: pt, eta, phi, truePU")
 parser.add_argument('-d', '--denominator', nargs='*', dest="den", default=["hardP","hardP_L1"], help="denominator of efficiency: hardP, hardP_L1")
-parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1", "L1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1), L1") #L1 : for dR measurement
+parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["IOFromL1","L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1", "L1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1), L1") #L1 : for dR measurement
 #parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1)")
 parser.add_argument('-t', '--trigger', nargs='*', dest="trig", default=["single","double"], help="which trigger to check: single(IsoMu24), double(Mu17Mu8)")
 args = parser.parse_args()
@@ -59,6 +59,8 @@ os.system('mkdir -p new_Run3_newplots/eff_den_valid')
 os.system('mkdir -p new_Run3_newplots/eff_num_valid')
 os.system('mkdir -p Winter21/eff_den_valid')
 os.system('mkdir -p Winter21/eff_num_valid')
+os.system('mkdir -p Winter20/eff_den_valid')
+os.system('mkdir -p Winter20/eff_num_valid')
 
 #Xaxis title
 Xtitle = {'pt' : "#scale[1.8]{p_{T}(#mu) [GeV]}", 'eta' : "#scale[1.8]{#eta(#mu)}", 'phi' : "#scale[1.8]{#varphi(#mu)}", 'truePU' : "#scale[1.8]{# of truePU}"}
@@ -79,14 +81,16 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
     #this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_WP02.root","result_"+this_proc+"_WP04.root","result_"+this_proc+"_WP10.root"]
     #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_WP02.root","Run3_result_"+this_proc+"_WP04.root","Run3_result_"+this_proc+"_WP10.root"]
     #this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_WP02.root","new_Run3_result_"+this_proc+"_WP04.root","new_Run3_result_"+this_proc+"_WP10.root"]
-    #this_files = ["Run3_Winter21_DY_WP00_reduced.root"]
-    this_files = ["Run3_Winter21_Zprime6000_WP00.root"]
+    this_files = ["Run3_Winter21_DY_WP00_reduced.root"]
+    #this_files = ["Run3_Winter21_Zprime6000_WP00.root"]
+    #this_files = ["Run3_Winter20_DY_WP00.root"]
   elif this_fltr == "N":
     #this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_N50.root","result_"+this_proc+"_N10.root","result_"+this_proc+"_N5.root"]
     #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_N50.root","Run3_result_"+this_proc+"_N10.root","Run3_result_"+this_proc+"_N5.root","Run3_result_"+this_proc+"_N0.root"]
     #this_files = ["new_Run3_result_"+this_proc+"_WP00.root","new_Run3_result_"+this_proc+"_N50.root","new_Run3_result_"+this_proc+"_N10.root","new_Run3_result_"+this_proc+"_N5.root"]#,"new_Run3_result_"+this_proc+"_N0.root"] #JH : Comment here when measuring Iter2 track eff
-    #this_files = ["Run3_Winter21_DY_WP00_reduced.root"]
-    this_files = ["Run3_Winter21_Zprime6000_WP00.root"]
+    this_files = ["Run3_Winter21_DY_WP00_reduced.root"]
+    #this_files = ["Run3_Winter21_Zprime6000_WP00.root"]
+    #this_files = ["Run3_Winter20_DY_WP00.root"]
   
   files = [TFile.Open(this_files[i]) for i in range(len(this_files))]
   
@@ -275,6 +279,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #c_den_var.SaveAs("new_Run3_newplots/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
       #c_den_var.SaveAs("test/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
       c_den_var.SaveAs("Winter21/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
+      #c_den_var.SaveAs("Winter20/eff_den_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+".png")
 
 
 
@@ -405,6 +410,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #c_den_var_num.SaveAs("new_Run3_newplots/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
       #c_den_var_num.SaveAs("test/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
       c_den_var_num.SaveAs("Winter21/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
+      #c_den_var_num.SaveAs("Winter20/eff_num_valid/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_"+this_num+".png")
 
 
 
@@ -562,6 +568,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #c_den_var_eff_num.SaveAs("new_Run3_newplots/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
       #c_den_var_eff_num.SaveAs("test/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
       c_den_var_eff_num.SaveAs("Winter21/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
+      #c_den_var_eff_num.SaveAs("Winter20/"+this_proc+"_"+this_fltr+"_"+this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num+".png")
 
    
 ######purity#####       
@@ -707,7 +714,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       txt_CMS.SetNDC()
 
       if "L1" in this_den : continue #JH : only hardP supported
-      if not this_var is "pt" : continue #JH : only dR vs pt supported
+      if not "pt" in this_var : continue #JH : only dR vs pt, ptres supported
 
       if "L1" in this_num and not "Iter" in this_num:
         AtVtx_iter = ["","AtVtx_"]
