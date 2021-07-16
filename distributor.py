@@ -59,7 +59,8 @@ if __name__ == "__main__":
   pwd = os.getcwd()
   
   #campaigns = ["Winter20","Winter21"]
-  campaigns = ["Winter21"]
+  campaigns = ["Winter20_113X"]
+  #campaigns = ["Winter21_subset"]
   #processes = ["DY","TT","Jpsi","QCD","Zprime6000"]
   processes = ["DY"]
   #WPs = ["WP00","WP02","WP04","WP10","N50","N10","N5","N0"]
@@ -67,7 +68,10 @@ if __name__ == "__main__":
   
   samples = {'Run3_Winter21_Zprime6000_WP00' : "/data9/Users/wonjun/public/crab_Zprime_M6000_113X_hlt_muon_Run3_mc_20210703/210703_041027/0000/*.root",
              'Run3_Winter21_DY_WP00' : "/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_20210703/210703_050244/*/*.root",
+             'Run3_Winter21_subset_DY_WP00' : "/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_20210703/210703_050244/0001/*.root",
              'Run3_Winter20_DY_WP00' : "/data9/Users/wonjun/public/crab_DYToLL_M50_110X_hlt_muon_Run3_mc_wp00_20210513/210513_155853/0000/*.root",
+             'Run3_Winter20_113X_DY_WP00' : "/data9/Users/wonjun/public/crab_DYToLL_M50_Winter20_113X_hlt_muon_Run3_mc_20210714/210714_122920/0000/*.root",
+             #'Run3_Winter20_113X_DY_WP00' : "/data9/Users/wonjun/public/crab_DYToLL_M50_Winter20_113X_hlt_muon_Run3_mc_20210714/210714_122920/0000/ntuple_1.root",
   }
   
   for campaign in campaigns:
