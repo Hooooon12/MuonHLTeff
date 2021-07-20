@@ -59,7 +59,7 @@ if __name__ == "__main__":
   pwd = os.getcwd()
   
   #campaigns = ["Winter20","Winter21"]
-  campaigns = ["Winter20_113X"]
+  campaigns = ["Winter20_113X","Winter21_subset"]
   #campaigns = ["Winter21_subset"]
   #processes = ["DY","TT","Jpsi","QCD","Zprime6000"]
   processes = ["DY"]

@@ -582,9 +582,11 @@ void calculateEff_dist(TString input, TString output){
   double iterL3Muon_eta[5000];
   double iterL3Muon_phi[5000];
   double iterL3Muon_charge[5000];
+  int nhltIterL3OIMuonTrack;
   vector<double> *hltIterL3OIMuonTrack_pt = 0;
   vector<double> *hltIterL3OIMuonTrack_eta = 0;
   vector<double> *hltIterL3OIMuonTrack_phi = 0;
+  int nhltIter0IterL3MuonTrack;
   vector<double> *hltIter0IterL3MuonTrack_pt = 0;
   vector<double> *hltIter0IterL3MuonTrack_eta = 0;
   vector<double> *hltIter0IterL3MuonTrack_phi = 0;
@@ -607,9 +609,9 @@ void calculateEff_dist(TString input, TString output){
   //vector<double> *hltIter3IterL3FromL1MuonTrack_eta = 0;
   //vector<double> *hltIter3IterL3FromL1MuonTrack_phi = 0;
   int nhltIterL3OIMuonTrackAssociated;
-  //vector<double> *hltIterL3OIMuonTrackAssociated_pt = 0;
-  //vector<double> *hltIterL3OIMuonTrackAssociated_eta = 0;
-  //vector<double> *hltIterL3OIMuonTrackAssociated_phi = 0;
+  vector<double> *hltIterL3OIMuonTrackAssociated_pt = 0;
+  vector<double> *hltIterL3OIMuonTrackAssociated_eta = 0;
+  vector<double> *hltIterL3OIMuonTrackAssociated_phi = 0;
   vector<double> *hltIterL3OIMuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIterL3OIMuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIterL3OIMuonTrackAssociated_bestMatchTP_phi = 0;
@@ -624,9 +626,9 @@ void calculateEff_dist(TString input, TString output){
   vector<double> *tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_eta = 0;
   vector<double> *tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_phi = 0;
   int nhltIter0IterL3MuonTrackAssociated;
-  //vector<double> *hltIter0IterL3MuonTrackAssociated_pt = 0;
-  //vector<double> *hltIter0IterL3MuonTrackAssociated_eta = 0;
-  //vector<double> *hltIter0IterL3MuonTrackAssociated_phi = 0;
+  vector<double> *hltIter0IterL3MuonTrackAssociated_pt = 0;
+  vector<double> *hltIter0IterL3MuonTrackAssociated_eta = 0;
+  vector<double> *hltIter0IterL3MuonTrackAssociated_phi = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi = 0;
@@ -641,9 +643,9 @@ void calculateEff_dist(TString input, TString output){
   vector<double> *tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_eta = 0;
   vector<double> *tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_phi = 0;
   int nhltIter2IterL3MuonTrackAssociated;
-  //vector<double> *hltIter2IterL3MuonTrackAssociated_pt = 0;
-  //vector<double> *hltIter2IterL3MuonTrackAssociated_eta = 0;
-  //vector<double> *hltIter2IterL3MuonTrackAssociated_phi = 0;
+  vector<double> *hltIter2IterL3MuonTrackAssociated_pt = 0;
+  vector<double> *hltIter2IterL3MuonTrackAssociated_eta = 0;
+  vector<double> *hltIter2IterL3MuonTrackAssociated_phi = 0;
   vector<double> *hltIter2IterL3MuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIter2IterL3MuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIter2IterL3MuonTrackAssociated_bestMatchTP_phi = 0;
@@ -658,9 +660,9 @@ void calculateEff_dist(TString input, TString output){
   vector<double> *tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_eta = 0;
   vector<double> *tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_phi = 0;
   int nhltIter0IterL3FromL1MuonTrackAssociated;
-  //vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_pt = 0;
-  //vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_eta = 0;
-  //vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_phi = 0;
+  vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_pt = 0;
+  vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_eta = 0;
+  vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_phi = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi = 0;
@@ -675,9 +677,9 @@ void calculateEff_dist(TString input, TString output){
   vector<double> *tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_eta = 0;
   vector<double> *tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_phi = 0;
   int nhltIter2IterL3FromL1MuonTrackAssociated;
-  //vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_pt = 0;
-  //vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_eta = 0;
-  //vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_phi = 0;
+  vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_pt = 0;
+  vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_eta = 0;
+  vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_phi = 0;
   vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_phi = 0;
@@ -831,9 +833,11 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("iterL3Muon_eta",&iterL3Muon_eta);
   fChain->SetBranchAddress("iterL3Muon_phi",&iterL3Muon_phi);
   fChain->SetBranchAddress("iterL3Muon_charge",&iterL3Muon_charge);
+  fChain->SetBranchAddress("nhltIterL3OIMuonTrack",&nhltIterL3OIMuonTrack);
   fChain->SetBranchAddress("hltIterL3OIMuonTrack_pt",&hltIterL3OIMuonTrack_pt);
   fChain->SetBranchAddress("hltIterL3OIMuonTrack_eta",&hltIterL3OIMuonTrack_eta);
   fChain->SetBranchAddress("hltIterL3OIMuonTrack_phi",&hltIterL3OIMuonTrack_phi);
+  fChain->SetBranchAddress("nhltIter0IterL3MuonTrack",&nhltIter0IterL3MuonTrack);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrack_pt",&hltIter0IterL3MuonTrack_pt);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrack_eta",&hltIter0IterL3MuonTrack_eta);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrack_phi",&hltIter0IterL3MuonTrack_phi);
@@ -856,9 +860,9 @@ void calculateEff_dist(TString input, TString output){
   //fChain->SetBranchAddress("hltIter3IterL3FromL1MuonTrack_eta",&hltIter3IterL3FromL1MuonTrack_eta);
   //fChain->SetBranchAddress("hltIter3IterL3FromL1MuonTrack_phi",&hltIter3IterL3FromL1MuonTrack_phi);
   fChain->SetBranchAddress("nhltIterL3OIMuonTrackAssociated",&nhltIterL3OIMuonTrackAssociated);
-  //fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_pt", &hltIterL3OIMuonTrackAssociated_pt);
-  //fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_eta",&hltIterL3OIMuonTrackAssociated_eta);
-  //fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_phi",&hltIterL3OIMuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_pt", &hltIterL3OIMuonTrackAssociated_pt);
+  fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_eta",&hltIterL3OIMuonTrackAssociated_eta);
+  fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_phi",&hltIterL3OIMuonTrackAssociated_phi);
   fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_bestMatchTP_pt", &hltIterL3OIMuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_bestMatchTP_eta",&hltIterL3OIMuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIterL3OIMuonTrackAssociated_bestMatchTP_phi",&hltIterL3OIMuonTrackAssociated_bestMatchTP_phi);
@@ -873,9 +877,9 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_eta",&tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_eta);
   fChain->SetBranchAddress("tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_phi",&tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_phi);
   fChain->SetBranchAddress("nhltIter0IterL3MuonTrackAssociated",&nhltIter0IterL3MuonTrackAssociated);
-  //fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_pt", &hltIter0IterL3MuonTrackAssociated_pt);
-  //fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_eta",&hltIter0IterL3MuonTrackAssociated_eta);
-  //fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_phi",&hltIter0IterL3MuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_pt", &hltIter0IterL3MuonTrackAssociated_pt);
+  fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_eta",&hltIter0IterL3MuonTrackAssociated_eta);
+  fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_phi",&hltIter0IterL3MuonTrackAssociated_phi);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt", &hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta",&hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi",&hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi);
@@ -890,9 +894,9 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_eta",&tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_eta);
   fChain->SetBranchAddress("tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_phi",&tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_phi);
   fChain->SetBranchAddress("nhltIter2IterL3MuonTrackAssociated",&nhltIter2IterL3MuonTrackAssociated);
-  //fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_pt", &hltIter2IterL3MuonTrackAssociated_pt);
-  //fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_eta",&hltIter2IterL3MuonTrackAssociated_eta);
-  //fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_phi",&hltIter2IterL3MuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_pt", &hltIter2IterL3MuonTrackAssociated_pt);
+  fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_eta",&hltIter2IterL3MuonTrackAssociated_eta);
+  fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_phi",&hltIter2IterL3MuonTrackAssociated_phi);
   fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_bestMatchTP_pt", &hltIter2IterL3MuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_bestMatchTP_eta",&hltIter2IterL3MuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIter2IterL3MuonTrackAssociated_bestMatchTP_phi",&hltIter2IterL3MuonTrackAssociated_bestMatchTP_phi);
@@ -907,9 +911,9 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_eta",&tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_eta);
   fChain->SetBranchAddress("tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_phi",&tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_phi);
   fChain->SetBranchAddress("nhltIter0IterL3FromL1MuonTrackAssociated",&nhltIter0IterL3FromL1MuonTrackAssociated);
-  //fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_pt", &hltIter0IterL3FromL1MuonTrackAssociated_pt);
-  //fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_eta",&hltIter0IterL3FromL1MuonTrackAssociated_eta);
-  //fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_phi",&hltIter0IterL3FromL1MuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_pt", &hltIter0IterL3FromL1MuonTrackAssociated_pt);
+  fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_eta",&hltIter0IterL3FromL1MuonTrackAssociated_eta);
+  fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_phi",&hltIter0IterL3FromL1MuonTrackAssociated_phi);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt", &hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta",&hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi",&hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi);
@@ -924,9 +928,9 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_eta",&tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_eta);
   fChain->SetBranchAddress("tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_phi",&tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_phi);
   fChain->SetBranchAddress("nhltIter2IterL3FromL1MuonTrackAssociated",&nhltIter2IterL3FromL1MuonTrackAssociated);
-  //fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_pt", &hltIter2IterL3FromL1MuonTrackAssociated_pt);
-  //fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_eta",&hltIter2IterL3FromL1MuonTrackAssociated_eta);
-  //fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_phi",&hltIter2IterL3FromL1MuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_pt", &hltIter2IterL3FromL1MuonTrackAssociated_pt);
+  fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_eta",&hltIter2IterL3FromL1MuonTrackAssociated_eta);
+  fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_phi",&hltIter2IterL3FromL1MuonTrackAssociated_phi);
   fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pt", &hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_eta",&hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_phi",&hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_phi);
@@ -1318,7 +1322,7 @@ void calculateEff_dist(TString input, TString output){
       exit(1);
     }
     for(int j=0; j<ntpTo_hltIterL3OIMuonTrackAssociated; j++){ //JH : I'm assuming here the TPs are the same with each tracks
-      if( tpTo_hltIterL3OIMuonTrackAssociated_gen_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j)) < 2.4 ){
         Object TP;
         TP.SetPtEtaPhiM(tpTo_hltIterL3OIMuonTrackAssociated_gen_pt->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_phi->at(j),0);
         TP.SetTag("TP");
@@ -1328,8 +1332,12 @@ void calculateEff_dist(TString input, TString output){
     }
 
     //==tracks to measure eff==//
+    if ( nhltIterL3OIMuonTrack != nhltIterL3OIMuonTrackAssociated ){
+      cout << "ERROR :: nhltIterL3OIMuonTrack == " << nhltIterL3OIMuonTrack << ", nhltIterL3OIMuonTrackAssociated == " << nhltIterL3OIMuonTrackAssociated << " ." << endl;
+      exit(1);
+    }
     vector<Object> L3OITracks;
-    for(int j=0; j<hltIterL3OIMuonTrack_pt->size(); j++){
+    for(int j=0; j<nhltIterL3OIMuonTrack; j++){
       Object L3OITrack;
       L3OITrack.SetPtEtaPhiM(hltIterL3OIMuonTrack_pt->at(j),hltIterL3OIMuonTrack_eta->at(j),hltIterL3OIMuonTrack_phi->at(j),0);
       L3OITrack.SetTag("OI");
@@ -1341,7 +1349,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIterL3OIMuonTrackAssociated; j++){
       if( hltIterL3OIMuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIterL3OIMuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object L3OIAssoTrack;
-        L3OIAssoTrack.SetPtEtaPhiE(hltIterL3OIMuonTrackAssociated_bestMatchTP_pt->at(j),hltIterL3OIMuonTrackAssociated_bestMatchTP_eta->at(j),hltIterL3OIMuonTrackAssociated_bestMatchTP_phi->at(j),hltIterL3OIMuonTrackAssociated_bestMatchTP_energy->at(j));
+        L3OIAssoTrack.SetPtEtaPhiM(hltIterL3OIMuonTrackAssociated_pt->at(j),hltIterL3OIMuonTrackAssociated_eta->at(j),hltIterL3OIMuonTrackAssociated_phi->at(j),0);
         L3OIAssoTrack.SetTag("OIAsso");
         L3OIAssoTrack.SetTruePU(truePU);
         L3OIAssoTracks.push_back(L3OIAssoTrack);
@@ -1349,9 +1357,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoL3OITracks;
     for(int j=0; j<ntpTo_hltIterL3OIMuonTrackAssociated; j++){
-      if( tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoL3OITrack;
-        TPtoL3OITrack.SetPtEtaPhiM(tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt->at(j),tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_eta->at(j),tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoL3OITrack.SetPtEtaPhiM(tpTo_hltIterL3OIMuonTrackAssociated_gen_pt->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_phi->at(j),0);
         TPtoL3OITrack.SetTag("TPtoOI");
         TPtoL3OITrack.SetTruePU(truePU);
         TPtoL3OITracks.push_back(TPtoL3OITrack);
@@ -1359,7 +1367,7 @@ void calculateEff_dist(TString input, TString output){
     }
   
     vector<Object> Iter0L3Tracks;
-    for(int j=0; j<hltIter0IterL3MuonTrack_pt->size(); j++){
+    for(int j=0; j<nhltIter0IterL3MuonTrack; j++){
       Object Iter0L3Track;
       Iter0L3Track.SetPtEtaPhiM(hltIter0IterL3MuonTrack_pt->at(j),hltIter0IterL3MuonTrack_eta->at(j),hltIter0IterL3MuonTrack_phi->at(j),0);
       Iter0L3Track.SetTag("Iter0FromL2");
@@ -1371,7 +1379,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIter0IterL3MuonTrackAssociated; j++){
       if( hltIter0IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object Iter0L3AssoTrack;
-        Iter0L3AssoTrack.SetPtEtaPhiE(hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt->at(j),hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta->at(j),hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi->at(j),hltIter0IterL3MuonTrackAssociated_bestMatchTP_energy->at(j));
+        Iter0L3AssoTrack.SetPtEtaPhiM(hltIter0IterL3MuonTrackAssociated_pt->at(j),hltIter0IterL3MuonTrackAssociated_eta->at(j),hltIter0IterL3MuonTrackAssociated_phi->at(j),0);
         Iter0L3AssoTrack.SetTag("Iter0FromL2Asso");
         Iter0L3AssoTrack.SetTruePU(truePU);
         Iter0L3AssoTracks.push_back(Iter0L3AssoTrack);
@@ -1379,9 +1387,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoIter0L3Tracks;
     for(int j=0; j<ntpTo_hltIter0IterL3MuonTrackAssociated; j++){
-      if( tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIter0IterL3MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoIter0L3Track;
-        TPtoIter0L3Track.SetPtEtaPhiM(tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j),tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_eta->at(j),tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoIter0L3Track.SetPtEtaPhiM(tpTo_hltIter0IterL3MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter0IterL3MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter0IterL3MuonTrackAssociated_gen_phi->at(j),0);
         TPtoIter0L3Track.SetTag("TPtoIter0FromL2");
         TPtoIter0L3Track.SetTruePU(truePU);
         TPtoIter0L3Tracks.push_back(TPtoIter0L3Track);
@@ -1389,7 +1397,7 @@ void calculateEff_dist(TString input, TString output){
     }
   
     vector<Object> Iter2L3Tracks;
-    for(int j=0; j<hltIter2IterL3MuonTrack_pt->size(); j++){
+    for(int j=0; j<nhltIter2IterL3MuonTrack; j++){
       Object Iter2L3Track;
       Iter2L3Track.SetPtEtaPhiM(hltIter2IterL3MuonTrack_pt->at(j),hltIter2IterL3MuonTrack_eta->at(j),hltIter2IterL3MuonTrack_phi->at(j),0);
       Iter2L3Track.SetTag("Iter2FromL2");
@@ -1401,7 +1409,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIter2IterL3MuonTrackAssociated; j++){
       if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object Iter2L3AssoTrack;
-        Iter2L3AssoTrack.SetPtEtaPhiE(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pt->at(j),hltIter2IterL3MuonTrackAssociated_bestMatchTP_eta->at(j),hltIter2IterL3MuonTrackAssociated_bestMatchTP_phi->at(j),hltIter2IterL3MuonTrackAssociated_bestMatchTP_energy->at(j));
+        Iter2L3AssoTrack.SetPtEtaPhiM(hltIter2IterL3MuonTrackAssociated_pt->at(j),hltIter2IterL3MuonTrackAssociated_eta->at(j),hltIter2IterL3MuonTrackAssociated_phi->at(j),0);
         Iter2L3AssoTrack.SetTag("Iter2FromL2Asso");
         Iter2L3AssoTrack.SetTruePU(truePU);
         Iter2L3AssoTracks.push_back(Iter2L3AssoTrack);
@@ -1409,9 +1417,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoIter2L3Tracks;
     for(int j=0; j<ntpTo_hltIter2IterL3MuonTrackAssociated; j++){
-      if( tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIter2IterL3MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoIter2L3Track;
-        TPtoIter2L3Track.SetPtEtaPhiM(tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j),tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_eta->at(j),tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoIter2L3Track.SetPtEtaPhiM(tpTo_hltIter2IterL3MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter2IterL3MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter2IterL3MuonTrackAssociated_gen_phi->at(j),0);
         TPtoIter2L3Track.SetTag("TPtoIter2FromL2");
         TPtoIter2L3Track.SetTruePU(truePU);
         TPtoIter2L3Tracks.push_back(TPtoIter2L3Track);
@@ -1427,7 +1435,7 @@ void calculateEff_dist(TString input, TString output){
     //}
   
     vector<Object> Iter0L3FromL1Tracks;
-    for(int j=0; j<hltIter0IterL3FromL1MuonTrack_pt->size(); j++){
+    for(int j=0; j<nhltIter0IterL3FromL1MuonTrack; j++){
       Object Iter0L3FromL1Track;
       Iter0L3FromL1Track.SetPtEtaPhiM(hltIter0IterL3FromL1MuonTrack_pt->at(j),hltIter0IterL3FromL1MuonTrack_eta->at(j),hltIter0IterL3FromL1MuonTrack_phi->at(j),0);
       Iter0L3FromL1Track.SetTag("Iter0FromL1");
@@ -1439,7 +1447,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIter0IterL3FromL1MuonTrackAssociated; j++){
       if( hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object Iter0L3FromL1AssoTrack;
-        Iter0L3FromL1AssoTrack.SetPtEtaPhiE(hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt->at(j),hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta->at(j),hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi->at(j),hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_energy->at(j));
+        Iter0L3FromL1AssoTrack.SetPtEtaPhiM(hltIter0IterL3FromL1MuonTrackAssociated_pt->at(j),hltIter0IterL3FromL1MuonTrackAssociated_eta->at(j),hltIter0IterL3FromL1MuonTrackAssociated_phi->at(j),0);
         Iter0L3FromL1AssoTrack.SetTag("Iter0FromL1Asso");
         Iter0L3FromL1AssoTrack.SetTruePU(truePU);
         Iter0L3FromL1AssoTracks.push_back(Iter0L3FromL1AssoTrack);
@@ -1447,17 +1455,21 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoIter0L3FromL1Tracks;
     for(int j=0; j<ntpTo_hltIter0IterL3FromL1MuonTrackAssociated; j++){
-      if( tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoIter0L3FromL1Track;
-        TPtoIter0L3FromL1Track.SetPtEtaPhiM(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j),tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_eta->at(j),tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoIter0L3FromL1Track.SetPtEtaPhiM(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_phi->at(j),0);
         TPtoIter0L3FromL1Track.SetTag("TPtoIter0FromL1");
         TPtoIter0L3FromL1Track.SetTruePU(truePU);
         TPtoIter0L3FromL1Tracks.push_back(TPtoIter0L3FromL1Track);
       }
     }
   
+    if ( nhltIter2IterL3FromL1MuonTrack != nhltIter2IterL3FromL1MuonTrackAssociated ){
+      cout << "ERROR :: nhltIter2IterL3FromL1MuonTrack == " << nhltIter2IterL3FromL1MuonTrack << ", nhltIter2IterL3FromL1MuonTrackAssociated == " << nhltIter2IterL3FromL1MuonTrackAssociated << " ." << endl;
+      exit(1);
+    }
     vector<Object> Iter2L3FromL1Tracks;
-    for(int j=0; j<hltIter2IterL3FromL1MuonTrack_pt->size(); j++){
+    for(int j=0; j<nhltIter2IterL3FromL1MuonTrack; j++){
       Object Iter2L3FromL1Track;
       Iter2L3FromL1Track.SetPtEtaPhiM(hltIter2IterL3FromL1MuonTrack_pt->at(j),hltIter2IterL3FromL1MuonTrack_eta->at(j),hltIter2IterL3FromL1MuonTrack_phi->at(j),0);
       Iter2L3FromL1Track.SetTag("Iter2FromL1");
@@ -1470,7 +1482,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIter2IterL3FromL1MuonTrackAssociated; j++){
       if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object Iter2L3FromL1AssoTrack;
-        Iter2L3FromL1AssoTrack.SetPtEtaPhiE(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pt->at(j),hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_eta->at(j),hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_phi->at(j),hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_energy->at(j));
+        Iter2L3FromL1AssoTrack.SetPtEtaPhiM(hltIter2IterL3FromL1MuonTrackAssociated_pt->at(j),hltIter2IterL3FromL1MuonTrackAssociated_eta->at(j),hltIter2IterL3FromL1MuonTrackAssociated_phi->at(j),0);
         Iter2L3FromL1AssoTrack.SetTag("Iter2FromL1Asso");
         Iter2L3FromL1AssoTrack.SetTruePU(truePU);
         Iter2L3FromL1AssoTracks.push_back(Iter2L3FromL1AssoTrack);
@@ -1478,9 +1490,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoIter2L3FromL1Tracks;
     for(int j=0; j<ntpTo_hltIter2IterL3FromL1MuonTrackAssociated; j++){
-      if( tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoIter2L3FromL1Track;
-        TPtoIter2L3FromL1Track.SetPtEtaPhiM(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j),tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_eta->at(j),tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoIter2L3FromL1Track.SetPtEtaPhiM(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_phi->at(j),0);
         TPtoIter2L3FromL1Track.SetTag("TPtoIter2FromL1");
         TPtoIter2L3FromL1Track.SetTruePU(truePU);
         TPtoIter2L3FromL1Tracks.push_back(TPtoIter2L3FromL1Track);
@@ -1508,7 +1520,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIter2IterL3MuonMergedAssociated; j++){
       if( hltIter2IterL3MuonMergedAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonMergedAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object IOFromL2AssoTrack;
-        IOFromL2AssoTrack.SetPtEtaPhiE(hltIter2IterL3MuonMergedAssociated_bestMatchTP_pt->at(j),hltIter2IterL3MuonMergedAssociated_bestMatchTP_eta->at(j),hltIter2IterL3MuonMergedAssociated_bestMatchTP_phi->at(j),hltIter2IterL3MuonMergedAssociated_bestMatchTP_energy->at(j));
+        IOFromL2AssoTrack.SetPtEtaPhiM(hltIter2IterL3MuonMergedAssociated_pt->at(j),hltIter2IterL3MuonMergedAssociated_eta->at(j),hltIter2IterL3MuonMergedAssociated_phi->at(j),0);
         IOFromL2AssoTrack.SetTag("IOFromL2Asso");
         IOFromL2AssoTrack.SetTruePU(truePU);
         IOFromL2AssoTracks.push_back(IOFromL2AssoTrack);
@@ -1516,9 +1528,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoIOFromL2Tracks;
     for(int j=0; j<ntpTo_hltIter2IterL3MuonMergedAssociated; j++){
-      if( tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIter2IterL3MuonMergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoIOFromL2Track;
-        TPtoIOFromL2Track.SetPtEtaPhiM(tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j),tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_eta->at(j),tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoIOFromL2Track.SetPtEtaPhiM(tpTo_hltIter2IterL3MuonMergedAssociated_gen_pt->at(j),tpTo_hltIter2IterL3MuonMergedAssociated_gen_eta->at(j),tpTo_hltIter2IterL3MuonMergedAssociated_gen_phi->at(j),0);
         TPtoIOFromL2Track.SetTag("TPtoIOFromL2");
         TPtoIOFromL2Track.SetTruePU(truePU);
         TPtoIOFromL2Tracks.push_back(TPtoIOFromL2Track);
@@ -1561,7 +1573,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIter2IterL3FromL1MuonMergedAssociated; j++){
       if( hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object IOFromL1AssoTrack;
-        IOFromL1AssoTrack.SetPtEtaPhiE(hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_pt->at(j),hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_eta->at(j),hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_phi->at(j),hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_energy->at(j));
+        IOFromL1AssoTrack.SetPtEtaPhiM(hltIter2IterL3FromL1MuonMergedAssociated_pt->at(j),hltIter2IterL3FromL1MuonMergedAssociated_eta->at(j),hltIter2IterL3FromL1MuonMergedAssociated_phi->at(j),0);
         IOFromL1AssoTrack.SetTag("IOFromL1Asso");
         IOFromL1AssoTrack.SetTruePU(truePU);
         IOFromL1AssoTracks.push_back(IOFromL1AssoTrack);
@@ -1569,9 +1581,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoIOFromL1Tracks;
     for(int j=0; j<ntpTo_hltIter2IterL3FromL1MuonMergedAssociated; j++){
-      if( tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoIOFromL1Track;
-        TPtoIOFromL1Track.SetPtEtaPhiM(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j),tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_eta->at(j),tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoIOFromL1Track.SetPtEtaPhiM(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_pt->at(j),tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_eta->at(j),tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_phi->at(j),0);
         TPtoIOFromL1Track.SetTag("TPtoIOFromL1");
         TPtoIOFromL1Track.SetTruePU(truePU);
         TPtoIOFromL1Tracks.push_back(TPtoIOFromL1Track);
@@ -1591,7 +1603,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIterL3MuonMergedAssociated; j++){
       if( hltIterL3MuonMergedAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIterL3MuonMergedAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object UpToFromL2AssoTrack;
-        UpToFromL2AssoTrack.SetPtEtaPhiE(hltIterL3MuonMergedAssociated_bestMatchTP_pt->at(j),hltIterL3MuonMergedAssociated_bestMatchTP_eta->at(j),hltIterL3MuonMergedAssociated_bestMatchTP_phi->at(j),hltIterL3MuonMergedAssociated_bestMatchTP_energy->at(j));
+        UpToFromL2AssoTrack.SetPtEtaPhiM(hltIterL3MuonMergedAssociated_pt->at(j),hltIterL3MuonMergedAssociated_eta->at(j),hltIterL3MuonMergedAssociated_phi->at(j),0);
         UpToFromL2AssoTrack.SetTag("UpToFromL2Asso");
         UpToFromL2AssoTrack.SetTruePU(truePU);
         UpToFromL2AssoTracks.push_back(UpToFromL2AssoTrack);
@@ -1599,9 +1611,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoUpToFromL2Tracks;
     for(int j=0; j<ntpTo_hltIterL3MuonMergedAssociated; j++){
-      if( tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIterL3MuonMergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoUpToFromL2Track;
-        TPtoUpToFromL2Track.SetPtEtaPhiM(tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j),tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_eta->at(j),tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoUpToFromL2Track.SetPtEtaPhiM(tpTo_hltIterL3MuonMergedAssociated_gen_pt->at(j),tpTo_hltIterL3MuonMergedAssociated_gen_eta->at(j),tpTo_hltIterL3MuonMergedAssociated_gen_phi->at(j),0);
         TPtoUpToFromL2Track.SetTag("TPtoUpToFromL2");
         TPtoUpToFromL2Track.SetTruePU(truePU);
         TPtoUpToFromL2Tracks.push_back(TPtoUpToFromL2Track);
@@ -1621,7 +1633,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<nhltIterL3MuonAndMuonFromL1MergedAssociated; j++){
       if( hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object UpToFromL1AssoTrack;
-        UpToFromL1AssoTrack.SetPtEtaPhiE(hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_pt->at(j),hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_eta->at(j),hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_phi->at(j),hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_energy->at(j));
+        UpToFromL1AssoTrack.SetPtEtaPhiM(hltIterL3MuonAndMuonFromL1MergedAssociated_pt->at(j),hltIterL3MuonAndMuonFromL1MergedAssociated_eta->at(j),hltIterL3MuonAndMuonFromL1MergedAssociated_phi->at(j),0);
         UpToFromL1AssoTrack.SetTag("UpToFromL1Asso");
         UpToFromL1AssoTrack.SetTruePU(truePU);
         UpToFromL1AssoTracks.push_back(UpToFromL1AssoTrack);
@@ -1629,9 +1641,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoUpToFromL1Tracks;
     for(int j=0; j<ntpTo_hltIterL3MuonAndMuonFromL1MergedAssociated; j++){
-      if( tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoUpToFromL1Track;
-        TPtoUpToFromL1Track.SetPtEtaPhiM(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j),tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_eta->at(j),tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoUpToFromL1Track.SetPtEtaPhiM(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_pt->at(j),tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_eta->at(j),tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_phi->at(j),0);
         TPtoUpToFromL1Track.SetTag("TPtoUpToFromL1");
         TPtoUpToFromL1Track.SetTruePU(truePU);
         TPtoUpToFromL1Tracks.push_back(TPtoUpToFromL1Track);
@@ -1651,7 +1663,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<niterL3MuonNoIDTrackAssociated; j++){
       if( iterL3MuonNoIDTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(iterL3MuonNoIDTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object L3MuonAssoTrack_NoID;
-        L3MuonAssoTrack_NoID.SetPtEtaPhiE(iterL3MuonNoIDTrackAssociated_bestMatchTP_pt->at(j),iterL3MuonNoIDTrackAssociated_bestMatchTP_eta->at(j),iterL3MuonNoIDTrackAssociated_bestMatchTP_phi->at(j),iterL3MuonNoIDTrackAssociated_bestMatchTP_energy->at(j));
+        L3MuonAssoTrack_NoID.SetPtEtaPhiM(iterL3MuonNoIDTrackAssociated_pt->at(j),iterL3MuonNoIDTrackAssociated_eta->at(j),iterL3MuonNoIDTrackAssociated_phi->at(j),0);
         L3MuonAssoTrack_NoID.SetTag("L3NoIDTrackAsso");
         L3MuonAssoTrack_NoID.SetTruePU(truePU);
         L3MuonAssoTracks_NoID.push_back(L3MuonAssoTrack_NoID);
@@ -1659,9 +1671,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoL3MuonTracks_NoID;
     for(int j=0; j<ntpTo_iterL3MuonNoIDTrackAssociated; j++){
-      if( tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_iterL3MuonNoIDTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoL3MuonTrack_NoID;
-        TPtoL3MuonTrack_NoID.SetPtEtaPhiM(tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j),tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta->at(j),tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoL3MuonTrack_NoID.SetPtEtaPhiM(tpTo_iterL3MuonNoIDTrackAssociated_gen_pt->at(j),tpTo_iterL3MuonNoIDTrackAssociated_gen_eta->at(j),tpTo_iterL3MuonNoIDTrackAssociated_gen_phi->at(j),0);
         TPtoL3MuonTrack_NoID.SetTag("TPtoL3NoIDTrack");
         TPtoL3MuonTrack_NoID.SetTruePU(truePU);
         TPtoL3MuonTracks_NoID.push_back(TPtoL3MuonTrack_NoID);
@@ -1681,7 +1693,7 @@ void calculateEff_dist(TString input, TString output){
     for(int j=0; j<niterL3MuonTrackAssociated; j++){
       if( iterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(iterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
         Object L3MuonAssoTrack;
-        L3MuonAssoTrack.SetPtEtaPhiE(iterL3MuonTrackAssociated_bestMatchTP_pt->at(j),iterL3MuonTrackAssociated_bestMatchTP_eta->at(j),iterL3MuonTrackAssociated_bestMatchTP_phi->at(j),iterL3MuonTrackAssociated_bestMatchTP_energy->at(j));
+        L3MuonAssoTrack.SetPtEtaPhiM(iterL3MuonTrackAssociated_pt->at(j),iterL3MuonTrackAssociated_eta->at(j),iterL3MuonTrackAssociated_phi->at(j),0);
         L3MuonAssoTrack.SetTag("L3TrackAsso");
         L3MuonAssoTrack.SetTruePU(truePU);
         L3MuonAssoTracks.push_back(L3MuonAssoTrack);
@@ -1689,9 +1701,9 @@ void calculateEff_dist(TString input, TString output){
     }
     vector<Object> TPtoL3MuonTracks;
     for(int j=0; j<ntpTo_iterL3MuonTrackAssociated; j++){
-      if( tpTo_iterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
+      if( fabs(tpTo_iterL3MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_iterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
         Object TPtoL3MuonTrack;
-        TPtoL3MuonTrack.SetPtEtaPhiM(tpTo_iterL3MuonTrackAssociated_bestMatchTrk_pt->at(j),tpTo_iterL3MuonTrackAssociated_bestMatchTrk_eta->at(j),tpTo_iterL3MuonTrackAssociated_bestMatchTrk_phi->at(j),0);
+        TPtoL3MuonTrack.SetPtEtaPhiM(tpTo_iterL3MuonTrackAssociated_gen_pt->at(j),tpTo_iterL3MuonTrackAssociated_gen_eta->at(j),tpTo_iterL3MuonTrackAssociated_gen_phi->at(j),0);
         TPtoL3MuonTrack.SetTag("TPtoL3Track");
         TPtoL3MuonTrack.SetTruePU(truePU);
         TPtoL3MuonTracks.push_back(TPtoL3MuonTrack);
@@ -1768,7 +1780,7 @@ void calculateEff_dist(TString input, TString output){
     do_eff_num_others(hardPs_above_L1matched_med, L3Muons_NoID, 0.1, genEventWeight);
     do_eff_num_others(hardPs_above_L1matched_med, L3Muons, 0.1, genEventWeight);
 
-  //====================================Efficiency vs eta, phi, truePU========================================//
+  //=======================New efficiency (hit association) vs pt, eta, phi, truePU============================//
 
     do_neweff_den_vars(TPs, genEventWeight);
     do_neweff_num_vars(TPtoL3OITracks, genEventWeight);
