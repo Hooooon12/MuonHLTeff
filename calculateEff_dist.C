@@ -44,50 +44,279 @@ void FillProf(TString pfname, double value_x, double value_y, double weight, int
   pf->Fill(value_x, value_y, weight);
 }
 
-//My object = TLorentzVector + nametag + pileup//
+//My object = TLorentzVector + nametag + pileup + L1 matcher info + TP info//
 class Object: public TLorentzVector{
 
 private:
 
   TString j_tag;
   int j_truePU;
+  double j_dR;
+  double j_l1ptByQ;
+  double j_l1etaByQ;
+  double j_l1phiByQ;
+  double j_l1chargeByQ;
+  int j_l1qByQ;
+  double j_l1drByQ;
+  double j_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt;
+  double j_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt;
+  double j_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt;
+  double j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt;
+  double j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt;
+  double j_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt;
+  double j_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt;
+  double j_hltIterL3MuonMergedAssociated_bestMatchTrk_pt;
+  double j_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt;
+  double j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt;
+  double j_iterL3MuonTrackAssociated_bestMatchTrk_pt;
+  double j_quality;
 
 public:
 
+//Initialize the variables
   Object(){
     j_tag = "";
     j_truePU = -999;
+    j_dR = -999.;
+    j_l1ptByQ = -999.;
+    j_l1etaByQ = -999.;
+    j_l1phiByQ = -999.;
+    j_l1chargeByQ = -999.;
+    j_l1qByQ = -999;
+    j_l1drByQ = -999.;
+    j_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt = -999.;
+    j_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt = -999.;
+    j_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt = -999.;
+    j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt = -999.;
+    j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt = -999.;
+    j_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt = -999.;
+    j_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt = -999.;
+    j_hltIterL3MuonMergedAssociated_bestMatchTrk_pt = -999.;
+    j_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt = -999.;
+    j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt = -999.;
+    j_iterL3MuonTrackAssociated_bestMatchTrk_pt = -999.;
+    j_quality = -999.;
   }
 
   ~Object() {}
 
+//Set the variables
   void SetTag(TString this_tag){
     j_tag = this_tag;
   }
-
   void SetTruePU(int this_truePU){
     j_truePU = this_truePU;
   }
+  void SetdR(double this_dR){
+    j_dR = this_dR;
+  }
+  void Setl1ptByQ(double this_l1ptByQ){
+    j_l1ptByQ = this_l1ptByQ;
+  }
+  void Setl1etaByQ(double this_l1etaByQ){
+    j_l1etaByQ = this_l1etaByQ;
+  }
+  void Setl1phiByQ(double this_l1phiByQ){
+    j_l1phiByQ = this_l1phiByQ;
+  }
+  void Setl1chargeByQ(double this_l1chargeByQ){
+    j_l1chargeByQ = this_l1chargeByQ;
+  }
+  void Setl1qByQ(int this_l1qByQ){
+    j_l1qByQ = this_l1qByQ;
+  }
+  void Setl1drByQ(double this_l1drByQ){
+    j_l1drByQ = this_l1drByQ;
+  }
+  void SetHltIterL3OIMuonTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIterL3MuonMergedAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIterL3MuonMergedAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetHltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt(double this_pt){
+    j_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetIterL3MuonTrackAssociated_bestMatchTrk_pt(double this_pt){
+    j_iterL3MuonTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetQuality(double this_quality){
+    j_quality = this_quality;
+  }
 
+//Call the variables
   TString Tag(){
     return j_tag;
   }
-
   int truePU(){
     return j_truePU;
+  }
+  double dR(){
+    return j_dR;
+  }
+  double l1ptByQ(){
+    return j_l1ptByQ;
+  }
+  double l1etaByQ(){
+    return j_l1etaByQ;
+  }
+  double l1phiByQ(){
+    return j_l1phiByQ;
+  }
+  double l1chargeByQ(){
+    return j_l1chargeByQ;
+  }
+  int l1qByQ(){
+    return j_l1qByQ;
+  }
+  double l1drByQ(){
+    return j_l1drByQ;
+  }
+  double hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt(){
+    return j_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt;
+  }
+  double hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt(){
+    return j_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt;
+  }
+  double hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt(){
+    return j_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt;
+  }
+  double hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(){
+    return j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt;
+  }
+  double hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(){
+    return j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt;
+  }
+  double hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt(){
+    return j_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt;
+  }
+  double hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt(){
+    return j_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt;
+  }
+  double hltIterL3MuonMergedAssociated_bestMatchTrk_pt(){
+    return j_hltIterL3MuonMergedAssociated_bestMatchTrk_pt;
+  }
+  double hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt(){
+    return j_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt;
+  }
+  double iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(){
+    return j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt;
+  }
+  double iterL3MuonTrackAssociated_bestMatchTrk_pt(){
+    return j_iterL3MuonTrackAssociated_bestMatchTrk_pt;
+  }
+  double quality(){
+    return j_quality;
   }
 
 };
 
+vector<Object> SelectL1(vector<Object> L1MuonsRaw, double qualcut, int ptcut){
 
-void match(Object gens, Object L1){
-//TODO
+  TString this_tag;
+  TString ptcut_t = Form("%d",ptcut);
+  if(qualcut == 11) this_tag = "L1SQ"+ptcut_t;
+  else if(qualcut == 7) this_tag = "L1DQ"+ptcut_t;
+  else this_tag = "L1Raw"+ptcut_t;
+  if(L1MuonsRaw.size()!=0){
+    if(L1MuonsRaw.at(0).Tag().Contains("AtVtx")) this_tag = this_tag+"_AtVtx";
+  }
+
+  vector<Object> L1s_Selected;
+  for(int j=0; j<L1MuonsRaw.size(); j++){
+    Object L1_tmp = L1MuonsRaw.at(j);
+    if(L1MuonsRaw.at(j).quality() > qualcut && L1MuonsRaw.at(j).Pt() > ptcut){
+      L1_tmp.SetPtEtaPhiM(L1MuonsRaw.at(j).Pt(), L1MuonsRaw.at(j).Eta(), L1MuonsRaw.at(j).Phi(), 0);
+      L1_tmp.SetTag(this_tag);
+      L1_tmp.SetQuality(L1MuonsRaw.at(j).quality());
+      L1s_Selected.push_back(L1_tmp);
+    }
+  }
+
+  return L1s_Selected;
+
+}
+
+vector<Object> SelectL1Matched(vector<Object> hardPs, double dRcut, double qualcut, int ptcut){
+
+  TString this_tag;
+  TString ptcut_t = Form("%d",ptcut);
+  if(qualcut == 11) this_tag = "L1Matched_SQ"+ptcut_t;
+  else if(qualcut == 7) this_tag = "L1Matched_DQ"+ptcut_t;
+  else this_tag = "L1Matched_Raw"+ptcut_t;
+
+  vector<Object> L1s_Matched;
+  for(int j=0; j<hardPs.size(); j++){
+    if(-1<hardPs.at(j).l1ptByQ()&&hardPs.at(j).l1drByQ()<dRcut){
+      if(hardPs.at(j).l1qByQ() > qualcut && hardPs.at(j).l1ptByQ() > ptcut){
+        Object L1_tmp;
+        L1_tmp.SetPtEtaPhiM(hardPs.at(j).l1ptByQ(), hardPs.at(j).l1etaByQ(), hardPs.at(j).l1phiByQ(), 0);
+        L1_tmp.SetTag(this_tag);
+        L1_tmp.SetQuality(hardPs.at(j).l1qByQ());
+        //if(L1_tmp.Tag().Contains("Raw0")){
+        //  cout << j << "th gen muon;" << endl;
+        //  cout << hardPs.at(j).Tag() << " pt, eta, phi : " << hardPs.at(j).Pt() << ", " << hardPs.at(j).Eta() << ", " << hardPs.at(j).Phi() << endl;
+        //  cout << L1_tmp.Tag() << " pt, eta, phi : " << hardPs.at(j).l1ptByQ() << ", " << hardPs.at(j).l1etaByQ() << ", " << hardPs.at(j).l1phiByQ() << endl;
+        //}
+        L1s_Matched.push_back(L1_tmp);
+      }
+    }
+  }
+
+  return L1s_Matched;
+
+}
+
+vector<Object> MatchTPtoL1(vector<Object> TPs, vector<Object> hardPs, double qualcut, int ptcut, double dRcut){ // why ptcut int? to get nice ptcut_t.
+
+  TString this_tag;
+  TString ptcut_t = Form("%d",ptcut);
+  if(qualcut == 11) this_tag = "TP_L1SQ"+ptcut_t;
+  else if(qualcut == 7) this_tag = "TP_L1DQ"+ptcut_t;
+  else this_tag = "TP_L1Raw"+ptcut_t;
+
+  vector<Object> TPs_L1matched;
+  for(int j=0; j<TPs.size(); j++){
+    Object TP_L1matched = TPs.at(j);
+    for(int k=0; k<hardPs.size(); k++){
+      if( TPs.at(j).Pt() == hardPs.at(k).Pt() && TPs.at(j).Eta() == hardPs.at(k).Eta() && TPs.at(j).Phi() == hardPs.at(k).Phi() ){
+        if(hardPs.at(k).l1qByQ() > qualcut && hardPs.at(k).l1ptByQ() > ptcut && hardPs.at(k).l1drByQ() < dRcut){
+          TP_L1matched.SetTag(this_tag);
+          TPs_L1matched.push_back(TP_L1matched);
+        }
+      }
+    }
+  }
+
+  return TPs_L1matched;
+
 }
 
 
 bool PtCompare(TLorentzVector p1, TLorentzVector p2){ return (p1.Pt() > p2.Pt()); }
 
-void check_Jpsi_dR(vector<Object> gens, double weight){
+void check_Meson_dR(vector<Object> gens, double weight){
 
   if(gens.size() != 2){
     return;
@@ -112,7 +341,7 @@ void draw_dR(vector<Object> gens, vector<Object> recos, double weight){
 
   for(int j=0; j<gens.size(); j++){
     //cout << "for " << j << "th " << gens.at(j).Tag() << ":" << endl;
-    double tmpDeltaR = 10.;
+    double tmpDeltaR = 999.;
     int Matched = -1;
     for(int k=0; k<recos.size(); k++){
       //cout << "for " << k << "th " << recos.at(k).Tag() << ":" << endl;
@@ -128,13 +357,33 @@ void draw_dR(vector<Object> gens, vector<Object> recos, double weight){
     if(Matched != -1){
       //cout << j << "th " << gens.at(j).Tag() << ", " << Matched << "th " << recos.at(Matched).Tag() << " : dR = " << gens.at(j).DeltaR(recos.at(Matched)) << endl;
       FillHist(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_2D",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,1000,0,10);
-      FillHist(gens.at(j).Tag()+"_ptres_dR_"+recos.at(Matched).Tag()+"_2D",( recos.at(Matched).Pt()-gens.at(j).Pt() ) / gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,10000,0,10,1000,0,10);
+      FillHist(gens.at(j).Tag()+"_pt_ptres_"+recos.at(Matched).Tag()+"_2D",gens.at(j).Pt(),(recos.at(Matched).Pt()-gens.at(j).Pt())/gens.at(j).Pt(),weight,3000,0,1500,10000,0,10);
+      FillHist(gens.at(j).Tag()+"_ptres_dR_"+recos.at(Matched).Tag()+"_2D",(recos.at(Matched).Pt()-gens.at(j).Pt())/gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,10000,0,10,1000,0,10);
       FillProf(gens.at(j).Tag()+"_pt_dR_"+recos.at(Matched).Tag()+"_pf",gens.at(j).Pt(),gens.at(j).DeltaR(recos.at(Matched)),weight,3000,0,1500,0,10);
       this_matched.push_back(Matched);
     }
   }
 
 }
+
+void draw_l1drByQ(vector<Object> gens, double qualcut, int ptcut, double weight){
+
+  TString this_tag;
+  TString ptcut_t = Form("%d",ptcut);
+  if(qualcut == 11) this_tag = "L1Matched_l1drByQ_SQ"+ptcut_t;
+  else if(qualcut == 7) this_tag = "L1Matched_l1drByQ_DQ"+ptcut_t;
+  else this_tag = "L1Matched_l1drByQ_Raw"+ptcut_t;
+
+  for(int j=0; j<gens.size(); j++){
+    if(-1<gens.at(j).l1ptByQ()){
+      FillHist("hardP_pt_dR_"+this_tag+"_2D",gens.at(j).Pt(),gens.at(j).l1drByQ(),weight,3000,0,1500,1000,0,10);
+      FillHist("hardP_pt_ptres_"+this_tag+"_2D",gens.at(j).Pt(),(gens.at(j).l1ptByQ()-gens.at(j).Pt())/gens.at(j).Pt(),weight,3000,0,1500,10000,0,10);
+      FillHist("hardP_ptres_dR_"+this_tag+"_2D",(gens.at(j).l1ptByQ()-gens.at(j).Pt())/gens.at(j).Pt(),gens.at(j).l1drByQ(),weight,10000,0,10,1000,0,10);
+    }
+  }
+
+}
+
 
 void do_eff_den_pt(vector<Object> gens, double weight){
 
@@ -154,24 +403,153 @@ void do_eff_den_others(vector<Object> gens_above, double weight){
 
 }
 
-void do_neweff_den_vars(vector<Object> dens, double weight){
+void do_neweff_pt(vector<Object> TPs, double weight){
 
-  for(int j=0; j<dens.size(); j++){
-    FillHist(dens.at(j).Tag()+"_pt",dens.at(j).Pt(),weight,3000,0,1500);
-    FillHist(dens.at(j).Tag()+"_eta",dens.at(j).Eta(),weight,48,-2.4,2.4);
-    FillHist(dens.at(j).Tag()+"_phi",dens.at(j).Phi(),weight,63,-3.15,3.15);
-    FillHist(dens.at(j).Tag()+"_truePU",dens.at(j).truePU(),weight,100,0,100);
+  for(int j=0; j<TPs.size(); j++){
+    FillHist(TPs.at(j).Tag()+"_pt",TPs.at(j).Pt(),weight,3000,0,1500);
+    if(TPs.at(j).hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoOI",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIter0FromL2",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIter2FromL2",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIter0FromL1",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIter2FromL1",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIOFromL2",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIOFromL1",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoUpToFromL2",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoUpToFromL1",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoL3NoIDTrack",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+    if(TPs.at(j).iterL3MuonTrackAssociated_bestMatchTrk_pt() > -1){
+      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoL3Track",TPs.at(j).Pt(),weight,3000,0,1500);
+    }
+
   }
 
 }
 
-void do_neweff_num_vars(vector<Object> nums, double weight){
+void do_neweff_others(vector<Object> TPs, double turn_on, double weight){
 
-  for(int j=0; j<nums.size(); j++){
-    FillHist("TP_pt_eff_"+nums.at(j).Tag(),nums.at(j).Pt(),weight,3000,0,1500);
-    FillHist("TP_eta_eff_"+nums.at(j).Tag(),nums.at(j).Eta(),weight,48,-2.4,2.4);
-    FillHist("TP_phi_eff_"+nums.at(j).Tag(),nums.at(j).Phi(),weight,63,-3.15,3.15);
-    FillHist("TP_truePU_eff_"+nums.at(j).Tag(),nums.at(j).truePU(),weight,100,0,100);
+  for(int j=0; j<TPs.size(); j++){
+    if( TPs.at(j).Pt() > turn_on ){
+      if(turn_on == 10.) TPs.at(j).SetTag(TPs.at(j).Tag()+"_med");
+      FillHist(TPs.at(j).Tag()+"_eta",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+      FillHist(TPs.at(j).Tag()+"_phi",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+      FillHist(TPs.at(j).Tag()+"_truePU",TPs.at(j).truePU(),weight,100,0,100);
+      if(TPs.at(j).hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoOI",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoOI",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoOI",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIter0FromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIter0FromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIter0FromL2",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIter2FromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIter2FromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIter2FromL2",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIter0FromL1",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIter0FromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIter0FromL1",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIter2FromL1",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIter2FromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIter2FromL1",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIOFromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIOFromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIOFromL2",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIOFromL1",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIOFromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIOFromL1",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoUpToFromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoUpToFromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoUpToFromL2",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoUpToFromL1",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoUpToFromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoUpToFromL1",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoL3NoIDTrack",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoL3NoIDTrack",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoL3NoIDTrack",TPs.at(j).truePU(),weight,100,0,100);
+      }
+      if(TPs.at(j).iterL3MuonTrackAssociated_bestMatchTrk_pt() > -1){
+        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoL3Track",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoL3Track",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoL3Track",TPs.at(j).truePU(),weight,100,0,100);
+      }
+    }
+  }
+
+}
+
+void do_neweff_L1MuonsMatched_pt(vector<Object> hardPs, double dRcut, double qualcut, int ptcut, double weight){
+
+  TString this_tag;
+  TString ptcut_t = Form("%d",ptcut);
+  if(qualcut == 11) this_tag = "L1Matched_l1drByQ_SQ"+ptcut_t;
+  else if(qualcut == 7) this_tag = "L1Matched_l1drByQ_DQ"+ptcut_t;
+  else this_tag = "L1Matched_l1drByQ_Raw"+ptcut_t;
+
+  for(int j=0; j<hardPs.size(); j++){
+    if(-1<hardPs.at(j).l1ptByQ()&&hardPs.at(j).l1drByQ()<dRcut){
+      if(hardPs.at(j).l1qByQ() > qualcut && hardPs.at(j).l1ptByQ() > ptcut){
+        FillHist(hardPs.at(j).Tag()+"_pt_eff_"+this_tag,hardPs.at(j).Pt(),weight,3000,0,1500);
+      }
+    }
+  }
+
+}
+
+void do_neweff_L1MuonsMatched_others(vector<Object> hardPs, double dRcut, double qualcut, int ptcut, double turn_on, double weight){
+
+  TString this_tag;
+  TString ptcut_t = Form("%d",ptcut);
+  if(qualcut == 11) this_tag = "L1Matched_l1drByQ_SQ"+ptcut_t;
+  else if(qualcut == 7) this_tag = "L1Matched_l1drByQ_DQ"+ptcut_t;
+  else this_tag = "L1Matched_l1drByQ_Raw"+ptcut_t;
+
+  for(int j=0; j<hardPs.size(); j++){
+    if(-1<hardPs.at(j).l1ptByQ()&&hardPs.at(j).l1drByQ()<dRcut){
+      if(hardPs.at(j).l1qByQ() > qualcut && hardPs.at(j).l1ptByQ() > ptcut){
+        if( hardPs.at(j).Pt() > turn_on ){
+          if(turn_on == 10.) hardPs.at(j).SetTag(hardPs.at(j).Tag()+"_med");
+          FillHist(hardPs.at(j).Tag()+"_eta_eff_"+this_tag,hardPs.at(j).Eta(),weight,48,-2.4,2.4);
+          FillHist(hardPs.at(j).Tag()+"_phi_eff_"+this_tag,hardPs.at(j).Phi(),weight,63,-3.15,3.15);
+          FillHist(hardPs.at(j).Tag()+"_truePU_eff_"+this_tag,hardPs.at(j).truePU(),weight,100,0,100);
+        }
+      }
+    }
   }
 
 }
@@ -426,8 +804,11 @@ void do_eff_num_pt(vector<Object> gens, vector<Object> recos, double dR, double 
     for(int k=0; k<recos.size(); k++){
       if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
         if(gens.at(j).DeltaR(recos.at(k)) < dR){
-          //cout << j << "th gen muon matched with " << k << "th reco within dR: " << gens.at(j).DeltaR(recos.at(k)) << endl;
-          //cout << "pt: " << gens.at(j).Pt() << " vs " << recos.at(k).Pt() << endl;
+          //if(recos.at(k).Tag().Contains("Raw0")){
+          //  cout << j << "th gen muon matched with " << k << "th " << recos.at(k).Tag() << ";" << endl;
+          //  cout << "gen pt, eta, phi : " << gens.at(j).Pt() << ", " << gens.at(j).Eta() << ", " << gens.at(j).Phi() << endl;
+          //  cout << "L1 pt, eta phi : " << recos.at(k).Pt() << ", " << recos.at(k).Eta() << ", " << recos.at(k).Phi() << endl;
+          //}
           //Nmatched_hardP_L3NoID_pt+=1;
           FillHist(gens.at(j).Tag()+"_pt_eff_"+recos.at(k).Tag(),gens.at(j).Pt(),weight,3000,0,1500);
           this_matched.push_back(k);
@@ -560,6 +941,12 @@ void calculateEff_dist(TString input, TString output){
   double genParticle_eta[5000];
   double genParticle_phi[5000];
   double genParticle_charge[5000];
+  double genParticle_l1ptByQ[5000];
+  double genParticle_l1etaByQ[5000];
+  double genParticle_l1phiByQ[5000];
+  double genParticle_l1chargeByQ[5000];
+  int genParticle_l1qByQ[5000];
+  double genParticle_l1drByQ[5000];
   int nL1Muon;
   double L1Muon_pt[5000];
   double L1Muon_eta[5000];
@@ -811,6 +1198,12 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("genParticle_eta",&genParticle_eta);
   fChain->SetBranchAddress("genParticle_phi",&genParticle_phi);
   fChain->SetBranchAddress("genParticle_charge",&genParticle_charge);
+  fChain->SetBranchAddress("genParticle_l1ptByQ",&genParticle_l1ptByQ);
+  fChain->SetBranchAddress("genParticle_l1etaByQ",&genParticle_l1etaByQ);
+  fChain->SetBranchAddress("genParticle_l1phiByQ",&genParticle_l1phiByQ);
+  fChain->SetBranchAddress("genParticle_l1chargeByQ",&genParticle_l1chargeByQ);
+  fChain->SetBranchAddress("genParticle_l1qByQ",&genParticle_l1qByQ);
+  fChain->SetBranchAddress("genParticle_l1drByQ",&genParticle_l1drByQ);
   fChain->SetBranchAddress("nL1Muon",&nL1Muon);
   fChain->SetBranchAddress("L1Muon_pt",&L1Muon_pt);
   fChain->SetBranchAddress("L1Muon_eta",&L1Muon_eta);
@@ -1054,6 +1447,9 @@ void calculateEff_dist(TString input, TString output){
   int NhardP = 0;
   int NhardP_above = 0;
   int NhardP_L1 = 0;
+  int NTP = 0;
+  int NTP_L1 = 0;
+  int NTP_L1_med = 0;
   int NL3_NoID = 0;
   int NL3 = 0;
   int NIter2FromL1Track = 0;
@@ -1088,87 +1484,202 @@ void calculateEff_dist(TString input, TString output){
     //int this_NhardP = 0;
   
   //===============================Call needed objects=======================================//
-  
+ 
+    //==pick index of final state muons with eta < 2.4==//
+    vector<int> Final_idx;
+    for(int j=0; j<nGenParticle; j++){
+      if(fabs(genParticle_ID[j])==13&&genParticle_status[j]==1&&fabs(genParticle_eta[j])<2.4){
+        Final_idx.push_back(j);
+        NFinal+=1;
+      }
+    }
+
+    //==make final muon's 4vectors==//
+    vector<Object> Finals;
+    vector<Object> Finals_above;
+    for(int j=0; j<Final_idx.size(); j++){
+      Object Final;
+      Final.SetPtEtaPhiM(genParticle_pt[Final_idx.at(j)],genParticle_eta[Final_idx.at(j)],genParticle_phi[Final_idx.at(j)],0);
+      Final.SetTag("hardP"); //JH : Just for nonprompt efficiency
+      Final.SetTruePU(truePU);
+      Finals.push_back(Final);
+      if(Final.Pt() > 10) Finals_above.push_back(Final);
+    }
+
     //==pick index of hardP muons with eta < 2.4==//
     vector<int> hardP_idx;
     for(int j=0; j<nGenParticle; j++){
-      if(genParticle_fromHardProcessFinalState[j]==1&&fabs(genParticle_eta[j])<2.4){
+      if(fabs(genParticle_ID[j])==13&&genParticle_fromHardProcessFinalState[j]==1&&fabs(genParticle_eta[j])<2.4){
         hardP_idx.push_back(j);
-        NhardP+=1;
       }
     }
   
     //==make hardP muon's 4vectors==//
     vector<Object> hardPs;
-    vector<Object> hardPs_above; // hardP muon above 26 GeV
-    vector<Object> hardPs_above_med; // hardP muon above 10 GeV
-    for(int j=0; j<hardP_idx.size(); j++){
-      Object hardP;
-      hardP.SetPtEtaPhiM(genParticle_pt[hardP_idx.at(j)],genParticle_eta[hardP_idx.at(j)],genParticle_phi[hardP_idx.at(j)],0);
-      hardP.SetTag("hardP");
-      hardP.SetTruePU(truePU);
-      hardPs.push_back(hardP);
-      NhardP+=1;
-      if(hardP.Pt() > 26){
-        hardPs_above.push_back(hardP);
-        NhardP_above+=1;
+    //vector<Object> hardPsRaw; //exactly the same with hardPs, but set tag as 'hardP_raw', to prevent double counting the name when measuring l1 efficiency
+    vector<Object> hardPs_above; // hardP muons above single muon trigger turn-on (26 GeV)
+    vector<Object> hardPs_above_med; // hardP muons above double muon trigger turn-on (10 GeV)
+    double turn_on, turn_on_med;
+
+    if(output.Contains("Jpsi")||output.Contains("Bs")){
+      turn_on = 26.;
+      turn_on_med = 10.;
+      double MesonMass;
+      double MesonWidth = 0.1;
+      if(output.Contains("Jpsi")){
+        MesonMass = 3.097;
       }
-      if(hardP.Pt() > 10){
-        hardPs_above_med.push_back(hardP);
+       else if(output.Contains("Bs")){
+        MesonMass = 5.366;
+      }
+      Object Lep1, Lep2;
+      double tmpMassDiff = 10000.;
+      int i1 = 0, i2 = 0;
+      if(Final_idx.size() > 1){
+        for(int j=0; j<Final_idx.size(); j++){
+          for(int k=j+1; k<Final_idx.size(); k++){
+            Object tmpLep1, tmpLep2;
+            tmpLep1.SetPtEtaPhiM(genParticle_pt[Final_idx.at(j)],genParticle_eta[Final_idx.at(j)],genParticle_phi[Final_idx.at(j)],0);
+            tmpLep2.SetPtEtaPhiM(genParticle_pt[Final_idx.at(k)],genParticle_eta[Final_idx.at(k)],genParticle_phi[Final_idx.at(k)],0);
+            if( fabs( (tmpLep1+tmpLep2).M() - MesonMass ) < tmpMassDiff ){
+              tmpMassDiff = fabs( (tmpLep1+tmpLep2).M() - MesonMass );
+              Lep1 = tmpLep1; Lep2 = tmpLep2;
+              i1 = Final_idx.at(j); i2 = Final_idx.at(k);
+            }
+          }
+        }
+        if( (MesonMass-MesonWidth) < (Lep1+Lep2).M() && (Lep1+Lep2).M() < (MesonMass+MesonWidth) ){
+          Lep1.SetTag("hardP");
+          Lep1.SetTruePU(truePU);
+          Lep1.Setl1ptByQ(genParticle_l1ptByQ[i1]);
+          Lep1.Setl1etaByQ(genParticle_l1etaByQ[i1]);
+          Lep1.Setl1phiByQ(genParticle_l1phiByQ[i1]);
+          Lep1.Setl1chargeByQ(genParticle_l1chargeByQ[i1]);
+          Lep1.Setl1qByQ(genParticle_l1qByQ[i1]);
+          Lep1.Setl1drByQ(genParticle_l1drByQ[i1]);
+          Lep2.SetTag("hardP");
+          Lep2.SetTruePU(truePU);
+          Lep2.Setl1ptByQ(genParticle_l1ptByQ[i2]);
+          Lep2.Setl1etaByQ(genParticle_l1etaByQ[i2]);
+          Lep2.Setl1phiByQ(genParticle_l1phiByQ[i2]);
+          Lep2.Setl1chargeByQ(genParticle_l1chargeByQ[i2]);
+          Lep2.Setl1qByQ(genParticle_l1qByQ[i2]);
+          Lep2.Setl1drByQ(genParticle_l1drByQ[i2]);
+          hardPs.push_back(Lep1);
+          hardPs.push_back(Lep2);
+          //hardPsRaw.push_back(Lep1);
+          //hardPsRaw.push_back(Lep2);
+          NhardP+=2;
+
+          if(Lep1.Pt() > turn_on){
+            hardPs_above.push_back(Lep1);
+            NhardP_above+=1;
+          }
+          if(Lep1.Pt() > turn_on_med){
+            Lep1.SetTag("hardP_med");
+            hardPs_above_med.push_back(Lep1);
+          }
+          if(Lep2.Pt() > turn_on){
+            hardPs_above.push_back(Lep2);
+            NhardP_above+=1;
+          }
+          if(Lep2.Pt() > turn_on_med){
+            Lep2.SetTag("hardP_med");
+            hardPs_above_med.push_back(Lep2);
+          }
+        }
+      }
+      //Sanity check//
+      //if(hardP.size() > 0) cout << "N of hardP : " << hardP.size() << ", Meson mass : " << (hardP[0]+hardP[1]).M() << ", pt : " << hardP[0].Pt() << ", " << hardP[1].Pt() << endl;
+      check_Meson_dR(hardPs, genEventWeight);
+    }
+    else if(output.Contains("QCD")){
+      hardPs = Finals;
+      hardPs_above = Finals_above;
+    }
+    else{
+      turn_on = 26.;
+      turn_on_med = 10.;
+      if(output.Contains("DY4")){
+        turn_on = 26.;
+        turn_on_med = 10.;
+      }
+      for(int j=0; j<hardP_idx.size(); j++){
+        Object hardP;
+        hardP.SetPtEtaPhiM(genParticle_pt[hardP_idx.at(j)],genParticle_eta[hardP_idx.at(j)],genParticle_phi[hardP_idx.at(j)],0);
+        hardP.SetTag("hardP");
+        hardP.SetTruePU(truePU);
+        hardP.Setl1ptByQ(genParticle_l1ptByQ[hardP_idx.at(j)]);
+        hardP.Setl1etaByQ(genParticle_l1etaByQ[hardP_idx.at(j)]);
+        hardP.Setl1phiByQ(genParticle_l1phiByQ[hardP_idx.at(j)]);
+        hardP.Setl1chargeByQ(genParticle_l1chargeByQ[hardP_idx.at(j)]);
+        hardP.Setl1qByQ(genParticle_l1qByQ[hardP_idx.at(j)]);
+        hardP.Setl1drByQ(genParticle_l1drByQ[hardP_idx.at(j)]);
+        hardPs.push_back(hardP);
+        //hardPsRaw.push_back(hardP);
+        NhardP+=1;
+        if(hardP.Pt() > turn_on){
+          hardPs_above.push_back(hardP);
+          NhardP_above+=1;
+        }
+        if(hardP.Pt() > turn_on_med){
+          hardP.SetTag("hardP_med");
+          hardPs_above_med.push_back(hardP);
+        }
       }
     }
-    ////==hardP muon above 26GeV==//
-    //vector<Object> hardPs_above;
-    //for(int j=0; j<hardP_idx.size(); j++){
-    //  Object hardP;
-    //  hardP.SetPtEtaPhiM(genParticle_pt[hardP_idx.at(j)],genParticle_eta[hardP_idx.at(j)],genParticle_phi[hardP_idx.at(j)],0);
-    //  if(hardP.Pt() > 26){
-    //    hardP.SetTag("hardP");
-    //    hardP.SetTruePU(truePU);
-    //    hardPs_above.push_back(hardP);
-    //    NhardP_above+=1;
-    //  }
-    //}
-    ////==hardP muon above 10GeV==//
-    //vector<Object> hardPs_above_med;
-    //for(int j=0; j<hardP_idx.size(); j++){
-    //  Object hardP;
-    //  hardP.SetPtEtaPhiM(genParticle_pt[hardP_idx.at(j)],genParticle_eta[hardP_idx.at(j)],genParticle_phi[hardP_idx.at(j)],0);
-    //  if(hardP.Pt() > 10){
-    //    hardPs_above_med.push_back(hardP);
-    //  }
+    //for(int j=0; j<hardPsRaw.size(); j++){
+    //  hardPsRaw.at(j).SetTag("hardP_raw");
     //}
 
-    //==L1Muon with fine quality and above trigger filter thresh.==//
-    vector<Object> L1Muons;
-    vector<Object> L1Muons_AtVtx;
+    //==Collect Raw L1Muons (get AtVtx separately, to easily use dR inherited from the TLorentzVector==//
+    vector<Object> L1MuonsRaw;
+    vector<Object> L1MuonsRaw_AtVtx;
     for(int j=0; j<nL1Muon; j++){
       Object L1Muon;
       Object L1Muon_AtVtx;
-      if(L1Muon_quality[j] > 11 && L1Muon_pt[j] > 22){ // quality 8 / L1 5 --> L3 muon pt 8GeV. vs eta, phi, truePU --> gen matching with pt > 10GeV. (to measure in the plateau.) Numerator --> matching with L3 and also "L1". Numerator should always be a subset of denominator.
-        L1Muon.SetPtEtaPhiM(L1Muon_pt[j],L1Muon_eta[j],L1Muon_phi[j],0);
-        L1Muon.SetTag("L1");
-        L1Muons.push_back(L1Muon);
-        L1Muon_AtVtx.SetPtEtaPhiM(L1Muon_pt[j],L1Muon_etaAtVtx[j],L1Muon_phiAtVtx[j],0);
-        L1Muon_AtVtx.SetTag("L1_AtVtx");
-        L1Muons_AtVtx.push_back(L1Muon_AtVtx);
-      }
+      Object L1MuonRaw;
+      Object L1MuonRaw_AtVtx;
+      L1MuonRaw.SetPtEtaPhiM(L1Muon_pt[j],L1Muon_eta[j],L1Muon_phi[j],0);
+      L1MuonRaw.SetTag("L1Raw0");
+      L1MuonRaw.SetQuality(L1Muon_quality[j]);
+      L1MuonsRaw.push_back(L1MuonRaw);
+      L1MuonRaw_AtVtx.SetPtEtaPhiM(L1Muon_pt[j],L1Muon_etaAtVtx[j],L1Muon_phiAtVtx[j],0);
+      L1MuonRaw_AtVtx.SetTag("L1Raw0_AtVtx");
+      L1MuonRaw_AtVtx.SetQuality(L1Muon_quality[j]);
+      L1MuonsRaw_AtVtx.push_back(L1MuonRaw_AtVtx);
     }
-    //==L1Muon with medium quality and above double muon trigger filter thresh.==//
-    vector<Object> L1Muons_med;
-    vector<Object> L1Muons_med_AtVtx;
-    for(int j=0; j<nL1Muon; j++){
-      Object L1Muon_med;
-      Object L1Muon_med_AtVtx;
-      if(L1Muon_quality[j] > 7 && L1Muon_pt[j] > 5){ // quality 8 / L1 5 --> L3 muon pt 8GeV. vs eta, phi, truePU --> gen matching with pt > 10GeV. (to measure in the plateau.) Numerator --> matching with L3 and also "L1". Numerator should always be a subset of denominator.
-        L1Muon_med.SetPtEtaPhiM(L1Muon_pt[j],L1Muon_eta[j],L1Muon_phi[j],0);
-        L1Muon_med.SetTag("L1_med");
-        L1Muons_med.push_back(L1Muon_med);
-        L1Muon_med_AtVtx.SetPtEtaPhiM(L1Muon_pt[j],L1Muon_etaAtVtx[j],L1Muon_phiAtVtx[j],0);
-        L1Muon_med_AtVtx.SetTag("L1_med_AtVtx");
-        L1Muons_med_AtVtx.push_back(L1Muon_med_AtVtx);
-      }
-    }
+
+    vector<Object> L1Muons_Raw0 = L1MuonsRaw;
+    vector<Object> L1Muons_Raw8 = SelectL1(L1MuonsRaw, 0, 8);
+    vector<Object> L1Muons_Raw22 = SelectL1(L1MuonsRaw, 0, 22);
+    vector<Object> L1Muons_DQ0 = SelectL1(L1MuonsRaw, 7, 0);
+    vector<Object> L1Muons_DQ8 = SelectL1(L1MuonsRaw, 7, 8);
+    vector<Object> L1Muons_DQ22 = SelectL1(L1MuonsRaw, 7, 22);
+    vector<Object> L1Muons_SQ0 = SelectL1(L1MuonsRaw, 11, 0);
+    vector<Object> L1Muons_SQ8 = SelectL1(L1MuonsRaw, 11, 8);
+    vector<Object> L1Muons_SQ22 = SelectL1(L1MuonsRaw, 11, 22);
+
+    vector<Object> L1Muons_Raw0_AtVtx = L1MuonsRaw_AtVtx;
+    vector<Object> L1Muons_Raw8_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 0, 8);
+    vector<Object> L1Muons_Raw22_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 0, 22);
+    vector<Object> L1Muons_DQ0_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 7, 0);
+    vector<Object> L1Muons_DQ8_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 7, 8);
+    vector<Object> L1Muons_DQ22_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 7, 22);
+    vector<Object> L1Muons_SQ0_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 11, 0);
+    vector<Object> L1Muons_SQ8_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 11, 8);
+    vector<Object> L1Muons_SQ22_AtVtx = SelectL1(L1MuonsRaw_AtVtx, 11, 22);
+
+    //==L1Muon matched with the propagated gen particles==//
+    vector<Object> L1MuonsMatched_Raw0 = SelectL1Matched(hardPs, 0.3, 0, 0);
+    vector<Object> L1MuonsMatched_Raw8 = SelectL1Matched(hardPs, 0.3, 0, 8);
+    vector<Object> L1MuonsMatched_Raw22 = SelectL1Matched(hardPs, 0.3, 0, 22);
+    vector<Object> L1MuonsMatched_DQ0 = SelectL1Matched(hardPs, 0.3, 7, 0);
+    vector<Object> L1MuonsMatched_DQ8 = SelectL1Matched(hardPs, 0.3, 7, 8);
+    vector<Object> L1MuonsMatched_DQ22 = SelectL1Matched(hardPs, 0.3, 7, 22);
+    vector<Object> L1MuonsMatched_SQ0 = SelectL1Matched(hardPs, 0.3, 11, 0);
+    vector<Object> L1MuonsMatched_SQ8 = SelectL1Matched(hardPs, 0.3, 11, 8);
+    vector<Object> L1MuonsMatched_SQ22 = SelectL1Matched(hardPs, 0.3, 11, 22);
 
     //==L3MuonNoID==//
     vector<Object> L3Muons_NoID;
@@ -1190,16 +1701,15 @@ void calculateEff_dist(TString input, TString output){
       L3Muons.push_back(L3Muon);
       NL3+=1;
     }
-    //==hardP muon matched with fine L1==//
+    //==hardP muon matched with tight L1==//
     vector<Object> hardPs_L1matched;
     this_matched.clear();
     for(int j=0; j<hardPs.size(); j++){
       Object hardP_L1matched = hardPs.at(j);
-      for(int k=0; k<L1Muons.size(); k++){
+      for(int k=0; k<L1Muons_SQ22.size(); k++){
         if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardP_L1matched.DeltaR(L1Muons.at(k))<0.3){
+          if(hardP_L1matched.DeltaR(L1Muons_SQ22.at(k))<0.3){
             hardP_L1matched.SetTag("hardP_L1");
-            hardP_L1matched.SetTruePU(truePU);
             hardPs_L1matched.push_back(hardP_L1matched);
             NhardP_L1+=1;
             this_matched.push_back(k);
@@ -1208,16 +1718,15 @@ void calculateEff_dist(TString input, TString output){
         }
       }
     }
-    //==hardP muon above 26GeV matched with fine L1==//
+    //==hardP muon above single muon trigger turn-on, matched with tight L1==//
     vector<Object> hardPs_above_L1matched;
     this_matched.clear();
     for(int j=0; j<hardPs_above.size(); j++){
       Object hardP_above_L1matched = hardPs_above.at(j);
-      for(int k=0; k<L1Muons.size(); k++){
+      for(int k=0; k<L1Muons_SQ22.size(); k++){
         if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardP_above_L1matched.DeltaR(L1Muons.at(k))<0.3){
+          if(hardP_above_L1matched.DeltaR(L1Muons_SQ22.at(k))<0.3){
             hardP_above_L1matched.SetTag("hardP_L1");
-            hardP_above_L1matched.SetTruePU(truePU);
             hardPs_above_L1matched.push_back(hardP_above_L1matched);
             this_matched.push_back(k);
             break;
@@ -1230,11 +1739,10 @@ void calculateEff_dist(TString input, TString output){
     this_matched.clear();
     for(int j=0; j<hardPs.size(); j++){
       Object hardP_L1matched_med = hardPs.at(j);
-      for(int k=0; k<L1Muons_med.size(); k++){
+      for(int k=0; k<L1Muons_DQ8.size(); k++){
         if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardP_L1matched_med.DeltaR(L1Muons_med.at(k))<0.3){
+          if(hardP_L1matched_med.DeltaR(L1Muons_DQ8.at(k))<0.3){
             hardP_L1matched_med.SetTag("hardP_L1_med");
-            hardP_L1matched_med.SetTruePU(truePU);
             hardPs_L1matched_med.push_back(hardP_L1matched_med);
             this_matched.push_back(k);
             break;
@@ -1242,16 +1750,15 @@ void calculateEff_dist(TString input, TString output){
         }
       }
     }
-    //==hardP muon above 10GeV matched with medium L1==//
+    //==hardP muon above double muon trigger turn-on, matched with medium L1==//
     vector<Object> hardPs_above_L1matched_med;
     this_matched.clear();
     for(int j=0; j<hardPs_above_med.size(); j++){
       Object hardP_above_L1matched_med = hardPs_above_med.at(j);
-      for(int k=0; k<L1Muons_med.size(); k++){
+      for(int k=0; k<L1Muons_DQ8.size(); k++){
         if( find(this_matched.begin(), this_matched.end(), k) == this_matched.end() ){
-          if(hardP_above_L1matched_med.DeltaR(L1Muons_med.at(k))<0.3){
+          if(hardP_above_L1matched_med.DeltaR(L1Muons_DQ8.at(k))<0.3){
             hardP_above_L1matched_med.SetTag("hardP_L1_med");
-            hardP_above_L1matched_med.SetTruePU(truePU);
             hardPs_above_L1matched_med.push_back(hardP_above_L1matched_med);
             this_matched.push_back(k);
             break;
@@ -1260,76 +1767,43 @@ void calculateEff_dist(TString input, TString output){
       }
     }
 
-    //==pick index of final state muons with eta < 2.4==//
-    vector<int> Final_idx;
-    for(int j=0; j<nGenParticle; j++){
-      if(genParticle_status[j]==1&&fabs(genParticle_eta[j])<2.4){
-        Final_idx.push_back(j);
-        NFinal+=1;
-      }
-    }
-
-    //==make final muon's 4vectors==//
-    vector<Object> Finals;
-    vector<Object> Finals_above;
-    for(int j=0; j<Final_idx.size(); j++){
-      Object Final;
-      Final.SetPtEtaPhiM(genParticle_pt[Final_idx.at(j)],genParticle_eta[Final_idx.at(j)],genParticle_phi[Final_idx.at(j)],0);
-      Final.SetTag("hardP"); //JH : Just for nonprompt efficiency
-      Final.SetTruePU(truePU);
-      Finals.push_back(Final);
-
-      if(Final.Pt() > 10) Finals_above.push_back(Final);
-    }
-
-    //==Call Jpsi candidates==// : Use this just for Jpsi RAW only 
-    //vector<Object> JpsiCand;
-    //vector<Object> JpsiCand_above;
-    //Object Lep1, Lep2;
-    //double tmpMassDiff = 10000.;
-    //int i1 = 0, i2 = 0;
-    //if(Final_idx.size() > 1){
-    //  for(int j=0; j<Final_idx.size(); j++){
-    //    for(int k=j+1; k<Final_idx.size(); k++){
-    //      Object tmpLep1, tmpLep2;
-    //      tmpLep1.SetPtEtaPhiM(genParticle_pt[Final_idx.at(j)],genParticle_eta[Final_idx.at(j)],genParticle_phi[Final_idx.at(j)],0);
-    //      tmpLep2.SetPtEtaPhiM(genParticle_pt[Final_idx.at(k)],genParticle_eta[Final_idx.at(k)],genParticle_phi[Final_idx.at(k)],0);
-    //      if( fabs( (tmpLep1+tmpLep2).M() - 3.1 ) < tmpMassDiff ){
-    //        tmpMassDiff = fabs( (tmpLep1+tmpLep2).M() - 3.1 );
-    //        Lep1 = tmpLep1; Lep2 = tmpLep2;
-    //      }
-    //    }
-    //  }
-    //  if(3. < (Lep1+Lep2).M() && (Lep1+Lep2).M() < 3.2){
-    //    Lep1.SetTag("hardP");
-    //    Lep2.SetTag("hardP");
-    //    Lep1.SetTruePU(truePU);
-    //    Lep2.SetTruePU(truePU);
-    //    JpsiCand.push_back(Lep1);
-    //    JpsiCand.push_back(Lep2);
-
-    //    if(Lep1.Pt() > 5) JpsiCand_above.push_back(Lep1);
-    //    if(Lep2.Pt() > 5) JpsiCand_above.push_back(Lep2);
-    //  }
-    //}
-    //Sanity check//
-    //if(JpsiCand.size() > 0) cout << "N of JpsiCand : " << JpsiCand.size() << ", Jpsi mass : " << (JpsiCand[0]+JpsiCand[1]).M() << ", pt : " << JpsiCand[0].Pt() << ", " << JpsiCand[1].Pt() << endl;
-
     //==Tracking Particles==//
     vector<Object> TPs;
     if ( ntpTo_hltIterL3OIMuonTrackAssociated != ntpTo_iterL3MuonTrackAssociated ){
       cout << "ERROR :: ntpTo_hltIterL3OIMuonTrackAssociated == " << ntpTo_hltIterL3OIMuonTrackAssociated << ", ntpTo_iterL3MuonTrackAssociated == " << ntpTo_iterL3MuonTrackAssociated << " ." << endl;
       exit(1);
     }
-    for(int j=0; j<ntpTo_hltIterL3OIMuonTrackAssociated; j++){ //JH : I'm assuming here the TPs are the same with each tracks
+    for(int j=0; j<ntpTo_hltIterL3OIMuonTrackAssociated; j++){ //JH : I'm assuming here the tpTos are the same along each tracks
       if( fabs(tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j)) < 2.4 ){
         Object TP;
         TP.SetPtEtaPhiM(tpTo_hltIterL3OIMuonTrackAssociated_gen_pt->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_phi->at(j),0);
         TP.SetTag("TP");
         TP.SetTruePU(truePU);
+        TP.SetHltIterL3OIMuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIterL3MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j));
+        TP.SetHltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j));
+        TP.SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetIterL3MuonTrackAssociated_bestMatchTrk_pt(tpTo_iterL3MuonTrackAssociated_bestMatchTrk_pt->at(j));
         TPs.push_back(TP);
+        NTP+=1;
       }
     }
+
+    vector<Object> TPs_L1Raw0 = MatchTPtoL1(TPs, hardPs, 0, 0, 0.3);
+    vector<Object> TPs_L1Raw8 = MatchTPtoL1(TPs, hardPs, 0, 8, 0.3);
+    vector<Object> TPs_L1Raw22 = MatchTPtoL1(TPs, hardPs, 0, 22, 0.3);
+    vector<Object> TPs_L1DQ0 = MatchTPtoL1(TPs, hardPs, 7, 0, 0.3);
+    vector<Object> TPs_L1DQ8 = MatchTPtoL1(TPs, hardPs, 7, 8, 0.3);
+    vector<Object> TPs_L1DQ22 = MatchTPtoL1(TPs, hardPs, 7, 22, 0.3);
+    vector<Object> TPs_L1SQ0 = MatchTPtoL1(TPs, hardPs, 11, 0, 0.3);
+    vector<Object> TPs_L1SQ8 = MatchTPtoL1(TPs, hardPs, 11, 8, 0.3);
+    vector<Object> TPs_L1SQ22 = MatchTPtoL1(TPs, hardPs, 11, 22, 0.3);
 
     //==tracks to measure eff==//
     if ( nhltIterL3OIMuonTrack != nhltIterL3OIMuonTrackAssociated ){
@@ -1355,16 +1829,6 @@ void calculateEff_dist(TString input, TString output){
         L3OIAssoTracks.push_back(L3OIAssoTrack);
       }
     }
-    vector<Object> TPtoL3OITracks;
-    for(int j=0; j<ntpTo_hltIterL3OIMuonTrackAssociated; j++){
-      if( fabs(tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIterL3OIMuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoL3OITrack;
-        TPtoL3OITrack.SetPtEtaPhiM(tpTo_hltIterL3OIMuonTrackAssociated_gen_pt->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_eta->at(j),tpTo_hltIterL3OIMuonTrackAssociated_gen_phi->at(j),0);
-        TPtoL3OITrack.SetTag("TPtoOI");
-        TPtoL3OITrack.SetTruePU(truePU);
-        TPtoL3OITracks.push_back(TPtoL3OITrack);
-      }
-    }
   
     vector<Object> Iter0L3Tracks;
     for(int j=0; j<nhltIter0IterL3MuonTrack; j++){
@@ -1385,16 +1849,6 @@ void calculateEff_dist(TString input, TString output){
         Iter0L3AssoTracks.push_back(Iter0L3AssoTrack);
       }
     }
-    vector<Object> TPtoIter0L3Tracks;
-    for(int j=0; j<ntpTo_hltIter0IterL3MuonTrackAssociated; j++){
-      if( fabs(tpTo_hltIter0IterL3MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter0IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoIter0L3Track;
-        TPtoIter0L3Track.SetPtEtaPhiM(tpTo_hltIter0IterL3MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter0IterL3MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter0IterL3MuonTrackAssociated_gen_phi->at(j),0);
-        TPtoIter0L3Track.SetTag("TPtoIter0FromL2");
-        TPtoIter0L3Track.SetTruePU(truePU);
-        TPtoIter0L3Tracks.push_back(TPtoIter0L3Track);
-      }
-    }
   
     vector<Object> Iter2L3Tracks;
     for(int j=0; j<nhltIter2IterL3MuonTrack; j++){
@@ -1413,16 +1867,6 @@ void calculateEff_dist(TString input, TString output){
         Iter2L3AssoTrack.SetTag("Iter2FromL2Asso");
         Iter2L3AssoTrack.SetTruePU(truePU);
         Iter2L3AssoTracks.push_back(Iter2L3AssoTrack);
-      }
-    }
-    vector<Object> TPtoIter2L3Tracks;
-    for(int j=0; j<ntpTo_hltIter2IterL3MuonTrackAssociated; j++){
-      if( fabs(tpTo_hltIter2IterL3MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoIter2L3Track;
-        TPtoIter2L3Track.SetPtEtaPhiM(tpTo_hltIter2IterL3MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter2IterL3MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter2IterL3MuonTrackAssociated_gen_phi->at(j),0);
-        TPtoIter2L3Track.SetTag("TPtoIter2FromL2");
-        TPtoIter2L3Track.SetTruePU(truePU);
-        TPtoIter2L3Tracks.push_back(TPtoIter2L3Track);
       }
     }
   
@@ -1453,16 +1897,6 @@ void calculateEff_dist(TString input, TString output){
         Iter0L3FromL1AssoTracks.push_back(Iter0L3FromL1AssoTrack);
       }
     }
-    vector<Object> TPtoIter0L3FromL1Tracks;
-    for(int j=0; j<ntpTo_hltIter0IterL3FromL1MuonTrackAssociated; j++){
-      if( fabs(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoIter0L3FromL1Track;
-        TPtoIter0L3FromL1Track.SetPtEtaPhiM(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter0IterL3FromL1MuonTrackAssociated_gen_phi->at(j),0);
-        TPtoIter0L3FromL1Track.SetTag("TPtoIter0FromL1");
-        TPtoIter0L3FromL1Track.SetTruePU(truePU);
-        TPtoIter0L3FromL1Tracks.push_back(TPtoIter0L3FromL1Track);
-      }
-    }
   
     if ( nhltIter2IterL3FromL1MuonTrack != nhltIter2IterL3FromL1MuonTrackAssociated ){
       cout << "ERROR :: nhltIter2IterL3FromL1MuonTrack == " << nhltIter2IterL3FromL1MuonTrack << ", nhltIter2IterL3FromL1MuonTrackAssociated == " << nhltIter2IterL3FromL1MuonTrackAssociated << " ." << endl;
@@ -1486,16 +1920,6 @@ void calculateEff_dist(TString input, TString output){
         Iter2L3FromL1AssoTrack.SetTag("Iter2FromL1Asso");
         Iter2L3FromL1AssoTrack.SetTruePU(truePU);
         Iter2L3FromL1AssoTracks.push_back(Iter2L3FromL1AssoTrack);
-      }
-    }
-    vector<Object> TPtoIter2L3FromL1Tracks;
-    for(int j=0; j<ntpTo_hltIter2IterL3FromL1MuonTrackAssociated; j++){
-      if( fabs(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoIter2L3FromL1Track;
-        TPtoIter2L3FromL1Track.SetPtEtaPhiM(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_pt->at(j),tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_eta->at(j),tpTo_hltIter2IterL3FromL1MuonTrackAssociated_gen_phi->at(j),0);
-        TPtoIter2L3FromL1Track.SetTag("TPtoIter2FromL1");
-        TPtoIter2L3FromL1Track.SetTruePU(truePU);
-        TPtoIter2L3FromL1Tracks.push_back(TPtoIter2L3FromL1Track);
       }
     }
   
@@ -1524,16 +1948,6 @@ void calculateEff_dist(TString input, TString output){
         IOFromL2AssoTrack.SetTag("IOFromL2Asso");
         IOFromL2AssoTrack.SetTruePU(truePU);
         IOFromL2AssoTracks.push_back(IOFromL2AssoTrack);
-      }
-    }
-    vector<Object> TPtoIOFromL2Tracks;
-    for(int j=0; j<ntpTo_hltIter2IterL3MuonMergedAssociated; j++){
-      if( fabs(tpTo_hltIter2IterL3MuonMergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoIOFromL2Track;
-        TPtoIOFromL2Track.SetPtEtaPhiM(tpTo_hltIter2IterL3MuonMergedAssociated_gen_pt->at(j),tpTo_hltIter2IterL3MuonMergedAssociated_gen_eta->at(j),tpTo_hltIter2IterL3MuonMergedAssociated_gen_phi->at(j),0);
-        TPtoIOFromL2Track.SetTag("TPtoIOFromL2");
-        TPtoIOFromL2Track.SetTruePU(truePU);
-        TPtoIOFromL2Tracks.push_back(TPtoIOFromL2Track);
       }
     }
 
@@ -1579,16 +1993,6 @@ void calculateEff_dist(TString input, TString output){
         IOFromL1AssoTracks.push_back(IOFromL1AssoTrack);
       }
     }
-    vector<Object> TPtoIOFromL1Tracks;
-    for(int j=0; j<ntpTo_hltIter2IterL3FromL1MuonMergedAssociated; j++){
-      if( fabs(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoIOFromL1Track;
-        TPtoIOFromL1Track.SetPtEtaPhiM(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_pt->at(j),tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_eta->at(j),tpTo_hltIter2IterL3FromL1MuonMergedAssociated_gen_phi->at(j),0);
-        TPtoIOFromL1Track.SetTag("TPtoIOFromL1");
-        TPtoIOFromL1Track.SetTruePU(truePU);
-        TPtoIOFromL1Tracks.push_back(TPtoIOFromL1Track);
-      }
-    }
 
     //==OI+IO(Iter0,2,3)FromL2==//
     vector<Object> UpToFromL2Tracks;
@@ -1607,16 +2011,6 @@ void calculateEff_dist(TString input, TString output){
         UpToFromL2AssoTrack.SetTag("UpToFromL2Asso");
         UpToFromL2AssoTrack.SetTruePU(truePU);
         UpToFromL2AssoTracks.push_back(UpToFromL2AssoTrack);
-      }
-    }
-    vector<Object> TPtoUpToFromL2Tracks;
-    for(int j=0; j<ntpTo_hltIterL3MuonMergedAssociated; j++){
-      if( fabs(tpTo_hltIterL3MuonMergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoUpToFromL2Track;
-        TPtoUpToFromL2Track.SetPtEtaPhiM(tpTo_hltIterL3MuonMergedAssociated_gen_pt->at(j),tpTo_hltIterL3MuonMergedAssociated_gen_eta->at(j),tpTo_hltIterL3MuonMergedAssociated_gen_phi->at(j),0);
-        TPtoUpToFromL2Track.SetTag("TPtoUpToFromL2");
-        TPtoUpToFromL2Track.SetTruePU(truePU);
-        TPtoUpToFromL2Tracks.push_back(TPtoUpToFromL2Track);
       }
     }
 
@@ -1639,16 +2033,6 @@ void calculateEff_dist(TString input, TString output){
         UpToFromL1AssoTracks.push_back(UpToFromL1AssoTrack);
       }
     }
-    vector<Object> TPtoUpToFromL1Tracks;
-    for(int j=0; j<ntpTo_hltIterL3MuonAndMuonFromL1MergedAssociated; j++){
-      if( fabs(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_eta->at(j)) < 2.4 && tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoUpToFromL1Track;
-        TPtoUpToFromL1Track.SetPtEtaPhiM(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_pt->at(j),tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_eta->at(j),tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_gen_phi->at(j),0);
-        TPtoUpToFromL1Track.SetTag("TPtoUpToFromL1");
-        TPtoUpToFromL1Track.SetTruePU(truePU);
-        TPtoUpToFromL1Tracks.push_back(TPtoUpToFromL1Track);
-      }
-    }
 
     //==L3MuonNoID Track==//
     vector<Object> L3MuonTracks_NoID;
@@ -1667,16 +2051,6 @@ void calculateEff_dist(TString input, TString output){
         L3MuonAssoTrack_NoID.SetTag("L3NoIDTrackAsso");
         L3MuonAssoTrack_NoID.SetTruePU(truePU);
         L3MuonAssoTracks_NoID.push_back(L3MuonAssoTrack_NoID);
-      }
-    }
-    vector<Object> TPtoL3MuonTracks_NoID;
-    for(int j=0; j<ntpTo_iterL3MuonNoIDTrackAssociated; j++){
-      if( fabs(tpTo_iterL3MuonNoIDTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoL3MuonTrack_NoID;
-        TPtoL3MuonTrack_NoID.SetPtEtaPhiM(tpTo_iterL3MuonNoIDTrackAssociated_gen_pt->at(j),tpTo_iterL3MuonNoIDTrackAssociated_gen_eta->at(j),tpTo_iterL3MuonNoIDTrackAssociated_gen_phi->at(j),0);
-        TPtoL3MuonTrack_NoID.SetTag("TPtoL3NoIDTrack");
-        TPtoL3MuonTrack_NoID.SetTruePU(truePU);
-        TPtoL3MuonTracks_NoID.push_back(TPtoL3MuonTrack_NoID);
       }
     }
 
@@ -1699,18 +2073,6 @@ void calculateEff_dist(TString input, TString output){
         L3MuonAssoTracks.push_back(L3MuonAssoTrack);
       }
     }
-    vector<Object> TPtoL3MuonTracks;
-    for(int j=0; j<ntpTo_iterL3MuonTrackAssociated; j++){
-      if( fabs(tpTo_iterL3MuonTrackAssociated_gen_eta->at(j)) < 2.4 && tpTo_iterL3MuonTrackAssociated_bestMatchTrk_pt->at(j) > -1 ){
-        Object TPtoL3MuonTrack;
-        TPtoL3MuonTrack.SetPtEtaPhiM(tpTo_iterL3MuonTrackAssociated_gen_pt->at(j),tpTo_iterL3MuonTrackAssociated_gen_eta->at(j),tpTo_iterL3MuonTrackAssociated_gen_phi->at(j),0);
-        TPtoL3MuonTrack.SetTag("TPtoL3Track");
-        TPtoL3MuonTrack.SetTruePU(truePU);
-        TPtoL3MuonTracks.push_back(TPtoL3MuonTrack);
-      }
-    }
-
-
 
     vector< vector<Object> > Tracks;
     Tracks.push_back(L3OITracks);
@@ -1718,35 +2080,15 @@ void calculateEff_dist(TString input, TString output){
     Tracks.push_back(Iter2L3Tracks);
     Tracks.push_back(Iter0L3FromL1Tracks);
     Tracks.push_back(Iter2L3FromL1Tracks);
- 
 
-    vector<Object> this_gens;
-    vector<Object> this_gens_above;
-   
-    //Use this with Jpsi RAW only sample
-    //if(input.Contains("Jpsi")){
-    //  this_gens = JpsiCand;
-    //  this_gens_above = JpsiCand_above;
-    //  check_Jpsi_dR(this_gens, genEventWeight);
-    //}
-    //else if(input.Contains("QCD")){
-    //  this_gens = Finals;
-    //  this_gens_above = Finals_above;
-    //}
-    //else{
-    //  this_gens = hardPs;
-    //  this_gens_above = hardPs_above;
-    //}
-    this_gens = hardPs;
-    this_gens_above = hardPs_above;
 
   //====================================Efficiency vs pt========================================//
- 
-    do_eff_den_pt(this_gens, genEventWeight);
-    do_trackeff_pt(this_gens, Tracks, 0.3, genEventWeight, "all");
-    do_eff_num_pt(this_gens, IOFromL1Tracks, 0.1, genEventWeight);
-    do_eff_num_pt(this_gens, L3Muons_NoID, 0.1, genEventWeight);
-    do_eff_num_pt(this_gens, L3Muons, 0.1, genEventWeight);
+
+    do_eff_den_pt(hardPs, genEventWeight);
+    do_trackeff_pt(hardPs, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_pt(hardPs, IOFromL1Tracks, 0.1, genEventWeight);
+    do_eff_num_pt(hardPs, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_pt(hardPs, L3Muons, 0.1, genEventWeight);
 
     do_eff_den_pt(hardPs_L1matched, genEventWeight);
     do_trackeff_pt(hardPs_L1matched, Tracks, 0.3, genEventWeight, "all");
@@ -1762,11 +2104,11 @@ void calculateEff_dist(TString input, TString output){
 
   //====================================Efficiency vs eta, phi, truePU========================================//
 
-    do_eff_den_others(this_gens_above, genEventWeight);
-    do_trackeff_others(this_gens_above, Tracks, 0.3, genEventWeight, "all");
-    do_eff_num_others(this_gens_above, IOFromL1Tracks, 0.1, genEventWeight);
-    do_eff_num_others(this_gens_above, L3Muons_NoID, 0.1, genEventWeight);
-    do_eff_num_others(this_gens_above, L3Muons, 0.1, genEventWeight);
+    do_eff_den_others(hardPs_above, genEventWeight);
+    do_trackeff_others(hardPs_above, Tracks, 0.3, genEventWeight, "all");
+    do_eff_num_others(hardPs_above, IOFromL1Tracks, 0.1, genEventWeight);
+    do_eff_num_others(hardPs_above, L3Muons_NoID, 0.1, genEventWeight);
+    do_eff_num_others(hardPs_above, L3Muons, 0.1, genEventWeight);
 
     do_eff_den_others(hardPs_above_L1matched, genEventWeight);
     do_trackeff_others(hardPs_above_L1matched, Tracks, 0.3, genEventWeight, "all");
@@ -1780,20 +2122,179 @@ void calculateEff_dist(TString input, TString output){
     do_eff_num_others(hardPs_above_L1matched_med, L3Muons_NoID, 0.1, genEventWeight);
     do_eff_num_others(hardPs_above_L1matched_med, L3Muons, 0.1, genEventWeight);
 
-  //=======================New efficiency (hit association) vs pt, eta, phi, truePU============================//
+    do_eff_den_others(hardPs_above_med, genEventWeight);
 
-    do_neweff_den_vars(TPs, genEventWeight);
-    do_neweff_num_vars(TPtoL3OITracks, genEventWeight);
-    do_neweff_num_vars(TPtoIter0L3Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoIter2L3Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoIter0L3FromL1Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoIter2L3FromL1Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoIOFromL2Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoIOFromL1Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoUpToFromL2Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoUpToFromL1Tracks, genEventWeight);
-    do_neweff_num_vars(TPtoL3MuonTracks_NoID, genEventWeight);
-    do_neweff_num_vars(TPtoL3MuonTracks, genEventWeight);
+  //=======================New efficiency (hit association or L1 matching) vs pt, eta, phi, truePU============================//
+
+    do_neweff_pt(TPs, genEventWeight);
+    do_neweff_pt(TPs_L1Raw0, genEventWeight);
+    do_neweff_pt(TPs_L1Raw8, genEventWeight);
+    do_neweff_pt(TPs_L1Raw22, genEventWeight);
+    do_neweff_pt(TPs_L1DQ0, genEventWeight);
+    do_neweff_pt(TPs_L1DQ8, genEventWeight);
+    do_neweff_pt(TPs_L1DQ22, genEventWeight);
+    do_neweff_pt(TPs_L1SQ0, genEventWeight);
+    do_neweff_pt(TPs_L1SQ8, genEventWeight);
+    do_neweff_pt(TPs_L1SQ22, genEventWeight);
+
+    do_neweff_others(TPs, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1Raw0, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1Raw8, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1Raw22, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1DQ0, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1DQ8, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1DQ22, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1SQ0, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1SQ8, turn_on, genEventWeight);
+    do_neweff_others(TPs_L1SQ22, turn_on, genEventWeight);
+
+    do_neweff_others(TPs, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1Raw0, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1Raw8, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1Raw22, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1DQ0, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1DQ8, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1DQ22, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1SQ0, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1SQ8, turn_on_med, genEventWeight);
+    do_neweff_others(TPs_L1SQ22, turn_on_med, genEventWeight);
+
+  //==================================L1 efficiency comparison vs pt==========================================//
+    //do_eff_den_pt(hardPsRaw, genEventWeight);
+    //do_eff_num_pt(hardPsRaw, L1MuonsRaw, 0.3, genEventWeight);
+    //do_eff_num_pt(hardPsRaw, L1MuonsRaw_AtVtx, 0.3, genEventWeight);
+    //do_eff_num_pt(hardPsRaw, L1MuonsMatched, 0.3, genEventWeight);
+    //do_eff_den_others(hardPsRaw, genEventWeight);
+    //do_eff_num_others(hardPsRaw, L1MuonsRaw, 0.3, genEventWeight);
+    //do_eff_num_others(hardPsRaw, L1MuonsRaw_AtVtx, 0.3, genEventWeight);
+    //do_eff_num_others(hardPsRaw, L1MuonsMatched, 0.3, genEventWeight);
+    //do_neweff_L1MuonsMatched_vars(hardPsRaw, 0.3, genEventWeight);
+    
+    do_eff_num_pt(hardPs, L1Muons_Raw0, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_Raw8, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_Raw22, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_DQ0, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_DQ8, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_DQ22, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_SQ0, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_SQ8, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_SQ22, 0.3, genEventWeight);
+
+    do_eff_num_pt(hardPs, L1Muons_Raw0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_Raw8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_Raw22_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_DQ0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_DQ8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_DQ22_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_SQ0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_SQ8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1Muons_SQ22_AtVtx, 0.3, genEventWeight);
+
+    do_eff_num_pt(hardPs, L1MuonsMatched_Raw0, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_Raw8, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_Raw22, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_DQ0, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_DQ8, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_DQ22, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_SQ0, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_SQ8, 0.3, genEventWeight);
+    do_eff_num_pt(hardPs, L1MuonsMatched_SQ22, 0.3, genEventWeight);
+
+  //==================================L1 efficiency comparison vs eta, phi, truePU (tight turn-on)==========================================//
+
+    do_eff_num_others(hardPs_above, L1Muons_Raw0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_Raw8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_Raw22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_DQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_DQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_DQ22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_SQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_SQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_SQ22, 0.3, genEventWeight);
+
+    do_eff_num_others(hardPs_above, L1Muons_Raw0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_Raw8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_Raw22_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_DQ0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_DQ8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_DQ22_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_SQ0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_SQ8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1Muons_SQ22_AtVtx, 0.3, genEventWeight);
+
+    do_eff_num_others(hardPs_above, L1MuonsMatched_Raw0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_Raw8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_Raw22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_DQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_DQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_DQ22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_SQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_SQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above, L1MuonsMatched_SQ22, 0.3, genEventWeight);
+
+  //==================================L1 efficiency comparison vs eta, phi, truePU (medium turn-on)==========================================//
+
+    do_eff_num_others(hardPs_above_med, L1Muons_Raw0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_Raw8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_Raw22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_DQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_DQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_DQ22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_SQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_SQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_SQ22, 0.3, genEventWeight);
+
+    do_eff_num_others(hardPs_above_med, L1Muons_Raw0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_Raw8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_Raw22_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_DQ0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_DQ8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_DQ22_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_SQ0_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_SQ8_AtVtx, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1Muons_SQ22_AtVtx, 0.3, genEventWeight);
+
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_Raw0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_Raw8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_Raw22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_DQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_DQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_DQ22, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_SQ0, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_SQ8, 0.3, genEventWeight);
+    do_eff_num_others(hardPs_above_med, L1MuonsMatched_SQ22, 0.3, genEventWeight);
+
+  //==================================L1 matched by l1drByQ efficiency vs pt, eta, phi, truePU==========================================//
+
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 0, 0, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 0, 8, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 0, 22, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 7, 0, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 7, 8, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 7, 22, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 11, 0, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 11, 8, genEventWeight);
+    do_neweff_L1MuonsMatched_pt(hardPs, 0.3, 11, 22, genEventWeight);
+
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 0, 0, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 0, 8, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 0, 22, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 7, 0, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 7, 8, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 7, 22, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 11, 0, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 11, 8, turn_on, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 11, 22, turn_on, genEventWeight);
+
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 0, 0, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 0, 8, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 0, 22, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 7, 0, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 7, 8, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 7, 22, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 11, 0, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 11, 8, turn_on_med, genEventWeight);
+    do_neweff_L1MuonsMatched_others(hardPs, 0.3, 11, 22, turn_on_med, genEventWeight);
 
   //==========================================Purity====================================================//
 
@@ -1805,20 +2306,32 @@ void calculateEff_dist(TString input, TString output){
     do_purity(IOFromL1Tracks, IOFromL1AssoTracks, Finals, 0.1, genEventWeight);
 
   //==========================================dR scan===================================================//
+
     //hardP vs tracks
-    draw_dR(this_gens, Tracks[0], genEventWeight);
-    draw_dR(this_gens, Tracks[1], genEventWeight);
-    draw_dR(this_gens, Tracks[2], genEventWeight);
-    draw_dR(this_gens, Tracks[3], genEventWeight);
-    draw_dR(this_gens, Tracks[4], genEventWeight);
+    draw_dR(hardPs, Tracks[0], genEventWeight);
+    draw_dR(hardPs, Tracks[1], genEventWeight);
+    draw_dR(hardPs, Tracks[2], genEventWeight);
+    draw_dR(hardPs, Tracks[3], genEventWeight);
+    draw_dR(hardPs, Tracks[4], genEventWeight);
     //hardP vs L1s
-    draw_dR(this_gens, L1Muons, genEventWeight);
-    draw_dR(this_gens, L1Muons_med, genEventWeight);
-    draw_dR(this_gens, L1Muons_AtVtx, genEventWeight);
-    draw_dR(this_gens, L1Muons_med_AtVtx, genEventWeight);
+    draw_dR(hardPs, L1Muons_Raw0, genEventWeight);
+    draw_dR(hardPs, L1Muons_DQ8, genEventWeight);
+    draw_dR(hardPs, L1Muons_SQ22, genEventWeight);
+    draw_dR(hardPs, L1Muons_Raw0_AtVtx, genEventWeight);
+    draw_dR(hardPs, L1Muons_DQ8_AtVtx, genEventWeight);
+    draw_dR(hardPs, L1Muons_SQ22_AtVtx, genEventWeight);
+    draw_l1drByQ(hardPs, 0, 0, genEventWeight);
+    draw_l1drByQ(hardPs, 0, 8, genEventWeight);
+    draw_l1drByQ(hardPs, 0, 22, genEventWeight);
+    draw_l1drByQ(hardPs, 7, 0, genEventWeight);
+    draw_l1drByQ(hardPs, 7, 8, genEventWeight);
+    draw_l1drByQ(hardPs, 7, 22, genEventWeight);
+    draw_l1drByQ(hardPs, 11, 0, genEventWeight);
+    draw_l1drByQ(hardPs, 11, 8, genEventWeight);
+    draw_l1drByQ(hardPs, 11, 22, genEventWeight);
     //hardP vs L3s
-    draw_dR(this_gens, L3Muons_NoID, genEventWeight);
-    draw_dR(this_gens, L3Muons, genEventWeight);
+    draw_dR(hardPs, L3Muons_NoID, genEventWeight);
+    draw_dR(hardPs, L3Muons, genEventWeight);
     
 
     pf_track->Fill(truePU,nhltIter2IterL3MuonTrack);
@@ -1829,13 +2342,16 @@ void calculateEff_dist(TString input, TString output){
   cout << "=================================================" << endl;
   cout << "total NhardPs : " << NhardP << endl;
   cout << "total NhardPs above 26GeV : " << NhardP_above << endl;
+  cout << "total NhardPs_L1 : " << NhardP_L1 << endl;
+  cout << "total TPs : " << NTP << endl;
+  cout << "total TPs matched to single muon L1 : " << NTP_L1 << endl;
+  cout << "total TPs matched to double muon L1 : " << NTP_L1_med << endl;
   cout << "total track pt eff : " << Nmatched_hardP_tracks_pt/NhardP << endl;
   cout << "total track others eff : " << Nmatched_hardP_tracks_others/NhardP_above << endl;
   cout << "L3NoID pt eff : " << Nmatched_hardP_L3NoID_pt/NhardP << endl;
   cout << "L3NoID others eff : " << Nmatched_hardP_L3NoID_others/NhardP_above << endl;
   cout << "L3 pt eff : " << Nmatched_hardP_L3_pt/NhardP << endl;
   cout << "L3 others eff : " << Nmatched_hardP_L3_others/NhardP_above << endl;
-  cout << "total NhardPs_L1 : " << NhardP_L1 << endl;
   cout << "total track pt eff : " << Nmatched_hardP_L1_tracks_pt/NhardP_L1 << endl;
   cout << "L3NoID pt eff : " << Nmatched_hardP_L1_L3NoID_pt/NhardP_L1 << endl;
   cout << "L3 pt eff : " << Nmatched_hardP_L1_L3_pt/NhardP_L1 << endl;
