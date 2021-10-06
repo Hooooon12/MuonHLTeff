@@ -68,6 +68,8 @@ private:
   double j_hltIterL3MuonMergedAssociated_bestMatchTrk_pt;
   double j_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt;
   double j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt;
+  double j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta;
+  double j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi;
   double j_iterL3MuonTrackAssociated_bestMatchTrk_pt;
   double j_quality;
   float j_hltIter2IterL3MuonTrackAssociated_mva;
@@ -100,6 +102,8 @@ public:
     j_hltIterL3MuonMergedAssociated_bestMatchTrk_pt = -999.;
     j_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt = -999.;
     j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt = -999.;
+    j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta = -999.;
+    j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi = -999.;
     j_iterL3MuonTrackAssociated_bestMatchTrk_pt = -999.;
     j_quality = -999.;
     j_hltIter2IterL3MuonTrackAssociated_mva = -999.;
@@ -169,6 +173,12 @@ public:
   }
   void SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(double this_pt){
     j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt = this_pt;
+  }
+  void SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_eta(double this_eta){
+    j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta = this_eta;
+  }
+  void SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_phi(double this_phi){
+    j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi = this_phi;
   }
   void SetIterL3MuonTrackAssociated_bestMatchTrk_pt(double this_pt){
     j_iterL3MuonTrackAssociated_bestMatchTrk_pt = this_pt;
@@ -252,6 +262,12 @@ public:
   }
   double iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(){
     return j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt;
+  }
+  double iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta(){
+    return j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta;
+  }
+  double iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi(){
+    return j_iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi;
   }
   double iterL3MuonTrackAssociated_bestMatchTrk_pt(){
     return j_iterL3MuonTrackAssociated_bestMatchTrk_pt;
@@ -950,7 +966,7 @@ void do_purity(vector<Object> recos, vector<Object> recos_Asso, vector<Object> F
 
 }
 
-void calculateEff_dist(TString input, TString output){
+void calculateEff_dist_investigate(TString input, TString output){
 
   vector<TString> inputs;
   ifstream in(input);
@@ -975,7 +991,7 @@ void calculateEff_dist(TString input, TString output){
 
   int runNum;
   int lumiBlockNum;
-	unsigned long long eventNum;
+  unsigned long long eventNum;
   double genEventWeight;
   int truePU;
   int nGenParticle;
@@ -1531,15 +1547,17 @@ void calculateEff_dist(TString input, TString output){
   double Nmatched_Iter2FromL1Track_Final = 0;
   
   //Call the histogram//
-  hists.clear();
-  hists_2D.clear();
-  pfs.clear();
-  TProfile *pf_track = new TProfile("pf_track","pf_track",25,30,80,0,5000);
-  TProfile *pf_trackFromL1 = new TProfile("pf_trackFromL1","pf_trackFromL1",25,30,80,0,5000);
+  //hists.clear();
+  //hists_2D.clear();
+  //pfs.clear();
+  //TProfile *pf_track = new TProfile("pf_track","pf_track",25,30,80,0,5000);
+  //TProfile *pf_trackFromL1 = new TProfile("pf_trackFromL1","pf_trackFromL1",25,30,80,0,5000);
 
   //To avoid double counting//
   vector<int> this_matched;
 
+  int den_count = 0;
+  int num_count = 0;
   for(int i=0; i<Nevents; i++){
     //cout << "==========" << i << "th event==========" << endl;
     fChain->GetEntry(i);
@@ -1845,6 +1863,8 @@ void calculateEff_dist(TString input, TString output){
         TP.SetHltIterL3MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j));
         TP.SetHltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j));
         TP.SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j));
+        TP.SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_eta(tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta->at(j));
+        TP.SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_phi(tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi->at(j));
         TP.SetIterL3MuonTrackAssociated_bestMatchTrk_pt(tpTo_iterL3MuonTrackAssociated_bestMatchTrk_pt->at(j));
         TPs.push_back(TP);
         NTP+=1;
@@ -2182,39 +2202,249 @@ void calculateEff_dist(TString input, TString output){
 
   //=======================New efficiency (hit association or L1 matching) vs pt, eta, phi, truePU============================//
 
-    do_neweff_pt(TPs, genEventWeight);
-    do_neweff_pt(TPs_L1Raw0, genEventWeight);
-    do_neweff_pt(TPs_L1Raw8, genEventWeight);
-    do_neweff_pt(TPs_L1Raw22, genEventWeight);
-    do_neweff_pt(TPs_L1DQ0, genEventWeight);
-    do_neweff_pt(TPs_L1DQ8, genEventWeight);
-    do_neweff_pt(TPs_L1DQ22, genEventWeight);
-    do_neweff_pt(TPs_L1SQ0, genEventWeight);
-    do_neweff_pt(TPs_L1SQ8, genEventWeight);
-    do_neweff_pt(TPs_L1SQ22, genEventWeight);
+    //do_neweff_pt(TPs, genEventWeight);
+    //do_neweff_pt(TPs_L1Raw0, genEventWeight);
+    //do_neweff_pt(TPs_L1Raw8, genEventWeight);
+    //do_neweff_pt(TPs_L1Raw22, genEventWeight);
+    //do_neweff_pt(TPs_L1DQ0, genEventWeight);
+    //do_neweff_pt(TPs_L1DQ8, genEventWeight);
+    //do_neweff_pt(TPs_L1DQ22, genEventWeight);
+    //do_neweff_pt(TPs_L1SQ0, genEventWeight);
+    //do_neweff_pt(TPs_L1SQ8, genEventWeight);
+    //do_neweff_pt(TPs_L1SQ22, genEventWeight);
 
-    do_neweff_others(TPs, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1Raw0, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1Raw8, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1Raw22, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1DQ0, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1DQ8, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1DQ22, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1SQ0, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1SQ8, turn_on, genEventWeight);
-    do_neweff_others(TPs_L1SQ22, turn_on, genEventWeight);
+    //do_neweff_others(TPs, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1Raw0, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1Raw8, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1Raw22, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1DQ0, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1DQ8, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1DQ22, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1SQ0, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1SQ8, turn_on, genEventWeight);
+    //do_neweff_others(TPs_L1SQ22, turn_on, genEventWeight);
 
-    do_neweff_others(TPs, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1Raw0, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1Raw8, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1Raw22, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1DQ0, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1DQ8, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1DQ22, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1SQ0, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1SQ8, turn_on_med, genEventWeight);
-    do_neweff_others(TPs_L1SQ22, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1Raw0, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1Raw8, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1Raw22, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1DQ0, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1DQ8, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1DQ22, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1SQ0, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1SQ8, turn_on_med, genEventWeight);
+    //do_neweff_others(TPs_L1SQ22, turn_on_med, genEventWeight);
 
+  //==================================Investigate the efficiency increasing==========================================//
+
+    int den_count_tmp = 0;
+    for(int j=0; j<TPs_L1SQ22.size(); j++){
+      if(120.<TPs_L1SQ22.at(j).Pt()&&TPs_L1SQ22.at(j).Pt()<200.){
+        den_count_tmp += 1;
+        if(den_count_tmp > 0){
+          cout << "<Event ID>" << endl;
+          cout << runNum << ":" << lumiBlockNum << ":" << eventNum << endl;
+          cout << "event weight : " << genEventWeight << endl;
+          cout << "genParticle" << endl;
+          for(int i=0; i<nGenParticle; i++){
+            if(genParticle_fromHardProcessFinalState[i]==1){
+              cout << genParticle_pt[i] << ", " << genParticle_eta[i] << ", " << genParticle_phi[i] << ", from hard process" << endl;
+            }
+            else if(genParticle_isPromptFinalState[i]==1){
+              cout << genParticle_pt[i] << ", " << genParticle_eta[i] << ", " << genParticle_phi[i] << ", from radiation" << endl;
+            }
+          }
+          cout << "L1Muon" << endl;
+          for(int i=0; i<nL1Muon; i++){
+            cout << L1Muon_pt[i] << ", " << L1Muon_eta[i] << ", " << L1Muon_phi[i] << endl;
+          }
+          cout << "L2Muon" << endl;
+          for(int i=0; i<nL2Muon; i++){
+            cout << L2Muon_pt[i] << ", " << L2Muon_eta[i] << ", " << L2Muon_phi[i] << endl;
+          }
+          cout << "hltOI" << endl;
+          for(int i=0; i<nhltIterL3OIMuonTrackAssociated; i++){
+            if( hltIterL3OIMuonTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIterL3OIMuonTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIterL3OIMuonTrackAssociated_pt->at(i) << ", "
+              << hltIterL3OIMuonTrackAssociated_eta->at(i) << ", "
+              << hltIterL3OIMuonTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIterL3OIMuonTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIterL3OIMuonTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIterL3OIMuonTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIterL3OIMuonTrackAssociated_pt->at(i) << ", " << hltIterL3OIMuonTrackAssociated_eta->at(i) << ", " << hltIterL3OIMuonTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIter0" << endl;
+          for(int i=0; i<nhltIter0IterL3MuonTrackAssociated; i++){
+            if( hltIter0IterL3MuonTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIter0IterL3MuonTrackAssociated_pt->at(i) << ", "
+              << hltIter0IterL3MuonTrackAssociated_eta->at(i) << ", "
+              << hltIter0IterL3MuonTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIter0IterL3MuonTrackAssociated_pt->at(i) << ", " << hltIter0IterL3MuonTrackAssociated_eta->at(i) << ", " << hltIter0IterL3MuonTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIter2" << endl;
+          for(int i=0; i<nhltIter2IterL3MuonTrackAssociated; i++){
+            if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIter2IterL3MuonTrackAssociated_pt->at(i) << ", "
+              << hltIter2IterL3MuonTrackAssociated_eta->at(i) << ", "
+              << hltIter2IterL3MuonTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIter2IterL3MuonTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIter2IterL3MuonTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIter2IterL3MuonTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIter2IterL3MuonTrackAssociated_pt->at(i) << ", " << hltIter2IterL3MuonTrackAssociated_eta->at(i) << ", " << hltIter2IterL3MuonTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIter0FromL1" << endl;
+          for(int i=0; i<nhltIter0IterL3FromL1MuonTrackAssociated; i++){
+            if( hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIter0IterL3FromL1MuonTrackAssociated_pt->at(i) << ", "
+              << hltIter0IterL3FromL1MuonTrackAssociated_eta->at(i) << ", "
+              << hltIter0IterL3FromL1MuonTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIter0IterL3FromL1MuonTrackAssociated_pt->at(i) << ", " << hltIter0IterL3FromL1MuonTrackAssociated_eta->at(i) << ", " << hltIter0IterL3FromL1MuonTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIter2FromL1" << endl;
+          for(int i=0; i<nhltIter2IterL3FromL1MuonTrackAssociated; i++){
+            if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIter2IterL3FromL1MuonTrackAssociated_pt->at(i) << ", "
+              << hltIter2IterL3FromL1MuonTrackAssociated_eta->at(i) << ", "
+              << hltIter2IterL3FromL1MuonTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIter2IterL3FromL1MuonTrackAssociated_pt->at(i) << ", " << hltIter2IterL3FromL1MuonTrackAssociated_eta->at(i) << ", " << hltIter2IterL3FromL1MuonTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIter2IterL3MuonMergedAssociated" << endl;
+          for(int i=0; i<nhltIter2IterL3MuonMergedAssociated; i++){
+            if( hltIter2IterL3MuonMergedAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIter2IterL3MuonMergedAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIter2IterL3MuonMergedAssociated_pt->at(i) << ", "
+              << hltIter2IterL3MuonMergedAssociated_eta->at(i) << ", "
+              << hltIter2IterL3MuonMergedAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIter2IterL3MuonMergedAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIter2IterL3MuonMergedAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIter2IterL3MuonMergedAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIter2IterL3MuonMergedAssociated_pt->at(i) << ", " << hltIter2IterL3MuonMergedAssociated_eta->at(i) << ", " << hltIter2IterL3MuonMergedAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIter2IterL3FromL1MuonMergedAssociated" << endl;
+          for(int i=0; i<nhltIter2IterL3FromL1MuonMergedAssociated; i++){
+            if( hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIter2IterL3FromL1MuonMergedAssociated_pt->at(i) << ", "
+              << hltIter2IterL3FromL1MuonMergedAssociated_eta->at(i) << ", "
+              << hltIter2IterL3FromL1MuonMergedAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIter2IterL3FromL1MuonMergedAssociated_pt->at(i) << ", " << hltIter2IterL3FromL1MuonMergedAssociated_eta->at(i) << ", " << hltIter2IterL3FromL1MuonMergedAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIterL3MuonMergedAssociated" << endl;
+          for(int i=0; i<nhltIterL3MuonMergedAssociated; i++){
+            if( hltIterL3MuonMergedAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIterL3MuonMergedAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIterL3MuonMergedAssociated_pt->at(i) << ", "
+              << hltIterL3MuonMergedAssociated_eta->at(i) << ", "
+              << hltIterL3MuonMergedAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIterL3MuonMergedAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIterL3MuonMergedAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIterL3MuonMergedAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIterL3MuonMergedAssociated_pt->at(i) << ", " << hltIterL3MuonMergedAssociated_eta->at(i) << ", " << hltIterL3MuonMergedAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIterL3MuonAndMuonFromL1MergedAssociated" << endl;
+          for(int i=0; i<nhltIterL3MuonAndMuonFromL1MergedAssociated; i++){
+            if( hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_status->at(i) == 1 && fabs(hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << hltIterL3MuonAndMuonFromL1MergedAssociated_pt->at(i) << ", "
+              << hltIterL3MuonAndMuonFromL1MergedAssociated_eta->at(i) << ", "
+              << hltIterL3MuonAndMuonFromL1MergedAssociated_phi->at(i)
+              << ", matched to muon TP (" << hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_pt->at(i) << ", "
+              << hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_eta->at(i) << ", "
+              << hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << hltIterL3MuonAndMuonFromL1MergedAssociated_pt->at(i) << ", " << hltIterL3MuonAndMuonFromL1MergedAssociated_eta->at(i) << ", " << hltIterL3MuonAndMuonFromL1MergedAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "hltIterL3MuonNoIDTrack" << endl;
+          for(int i=0; i<niterL3MuonNoIDTrackAssociated; i++){
+            if( iterL3MuonNoIDTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(iterL3MuonNoIDTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << iterL3MuonNoIDTrackAssociated_pt->at(i) << ", "
+              << iterL3MuonNoIDTrackAssociated_eta->at(i) << ", "
+              << iterL3MuonNoIDTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << iterL3MuonNoIDTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << iterL3MuonNoIDTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << iterL3MuonNoIDTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << iterL3MuonNoIDTrackAssociated_pt->at(i) << ", " << iterL3MuonNoIDTrackAssociated_eta->at(i) << ", " << iterL3MuonNoIDTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "IterL3MuonNoID" << endl;
+          for(int i=0; i<nIterL3MuonNoID; i++){
+            cout << iterL3MuonNoID_pt[i] << ", " << iterL3MuonNoID_eta[i] << ", " << iterL3MuonNoID_phi[i] << endl;
+          }
+          cout << "hltIterL3MuonTrack" << endl;
+          for(int i=0; i<niterL3MuonTrackAssociated; i++){
+            if( iterL3MuonTrackAssociated_bestMatchTP_status->at(i) == 1 && fabs(iterL3MuonTrackAssociated_bestMatchTP_pdgId->at(i)) == 13 ){
+              cout << iterL3MuonTrackAssociated_pt->at(i) << ", "
+              << iterL3MuonTrackAssociated_eta->at(i) << ", "
+              << iterL3MuonTrackAssociated_phi->at(i)
+              << ", matched to muon TP (" << iterL3MuonTrackAssociated_bestMatchTP_pt->at(i) << ", "
+              << iterL3MuonTrackAssociated_bestMatchTP_eta->at(i) << ", "
+              << iterL3MuonTrackAssociated_bestMatchTP_phi->at(i) << ")" << endl;
+            }
+            else{
+              cout << iterL3MuonTrackAssociated_pt->at(i) << ", " << iterL3MuonTrackAssociated_eta->at(i) << ", " << iterL3MuonTrackAssociated_phi->at(i) << ", no matched" << endl;
+            }
+          }
+          cout << "IterL3Muon" << endl;
+          for(int i=0; i<nIterL3Muon; i++){
+            cout << iterL3Muon_pt[i] << ", " << iterL3Muon_eta[i] << ", " << iterL3Muon_phi[i] << endl;
+          }
+          break;
+        }
+      }
+    }
+
+    for(int j=0; j<TPs_L1SQ22.size(); j++){
+      if(120.<TPs_L1SQ22.at(j).Pt()&&TPs_L1SQ22.at(j).Pt()<200.){
+        den_count += 1;
+        cout << "denominator : TP_L1SQ22" << endl;
+        cout << TPs_L1SQ22.at(j).Pt() << ", " << TPs_L1SQ22.at(j).Eta() << ", " << TPs_L1SQ22.at(j).Phi() << endl;
+        if(TPs_L1SQ22.at(j).iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt() > -1){
+          num_count += 1;
+          cout << "numerator : TPs_L1SQ22_pt_eff_TPtoL3NoIDTrack" << endl;
+          cout << TPs_L1SQ22.at(j).iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt() << ", " << TPs_L1SQ22.at(j).iterL3MuonNoIDTrackAssociated_bestMatchTrk_eta() << ", " << TPs_L1SQ22.at(j).iterL3MuonNoIDTrackAssociated_bestMatchTrk_phi() << endl;
+        }
+      }
+    }
+
+    cout << "============================================================================" << endl;
+
+    
   //==================================L1 efficiency comparison vs pt==========================================//
     
     //do_eff_num_pt(hardPs, L1Muons_Raw0, 0.3, genEventWeight);
@@ -2345,121 +2575,125 @@ void calculateEff_dist(TString input, TString output){
 
   //==========================================Purity====================================================//
 
-    do_purity(L3Muons_NoID, Finals, 0.1, genEventWeight);
-    do_purity(L3Muons, Finals, 0.1, genEventWeight);
-    do_purity(L3MuonTracks_NoID, L3MuonAssoTracks_NoID, Finals, 0.1, genEventWeight);
-    do_purity(L3MuonTracks, L3MuonAssoTracks, Finals, 0.1, genEventWeight);
-    do_purity(Iter2L3FromL1Tracks, Iter2L3FromL1AssoTracks, Finals, 0.1, genEventWeight);
-    do_purity(Iter2L3Tracks, Iter2L3AssoTracks, Finals, 0.1, genEventWeight);
-    do_purity(L3OITracks, L3OIAssoTracks, Finals, 0.1, genEventWeight);
-    do_purity(IOFromL1Tracks, IOFromL1AssoTracks, Finals, 0.1, genEventWeight);
+    //do_purity(L3Muons_NoID, Finals, 0.1, genEventWeight);
+    //do_purity(L3Muons, Finals, 0.1, genEventWeight);
+    //do_purity(L3MuonTracks_NoID, L3MuonAssoTracks_NoID, Finals, 0.1, genEventWeight);
+    //do_purity(L3MuonTracks, L3MuonAssoTracks, Finals, 0.1, genEventWeight);
+    //do_purity(Iter2L3FromL1Tracks, Iter2L3FromL1AssoTracks, Finals, 0.1, genEventWeight);
+    //do_purity(Iter2L3Tracks, Iter2L3AssoTracks, Finals, 0.1, genEventWeight);
+    //do_purity(L3OITracks, L3OIAssoTracks, Finals, 0.1, genEventWeight);
+    //do_purity(IOFromL1Tracks, IOFromL1AssoTracks, Finals, 0.1, genEventWeight);
 
   //==========================================dR scan===================================================//
 
-    //hardP vs tracks
-    draw_dR(hardPs, Tracks[0], genEventWeight);
-    draw_dR(hardPs, Tracks[1], genEventWeight);
-    draw_dR(hardPs, Tracks[2], genEventWeight);
-    draw_dR(hardPs, Tracks[3], genEventWeight);
-    draw_dR(hardPs, Tracks[4], genEventWeight);
-    //hardP vs L1s
-    draw_dR(hardPs, L1Muons_Raw0, genEventWeight);
-    draw_dR(hardPs, L1Muons_DQ8, genEventWeight);
-    draw_dR(hardPs, L1Muons_SQ22, genEventWeight);
-    draw_dR(hardPs, L1Muons_Raw0_AtVtx, genEventWeight);
-    draw_dR(hardPs, L1Muons_DQ8_AtVtx, genEventWeight);
-    draw_dR(hardPs, L1Muons_SQ22_AtVtx, genEventWeight);
-    draw_l1drByQ(hardPs, 0, 0, genEventWeight);
-    draw_l1drByQ(hardPs, 0, 8, genEventWeight);
-    draw_l1drByQ(hardPs, 0, 22, genEventWeight);
-    draw_l1drByQ(hardPs, 7, 0, genEventWeight);
-    draw_l1drByQ(hardPs, 7, 8, genEventWeight);
-    draw_l1drByQ(hardPs, 7, 22, genEventWeight);
-    draw_l1drByQ(hardPs, 11, 0, genEventWeight);
-    draw_l1drByQ(hardPs, 11, 8, genEventWeight);
-    draw_l1drByQ(hardPs, 11, 22, genEventWeight);
-    //hardP vs L3s
-    draw_dR(hardPs, L3Muons_NoID, genEventWeight);
-    draw_dR(hardPs, L3Muons, genEventWeight);
+    ////hardP vs tracks
+    //draw_dR(hardPs, Tracks[0], genEventWeight);
+    //draw_dR(hardPs, Tracks[1], genEventWeight);
+    //draw_dR(hardPs, Tracks[2], genEventWeight);
+    //draw_dR(hardPs, Tracks[3], genEventWeight);
+    //draw_dR(hardPs, Tracks[4], genEventWeight);
+    ////hardP vs L1s
+    //draw_dR(hardPs, L1Muons_Raw0, genEventWeight);
+    //draw_dR(hardPs, L1Muons_DQ8, genEventWeight);
+    //draw_dR(hardPs, L1Muons_SQ22, genEventWeight);
+    //draw_dR(hardPs, L1Muons_Raw0_AtVtx, genEventWeight);
+    //draw_dR(hardPs, L1Muons_DQ8_AtVtx, genEventWeight);
+    //draw_dR(hardPs, L1Muons_SQ22_AtVtx, genEventWeight);
+    //draw_l1drByQ(hardPs, 0, 0, genEventWeight);
+    //draw_l1drByQ(hardPs, 0, 8, genEventWeight);
+    //draw_l1drByQ(hardPs, 0, 22, genEventWeight);
+    //draw_l1drByQ(hardPs, 7, 0, genEventWeight);
+    //draw_l1drByQ(hardPs, 7, 8, genEventWeight);
+    //draw_l1drByQ(hardPs, 7, 22, genEventWeight);
+    //draw_l1drByQ(hardPs, 11, 0, genEventWeight);
+    //draw_l1drByQ(hardPs, 11, 8, genEventWeight);
+    //draw_l1drByQ(hardPs, 11, 22, genEventWeight);
+    ////hardP vs L3s
+    //draw_dR(hardPs, L3Muons_NoID, genEventWeight);
+    //draw_dR(hardPs, L3Muons, genEventWeight);
     
   //==========================================track vs sigmoid MVA===================================================//
 
-    for(int j=0; j<nhltIter2IterL3MuonTrackAssociated; j++){
-      FillHist("Iter2FromL2_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-        FillHist("Iter2FromL2_sig_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      }
-      else{
-        FillHist("Iter2FromL2_fake_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      }
-    }
-    for(int j=0; j<nhltIter2IterL3FromL1MuonTrackAssociated; j++){
-      FillHist("Iter2FromL1_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-        FillHist("Iter2FromL1_sig_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      }
-      else{
-        FillHist("Iter2FromL1_fake_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      }
-    }
+    //for(int j=0; j<nhltIter2IterL3MuonTrackAssociated; j++){
+    //  FillHist("Iter2FromL2_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //  if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+    //    FillHist("Iter2FromL2_sig_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //  }
+    //  else{
+    //    FillHist("Iter2FromL2_fake_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //  }
+    //}
+    //for(int j=0; j<nhltIter2IterL3FromL1MuonTrackAssociated; j++){
+    //  FillHist("Iter2FromL1_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //  if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+    //    FillHist("Iter2FromL1_sig_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //  }
+    //  else{
+    //    FillHist("Iter2FromL1_fake_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //  }
+    //}
 
   //==========================================track profile vs pileup===================================================//
 
-    pf_track->Fill(truePU,nhltIter2IterL3MuonTrack);
-    pf_trackFromL1->Fill(truePU,nhltIter2IterL3FromL1MuonTrack);
+    //pf_track->Fill(truePU,nhltIter2IterL3MuonTrack);
+    //pf_trackFromL1->Fill(truePU,nhltIter2IterL3FromL1MuonTrack);
 
   }
+
+  cout << "total num : " << num_count << endl;
+  cout << "total den : " << den_count << endl;
+  if(num_count != den_count) cout << "!!!!!!!!!!!!!!!!eff is not 1!!!!!!!!!!!!!!!!!!" << endl;
   
-  cout << "=================================================" << endl;
-  cout << "total NhardPs : " << NhardP << endl;
-  cout << "total NhardPs above 26GeV : " << NhardP_above << endl;
-  cout << "total NhardPs_L1 : " << NhardP_L1 << endl;
-  cout << "total TPs : " << NTP << endl;
-  cout << "total TPs matched to single muon L1 : " << NTP_L1 << endl;
-  cout << "total TPs matched to double muon L1 : " << NTP_L1_med << endl;
-  cout << "total track pt eff : " << Nmatched_hardP_tracks_pt/NhardP << endl;
-  cout << "total track others eff : " << Nmatched_hardP_tracks_others/NhardP_above << endl;
-  cout << "L3NoID pt eff : " << Nmatched_hardP_L3NoID_pt/NhardP << endl;
-  cout << "L3NoID others eff : " << Nmatched_hardP_L3NoID_others/NhardP_above << endl;
-  cout << "L3 pt eff : " << Nmatched_hardP_L3_pt/NhardP << endl;
-  cout << "L3 others eff : " << Nmatched_hardP_L3_others/NhardP_above << endl;
-  cout << "total track pt eff : " << Nmatched_hardP_L1_tracks_pt/NhardP_L1 << endl;
-  cout << "L3NoID pt eff : " << Nmatched_hardP_L1_L3NoID_pt/NhardP_L1 << endl;
-  cout << "L3 pt eff : " << Nmatched_hardP_L1_L3_pt/NhardP_L1 << endl;
-  cout << "=================================================" << endl;
-  cout << "L3NoID purity : " << Nmatched_L3NoID_Final/NL3_NoID << endl;
-  cout << "L3 purity : " << Nmatched_L3_Final/NL3 << endl;
-  cout << "Iter2FromL1Track purity : " << Nmatched_Iter2FromL1Track_Final/NIter2FromL1Track << endl;
-  cout << "/////////////////////////////////////////////////" << endl;
+  //cout << "=================================================" << endl;
+  //cout << "total NhardPs : " << NhardP << endl;
+  //cout << "total NhardPs above 26GeV : " << NhardP_above << endl;
+  //cout << "total NhardPs_L1 : " << NhardP_L1 << endl;
+  //cout << "total TPs : " << NTP << endl;
+  //cout << "total TPs matched to single muon L1 : " << NTP_L1 << endl;
+  //cout << "total TPs matched to double muon L1 : " << NTP_L1_med << endl;
+  //cout << "total track pt eff : " << Nmatched_hardP_tracks_pt/NhardP << endl;
+  //cout << "total track others eff : " << Nmatched_hardP_tracks_others/NhardP_above << endl;
+  //cout << "L3NoID pt eff : " << Nmatched_hardP_L3NoID_pt/NhardP << endl;
+  //cout << "L3NoID others eff : " << Nmatched_hardP_L3NoID_others/NhardP_above << endl;
+  //cout << "L3 pt eff : " << Nmatched_hardP_L3_pt/NhardP << endl;
+  //cout << "L3 others eff : " << Nmatched_hardP_L3_others/NhardP_above << endl;
+  //cout << "total track pt eff : " << Nmatched_hardP_L1_tracks_pt/NhardP_L1 << endl;
+  //cout << "L3NoID pt eff : " << Nmatched_hardP_L1_L3NoID_pt/NhardP_L1 << endl;
+  //cout << "L3 pt eff : " << Nmatched_hardP_L1_L3_pt/NhardP_L1 << endl;
+  //cout << "=================================================" << endl;
+  //cout << "L3NoID purity : " << Nmatched_L3NoID_Final/NL3_NoID << endl;
+  //cout << "L3 purity : " << Nmatched_L3_Final/NL3 << endl;
+  //cout << "Iter2FromL1Track purity : " << Nmatched_Iter2FromL1Track_Final/NIter2FromL1Track << endl;
+  //cout << "/////////////////////////////////////////////////" << endl;
 
-  TFile fout(output,"recreate");
+  //TFile fout(output,"recreate");
 
-  for(const auto& [histname,hist]:hists){
-    hist->Write();
-  }
-  for(const auto& [histname,hist]:hists_2D){
-    //cout << "save " << histname << endl;
-    hist->Write();
-  }
-  for(const auto& [pfname,pf]:pfs){
-    //cout << "save " << pfname << endl;
-    pf->Write();
-  }
-  pf_track->Write();
-  pf_trackFromL1->Write();
-  fout.Close();
+  //for(const auto& [histname,hist]:hists){
+  //  hist->Write();
+  //}
+  //for(const auto& [histname,hist]:hists_2D){
+  //  //cout << "save " << histname << endl;
+  //  hist->Write();
+  //}
+  //for(const auto& [pfname,pf]:pfs){
+  //  //cout << "save " << pfname << endl;
+  //  pf->Write();
+  //}
+  //pf_track->Write();
+  //pf_trackFromL1->Write();
+  //fout.Close();
 
-  for(auto& [histname,hist]:hists){
-    delete hists[histname];
-  }
-  for(auto& [histname,hist]:hists_2D){
-    delete hists_2D[histname];
-  }
-  for(auto& [pfname,pf]:pfs){
-    delete pfs[pfname];
-  }
-  delete pf_track;
-  delete pf_trackFromL1;
+  //for(auto& [histname,hist]:hists){
+  //  delete hists[histname];
+  //}
+  //for(auto& [histname,hist]:hists_2D){
+  //  delete hists_2D[histname];
+  //}
+  //for(auto& [pfname,pf]:pfs){
+  //  delete pfs[pfname];
+  //}
+  //delete pf_track;
+  //delete pf_trackFromL1;
 
 }
 

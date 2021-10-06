@@ -7,19 +7,20 @@ file_dict = {
              "DY" : {
                      #'Winter20_113X' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210719__180358/Run3_Winter20_113X_DY_WP00/Run3_Winter20_113X_DY_WP00.root"),
                      #'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210719__180358/Run3_Winter21_subset_DY_WP00/Run3_Winter21_subset_DY_WP00.root"),
-                     'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210806__023659/Run3_Winter21_DY_WP00/Run3_Winter21_DY_WP00.root"),
+                     'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210907__212505/Run3_Winter21_DY_WP00/Run3_Winter21_DY_WP00.root"),
                     },
              "DY4" : {
-                      'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210806__023659/Run3_Winter21_DY4_WP00/Run3_Winter21_DY4_WP00.root")
+                      'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210907__212505/Run3_Winter21_DY4_WP00/Run3_Winter21_DY4_WP00.root")
                      },
-             "TTbar" : {
+             "TT" : {
+                        'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210908__162237/Run3_Winter21_TT_WP00/Run3_Winter21_TT_WP00.root")
                        },
              "Jpsi" : {
-                       'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210806__023659/Run3_Winter21_Jpsi_WP00/Run3_Winter21_Jpsi_WP00.root")
+                       'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210907__212505/Run3_Winter21_Jpsi_WP00/Run3_Winter21_Jpsi_WP00.root")
                       },
              "Bs" : {
                      #'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210806__023659/Run3_Winter21_Bs_WP00/Run3_Winter21_Bs_WP00.root")
-                     'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210812__034800/Run3_Winter21_subset_Bs_WP00/Run3_Winter21_subset_Bs_WP00.root")
+                     'Winter21' : TFile.Open("/data6/Users/jihkim/MuonHLT/logs/20210907__212505/Run3_Winter21_Bs_WP00/Run3_Winter21_Bs_WP00.root")
                     },
             }
 
@@ -32,13 +33,19 @@ bin_dict = {
 
 Xrange = {
           "DY" : {
-                  "pt" : [20, 200],
+                  "pt" : [0, 200],
+                  "eta" : [-2.4, 2.4],
+                  "phi" : [-3.15, 3.15],
+                  "truePU" : [30, 80]
+                 },
+          "TT" : {
+                  "pt" : [0, 200],
                   "eta" : [-2.4, 2.4],
                   "phi" : [-3.15, 3.15],
                   "truePU" : [30, 80]
                  },
           "DY4" : {
-                   "pt" : [0, 60],
+                   "pt" : [0, 200],
                    "eta" : [-2.4, 2.4],
                    "phi" : [-3.15, 3.15],
                    "truePU" : [30, 80]
@@ -119,6 +126,8 @@ def GetHistList(num, den, L1_den, var, turn_on):
 
       isL1Gen += "_L1"
       L1_den = "_"+L1_den
+    else: # "gen" in den
+      L1_den = ""
 
     if var != "pt":
       if turn_on == "double":
@@ -260,17 +269,17 @@ class plot: # each instance of this class corresponds to one canvas
 #c1.genPt = "p_{T}^{gen} > 26 GeV"
 ######################
 
-def DrawHist_New(proc, var):
+def DrawHist(proc, var):
 
   hist_setup = [
                 ["L3NoID","gen_L1","L1SQ22",var,"single"],
-                #["IOFromL1","gen","",var,"double"], # I didn't make "double" turn-on (i.e. med) for gen efficiency with dR matching, so this cannot be used.
                 ["IOFromL1","gen_L1","L1DQ8",var,"double"],
                 ["L1SQ22","gen","",var,"single"],
-                #["L1SQ22","gen","",var,"double"],
                 ["L1DQ8","gen","",var,"double"],
                 ["gen","L3NoID","",var,""],
-		  		     ]
+                #["L1SQ22","gen","",var,"double"], # possible but not reasonable
+                #["IOFromL1","gen","",var,"double"], # I didn't make "double" turn-on (i.e. med) for gen efficiency with dR matching, so this cannot be used.
+               ]
 
   for i in range(len(hist_setup)):
     h1 = plot(hist_setup[i][0],hist_setup[i][1],hist_setup[i][2],hist_setup[i][3],hist_setup[i][4])
@@ -327,6 +336,7 @@ def DrawHist_New(proc, var):
           #yran1 = TMath.MinElement(len(gr.GetY()),gr.GetY())*0.8
           yran1 = 0.
           yran2 = TMath.MaxElement(len(gr.GetY()),gr.GetY())*1.6
+          #yran2 = TMath.MaxElement(len(gr.GetY()),gr.GetY())*2. # use this only when the difference between the distributions is large.
           gr.GetYaxis().SetRangeUser(yran1, yran2)
           gr.Draw("AP")
         else:
@@ -340,240 +350,6 @@ def DrawHist_New(proc, var):
     lg_gen.Draw()
     lg_gr.Draw()
     c1.SaveAs("comp/"+proc+"/"+h1.name+".png")
-
-
-def DrawHist(proc, var): # For each title : multiple { legend : histo }s to draw in the same canvas (in order).
- 
-#def DrawHist(proc, var, compare):
-#TODO : if compare == "matching", this_num(den)_dict should be varieties of histograms in one process(same root file)
-#       elif compare == "process", this_num(den)_dict should be processes(files) with the same histogram
-
-  this_num_dict = {
-                   "proc" : [
-                              {'L3 efficiency' : [
-                                                       {'L3 muon before ID dR matching' : "hardP_"+var+"_eff_L3NoID"},
-                                                       {'L3 muon before ID hit association' : "TP_"+var+"_eff_TPtoL3NoIDTrack"},
-                                                     ]
-                              },
-                              {'L3/L1 efficiency' : [
-                                                       {'L3 muon before ID dR matching' : "hardP_L1_"+var+"_eff_L3NoID"},
-                                                       {'L3 muon before ID hit association' : "TP_L1SQ22_"+var+"_eff_TPtoL3NoIDTrack"},
-                                                     ]
-                              },
-                              #{'L3/L1 efficiency' : [
-                              #                         {'L3 muon before ID dR matching' : "hardP_L1_med_"+var+"_eff_L3NoID"},
-                              #                         {'L3 muon before ID hit association' : "TP_L1DQ8_med_"+var+"_eff_TPtoL3NoIDTrack"},
-                              #                       ]
-                              #},
-                              {'L3 efficiency' : [
-                                                         {'IO from L1 dR matching' : "hardP_"+var+"_eff_IOFromL1"},
-                                                         {'IO from L1 hit association' : "TP_"+var+"_eff_TPtoIOFromL1"},
-                                                       ]
-                              },
-                              {'L3/L1 efficiency' : [
-                                                         {'IO from L1 dR matching' : "hardP_L1_"+var+"_eff_IOFromL1"},
-                                                         {'IO from L1 hit association' : "TP_L1SQ22_"+var+"_eff_TPtoIOFromL1"},
-                                                       ]
-                              },
-                              #{'L3/L1 efficiency' : [
-                              #                           {'IO from L1 dR matching' : "hardP_L1_med_"+var+"_eff_IOFromL1"},
-                              #                           {'IO from L1 hit association' : "TP_L1DQ8_med_"+var+"_eff_TPtoIOFromL1"},
-                              #                         ]
-                              #},
-                              {'L3 efficiency' : [
-                                                   {'OI dR matching' : "hardP_"+var+"_eff_OI"},
-                                                   {'OI hit association' : "TP_"+var+"_eff_TPtoOI"},
-                                                 ]
-                              },
-                              {'L3/L1 efficiency' : [
-                                                   {'OI dR matching' : "hardP_L1_"+var+"_eff_OI"},
-                                                   {'OI hit association' : "TP_L1SQ22_"+var+"_eff_TPtoOI"},
-                                                 ]
-                              },
-                              #{'L3/L1 efficiency' : [
-                              #                     {'OI dR matching' : "hardP_L1_med_"+var+"_eff_OI"},
-                              #                     {'OI hit association' : "TP_L1DQ8_med_"+var+"_eff_TPtoOI"},
-                              #                   ]
-                              #}, # comment out 'med's when running with pt
-                              {'L1 efficiency' : [
-                                                   {'L1 position dR matching' : "hardP_"+var+"_eff_L1Raw0"},
-                                                   {'L1 position_at_vtx dR matching' : "hardP_"+var+"_eff_L1Raw0_AtVtx"},
-                                                   {'L1 Matcher dR' : "hardP_"+var+"_eff_L1Matched_Raw0"},
-                                                   {'L1 Matcher dR at MS' : "hardP_"+var+"_eff_L1Matched_l1drByQ_Raw0"},
-                                                 ]
-                              },
-                              {'L1 efficiency' : [
-                                                   {'L1 position dR matching' : "hardP_"+var+"_eff_L1SQ0"},
-                                                   {'L1 position_at_vtx dR matching' : "hardP_"+var+"_eff_L1SQ0_AtVtx"},
-                                                   {'L1 Matcher dR' : "hardP_"+var+"_eff_L1Matched_SQ0"},
-                                                   {'L1 Matcher dR at MS' : "hardP_"+var+"_eff_L1Matched_l1drByQ_SQ0"},
-                                                 ]
-                              },
-                              {'L3 purity' : [
-                                                   {'dR matching' : "L3NoIDTrack_"+var+"_purity"},
-                                                   {'hit association' : "L3NoIDTrack_"+var+"_Asso"},
-                                                 ]
-                              },
-                             ],
-                  }
-  
-  this_den_dict = {
-                   "proc" : [
-                              {'L3 efficiency' : [
-                                                       {'L3/hardP dR matching' : "hardP_"+var},
-                                                       {'L3/TP hit association' : "TP_"+var},
-                                                     ]
-                              },
-                              {'L3/L1 eEfficiency' : [
-                                                       {'L3/hardP_L1 dR matching' : "hardP_L1_"+var},
-                                                       {'L3/TP_L1 hit association' : "TP_L1SQ22_"+var},
-                                                     ]
-                              },
-                              #{'L3/L1 efficiency' : [
-                              #                         {'L3/hardP_L1_med dR matching' : "hardP_L1_med_"+var},
-                              #                         {'L3/TP_L1_med hit association' : "TP_L1DQ8_med_"+var},
-                              #                       ]
-                              #},
-                              {'L3 efficiency' : [
-                                                         {'L3/hardP dR matching' : "hardP_"+var},
-                                                         {'L3/TP hit association' : "TP_"+var},
-                                                       ]
-                              },
-                              {'L3/L1 efficiency' : [
-                                                         {'L3/hardP_L1 dR matching' : "hardP_L1_"+var},
-                                                         {'L3/TP_L1 hit association' : "TP_L1SQ22_"+var},
-                                                       ]
-                              },
-                              #{'L3/L1 efficiency' : [
-                              #                           {'L3/hardP_L1_med dR matching' : "hardP_L1_med_"+var},
-                              #                           {'L3/TP_L1_med hit association' : "TP_L1DQ8_med_"+var},
-                              #                         ]
-                              #},
-                              {'L3 efficiency' : [
-                                                   {'dR matching' : "hardP_"+var},
-                                                   {'hit association' : "TP_"+var},
-                                                 ]
-                              },
-                              {'L3/L1 efficiency' : [
-                                                   {'dR matching' : "hardP_L1_"+var},
-                                                   {'hit association' : "TP_L1SQ22_"+var},
-                                                 ]
-                              },
-                              #{'L3/L1 efficiency' : [
-                              #                     {'dR matching' : "hardP_L1_med_"+var},
-                              #                     {'hit association' : "TP_L1DQ8_med_"+var},
-                              #                   ]
-                              #},
-                              {'L1 efficiency' : [
-                                                   {'L1/hardP dR matching' : "hardP_"+var},
-                                                   {'L1_AtVtx/hardP dR matching' : "hardP_"+var},
-                                                   {'L1/hardP L1Matcher dR' : "hardP_"+var},
-                                                   {'L1/hardP L1Matcher dR_At_MS' : "hardP_"+var},
-                                                 ]
-                              },
-                              {'L1 efficiency' : [
-                                                   {'L1/hardP dR matching' : "hardP_"+var},
-                                                   {'L1_AtVtx/hardP dR matching' : "hardP_"+var},
-                                                   {'L1/hardP L1Matcher dR' : "hardP_"+var},
-                                                   {'L1/hardP L1Matcher dR_At_MS' : "hardP_"+var},
-                                                 ]
-                              },
-                              {'L3 purity' : [
-                                                   {'dR matching' : "L3NoIDTrack_"+var},
-                                                   {'hit association' : "L3NoIDTrack_"+var},
-                                                 ]
-                              },
-                             ],
-                  }
-
-  if proc == "DY" or proc == "TTbar":
-    num_dict = this_num_dict["proc"]
-    den_dict = this_den_dict["proc"]
-  elif proc == "DY4" or proc == "Jpsi" or proc == "Bs":
-    num_dict = this_num_dict["proc"]
-    den_dict = this_den_dict["proc"]
-
-  for i in range(len(num_dict)):
-    c1 = TCanvas("c1","c1",200,200,900,800)
-    c1.cd()
-    #########if you want to add ratio plot also...
-    #p1 = TPad("p1","p1",0,0.3,1,1)
-    #p1.SetBottomMargin(0.01)
-    #p1.Draw()
-    #p1.cd()
-    ################################
-    lg1 = TPaveText(0.13,0.82,0.85,0.85,"NDC NB")
-    lg1.SetShadowColor(0)
-    lg1.SetFillColor(0)
-    lg1.SetTextFont(42)
-    lg1.SetTextAlign(12)
-    lg1.SetTextSize(0.04)
-    #lg2 = TLegend(0.7,0.75,0.9,0.9)
-    lg2 = TLegend(0.13,0.7,0.85,0.8)
-    lg2.SetBorderSize(0)
-    grs = []
-    for j in range(len(num_dict[i].values()[0])):
-      for camp in file_dict[proc].keys():
-        ############################ Debug ############################
-        #print "num = "+(num_dict[i].values()[0])[j].values()[0]
-        #print "den = "+(den_dict[i].values()[0])[j].values()[0]
-        #print "SetTitle = "+num_dict[i].keys()[0]
-        #print "SetRangeUser =",Xrange[proc][var][0],Xrange[proc][var][1]
-        #print "lg2.AddEntry = "+(num_dict[i].values()[0])[j].keys()[0], camp, proc
-        ###############################################################
-        #num = file_dict[proc][camp].Get((num_dict[i].values()[0])[j].values()[0])
-        #den = file_dict[proc][camp].Get((den_dict[i].values()[0])[j].values()[0])
-        num = file_dict[proc][camp].Get(num_dict[i].values()[0][j].values()[0])
-        den = file_dict[proc][camp].Get(den_dict[i].values()[0][j].values()[0])
-        #print "file :", file_dict[proc][camp]
-        #print "num :", num_dict[i].values()[0][j].values()[0], num
-        #print "den :", den_dict[i].values()[0][j].values()[0], den
-        num_rebin = num.Rebin(len(bin_dict[var])-1,'a',bin_dict[var])
-        den_rebin = den.Rebin(len(bin_dict[var])-1,'b',bin_dict[var])
-        ############################ Debug ############################
-        #print "num.GetBinContent(40)", num.GetBinContent(40)
-        #print "den.GetBinContent(40)", den.GetBinContent(40)
-        #print "num_rebin.GetBinContent(6)", num_rebin.GetBinContent(6)
-        #print "den_rebin.GetBinContent(6)", den_rebin.GetBinContent(6)
-        ###############################################################
-        gr = TGraphAsymmErrors(len(bin_dict[var])-1)
-        gr.Divide(num_rebin,den_rebin)
-        gr.SetTitle("")
-        gr.GetXaxis().SetTitle(var)
-        gr.GetYaxis().SetTitle(num_dict[i].keys()[0])
-        gr.SetMarkerStyle(8)
-        gr.SetMarkerColor(color_list[len(num_dict[i].values()[0])][j])
-        gr.SetLineStyle(lineStyle_dict[camp])
-        gr.SetLineColor(color_list[len(num_dict[i].values()[0])][j])
-        gr.SetLineWidth(3)
-        gr.GetXaxis().SetRangeUser(Xrange[proc][var][0],Xrange[proc][var][1])
-        #if 'IOFromL2' in num_dict[i].keys()[0]:
-        #  gr.GetYaxis().SetRangeUser(0., 1.)
-        #else:
-        #  gr.GetYaxis().SetRangeUser(0.5, 1.1)
-        if j == 0:
-          #yran1 = TMath.MinElement(len(gr.GetY()),gr.GetY())*0.8
-          yran1 = 0.
-          yran2 = TMath.MaxElement(len(gr.GetY()),gr.GetY())*1.6
-          gr.GetYaxis().SetRangeUser(yran1, yran2)
-          gr.Draw("AP")
-        else:
-          gr.Draw("P same")
-        grs = [gr] + grs
-        if j == len(num_dict[i].values()[0])-1:
-          if "SQ0" in num_dict[i].values()[0][j].values()[0]:
-            lg1.AddText("L1 qual > 11, no p_{T}^{L1} cut")
-          elif "SQ22" in num_dict[i].values()[0][j].values()[0]:
-            lg1.AddText("L1 qual > 11, p_{T}^{L1} > 22 GeV")
-          elif "DQ8" in num_dict[i].values()[0][j].values()[0]:
-            lg1.AddText("L1 qual > 7, p_{T}^{L1} > 8 GeV")
-          elif "Raw0" in num_dict[i].values()[0][j].values()[0]:
-            lg1.AddText("no L1 qual cut, no p_{T}^{L1} cut")
-        lg2.AddEntry(gr,(num_dict[i].values()[0])[j].keys()[0]+" ("+camp+" "+proc+")")
-    lg1.Draw()
-    lg2.Draw()
-    #c1.SaveAs("comp/"+proc+"/"+num_dict[i].keys()[0].replace(' ','_')+"_"+var+".png")
-    c1.SaveAs("comp/"+proc+"/"+num_dict[i].values()[0][-1].values()[0]+".png")
 
 def Draw2DHist(proc, var): # For each title : multiple { legend : histo }s to draw in the same canvas (in order).
 
@@ -708,15 +484,15 @@ var_list = ["pt","eta","phi","truePU"]
 #var_list = ["eta"]
 #proc_list = ["DY","DY4","Bs","Jpsi"]
 #proc_list = ["DY","Bs"]
-#proc_list = ["DY4"]
+proc_list = ["DY4"]
+#proc_list = ["DY"]
 #proc_list = ["Bs"]
 #proc_list = ["Jpsi"]
+#proc_list = ["TT"]
 
 for this_proc in proc_list:
   os.system("mkdir -p comp/"+this_proc)
   for this_var in var_list:
-    DrawHist_New(this_proc, this_var)
-  #for this_var in var_list:
-  #  DrawHist(this_proc, this_var)
+    DrawHist(this_proc, this_var)
   #for this_2D_var in var_2D_list:
   #  Draw2DHist(this_proc, this_2D_var)

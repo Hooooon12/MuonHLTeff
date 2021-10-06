@@ -7,8 +7,8 @@ def set_input(sampleName, fileList, nTotFiles, nJobs):
   # -- split the input files -- #
   logPath = pwd+"/logs/"+timestamp+"/"+sampleName
   os.system('mkdir -p '+logPath)
-  os.system("cp -n run_calculateEff_dist.sh "+logPath)
-  os.system("cp -n calculateEff_dist.C "+logPath)
+  os.system("cp -n run_calculateEff_dist_investigate.sh "+logPath)
+  os.system("cp -n calculateEff_dist_investigate.C "+logPath)
   nTotFilesPerJobs = int(nTotFiles/nJobs) # q for aq+b
   Remainder = nTotFiles - (nJobs)*(nTotFilesPerJobs) # b = nTotFiles - aq
   if Remainder >= nJobs:
@@ -39,9 +39,9 @@ def set_input(sampleName, fileList, nTotFiles, nJobs):
 
   for nIter in range(0, nJobs):
     os.chdir(logPath)
-    os.system('./run_calculateEff_dist.sh input_'+str(nIter)+'.txt '+sampleName+'_'+str(nIter)+'.root '+sampleName+' '+str(nIter))
+    os.system('./run_calculateEff_dist_investigate.sh input_'+str(nIter)+'.txt '+sampleName+'_'+str(nIter)+'.root '+sampleName+' '+str(nIter))
     #os.system('pwd')
-    #os.system('echo ./run_calculateEff_dist.sh input_'+str(nIter)+'.txt '+sampleName+'_'+str(nIter)+'.root '+sampleName+' '+str(nIter)) #TEST
+    #os.system('echo ./run_calculateEff_dist_investigate.sh input_'+str(nIter)+'.txt '+sampleName+'_'+str(nIter)+'.root '+sampleName+' '+str(nIter)) #TEST
 
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
@@ -58,8 +58,8 @@ if __name__ == "__main__":
   
   #campaigns = ["Winter20","Winter21"]
   #campaigns = ["Winter20_113X","Winter21_subset"]
-  campaigns = ["Winter21_subset"]
-  #campaigns = ["Winter21"]
+  #campaigns = ["Winter21_subset"]
+  campaigns = ["Winter21"]
   #processes = ["DY","TT","Jpsi","QCD","Zprime6000"]
   #processes = ["DY","DY4","Jpsi","Bs"]
   #processes = ["DY","DY4","Jpsi"]
@@ -72,7 +72,8 @@ if __name__ == "__main__":
   #processes = ["Zprime"]
   #WPs = ["WP00","WP02","WP04","WP10","N50","N10","N5","N0"]
   #WPs = ["WP00","WP02","WP04","WP10"]
-  WPs = ["WP00"]
+  WPs = ["WP00","WP02"]
+  #WPs = ["WP00"]
   
   samples = {'Run3_Winter21_Zprime6000_WP00' : "/data9/Users/wonjun/public/crab_Zprime_M6000_113X_hlt_muon_Run3_mc_20210703/210703_041027/0000/*.root",
              'Run3_Winter21_subset_DY_WP00' : "/data9/Users/wonjun/public/crab_DYToLL_M50_113X_hlt_muon_Run3_mc_wp00_20210924/210924_055042/0000/ntuple_39.root",
