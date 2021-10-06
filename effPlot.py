@@ -93,6 +93,14 @@ txt_sample_setting = {
                       'Bs'     : [0.78,0.91,"#scale[0.8]{Bs (14TeV)}"],
                       'Gun'    : [0.71,0.91,"#scale[0.8]{Muon Gun (14TeV)}"],
                      }
+txt_sample_setting_onepad = {
+                             'Zprime' : [0.73,0.91,"#scale[0.6]{Zprime (14TeV)}"],
+                             'DY'     : [0.78,0.91,"#scale[0.6]{DY (14TeV)}"],
+                             'TT'     : [0.74,0.91,"#scale[0.6]{TTbar (14TeV)}"],
+                             'Jpsi'   : [0.76,0.91,"#scale[0.6]{Jpsi (14TeV)}"],
+                             'Bs'     : [0.78,0.91,"#scale[0.6]{Bs (14TeV)}"],
+                             'Gun'    : [0.69,0.91,"#scale[0.6]{Muon Gun (14TeV)}"],
+                            }
 
 for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc for this_fltr in args.fltr]:
 
@@ -863,7 +871,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       txt_CMS.SetNDC()
       txt_CMS.SetTextSize(0.04)
       txt_CMS.Draw()
-      txt_sample.DrawLatexNDC(txt_sample_setting[this_proc][0]-0.1,txt_sample_setting[this_proc][1],txt_sample_setting[this_proc][2])
+      txt_sample.DrawLatexNDC(txt_sample_setting_onepad[this_proc][0],txt_sample_setting_onepad[this_proc][1],txt_sample_setting_onepad[this_proc][2])
       #txt_sample.SetTextSize(0.035)
 
       os.system("mkdir -p Winter21_new/"+this_proc+"/mva/")
@@ -918,7 +926,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         txt_CMS.SetNDC()
         txt_CMS.SetTextSize(0.04)
         txt_CMS.Draw()
-        txt_sample.DrawLatexNDC(txt_sample_setting[this_proc][0]-0.1,txt_sample_setting[this_proc][1],txt_sample_setting[this_proc][2])
+        txt_sample.DrawLatexNDC(txt_sample_setting_onepad[this_proc][0],txt_sample_setting_onepad[this_proc][1],txt_sample_setting_onepad[this_proc][2])
 
         os.system("mkdir -p Winter21_new/"+this_proc+"/profile/")
         c_pf_track.SaveAs("Winter21_new/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
