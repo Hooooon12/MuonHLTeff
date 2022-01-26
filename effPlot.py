@@ -245,7 +245,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           if this_var != "pt":
             txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 26GeV}")
         if this_trig == "double":
-          txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 8GeV}")
+          if 'DQ8' in this_den:
+            txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 8GeV}")
+          elif 'DQ0' in this_den:
+            txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 0GeV}")
           if this_var != "pt":
             txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 10GeV}")
       else:
@@ -368,7 +371,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
             if this_var != "pt":
               txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 26GeV}")
           if this_trig == "double":
-            txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 8GeV}")
+            if 'DQ8' in this_den:
+              txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 8GeV}")
+            elif 'DQ0' in this_den:
+              txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 0GeV}")
             if this_var != "pt":
               txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 10GeV}")
         if this_den == "hardP":
@@ -503,7 +509,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           if this_var != "pt":
             txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 26GeV}")
         if this_trig == "double":
-          txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 8GeV}")
+          if 'DQ8' in this_den:
+            txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 8GeV}")
+          elif 'DQ0' in this_den:
+            txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 0GeV}")
           if this_var != "pt":
             txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 10GeV}")
       elif this_den == "hardP" or this_den == "TP":
