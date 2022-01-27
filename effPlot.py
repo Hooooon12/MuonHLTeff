@@ -51,7 +51,7 @@ parser.add_argument('-m', '--measure', nargs='*', dest="measure", default=["trac
 parser.add_argument('-v', '--variable', nargs='*', dest="var", default=["pt","eta","phi","truePU"], help="measure as a function of: pt, eta, phi, truePU")
 parser.add_argument('-d', '--denominator', nargs='*', dest="den", default=["hardP","hardP_L1"], help="denominator of efficiency: hardP, hardP_L1")
 parser.add_argument('-n', '--numerator', nargs='*', dest="num", default=["IOFromL1","L3NoID","L3","OI","Iter0FromL2","Iter2FromL2","Iter0FromL1","Iter2FromL1", "L1"], help="numerator of efficiency or denominator of purity: L3NoID, L3, OI, Iter0(2)FromL2(1), L1") #L1 : for dR measurement
-parser.add_argument('-t', '--trigger', nargs='*', dest="trig", default=["single","double"], help="which trigger to check: single(IsoMu24), double(Mu17Mu8)")
+parser.add_argument('-t', '--trigger', nargs='*', dest="trig", default=["single","double"], help="which turn-on cut: single(26 - IsoMu24), double(10 - Mu17Mu8)")
 args = parser.parse_args()
 
 gROOT.SetBatch(kTRUE)
@@ -64,7 +64,8 @@ Xtitle = {'pt' : "#scale[1.8]{p_{T}(#mu) [GeV]}", 'eta' : "#scale[1.8]{#eta(#mu)
 #Yaxis title #TODO
 
 #pt Xaxis range
-Xrange = {'single' : [0., 200.], 'double' : [0., 200.], 'Jpsi' : [0., 200.], 'Bs' : [0., 200.], 'QCD' : [0., 55.], 'Gun' : [0., 1000.], 'Zprime' : [20., 3000.,],}
+#Xrange = {'single' : [0., 200.], 'double' : [0., 200.], 'Jpsi' : [0., 200.], 'Bs' : [0., 200.], 'QCD' : [0., 55.], 'Gun' : [0., 1000.], 'Zprime' : [20., 3000.,],}
+Xrange = {'single' : [0., 200.], 'double' : [0., 200.], 'Jpsi' : [0., 30.], 'Bs' : [0., 200.], 'QCD' : [0., 55.], 'Gun' : [0., 1000.], 'Zprime' : [20., 3000.,],}
 SetLogX = {'DY' : 0, 'TT' : 0, 'Jpsi' : 0, 'Bs' : 0, 'QCD' : 0, 'DY4' : 0, 'Gun' : 1, 'Zprime' : 1,}
 
 #Graph colors
@@ -121,17 +122,23 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
   for this_measure, this_var, this_den, this_num, this_trig in [(this_measure,this_var,this_den,this_num,this_trig) for this_measure in args.measure for this_var in args.var for this_den in args.den for this_num in args.num for this_trig in args.trig]:
 
     #Call the target histograms
-    if this_trig == "single" or (this_trig == "double" and this_var == "pt"):
+    if this_trig == "single" or (this_trig == "double" and this_var == "pt"): #JH : no tag for single turn-on(26 GeV). And pt distribution doesn't need a turn-on.
       this_trigLabel = ""
-    elif this_trig == "double":
+    elif this_trig == "double": #JH : histogram drawn with double 2nd leg turn-on(10 GeV) for vs eta, phi, pileup.
       this_trigLabel = "_med"
     
     if 'L1' in this_den:
       this_den_vars = [files[i].Get(this_den+this_trigLabel+"_"+this_var) for i in range(len(files))]
       this_den_var_eff_nums = [files[i].Get(this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num) for i in range(len(files))]
     else:
-      this_den_vars = [files[i].Get(this_den+"_"+this_var) for i in range(len(files))]
-      this_den_var_eff_nums = [files[i].Get(this_den+"_"+this_var+"_eff_"+this_num) for i in range(len(files))]
+      if 'L1' in this_num: #JH : special case to check (L1+L3)/gen efficiency.
+        this_den_tmp = this_num.split('__')[0]
+        this_num_tmp = this_num.split('__')[1]
+        this_den_vars = [files[i].Get(this_den+"_"+this_var) for i in range(len(files))] #JH : this should be TP, but
+        this_den_var_eff_nums = [files[i].Get(this_den_tmp+"_"+this_var+"_eff_"+this_num_tmp) for i in range(len(files))] #JH : this is e.g. TP_L1DQ0_var_eff_TPtoL3Track
+      else:
+        this_den_vars = [files[i].Get(this_den+"_"+this_var) for i in range(len(files))]
+        this_den_var_eff_nums = [files[i].Get(this_den+"_"+this_var+"_eff_"+this_num) for i in range(len(files))]
     this_num_vars = [files[i].Get(this_num+"_"+this_var) for i in range(len(files))]
     #this_num_var_puritys = [files[i].Get(this_num+"_"+this_var+"_purity") for i in range(len(files))] #JH : dR matching
     this_num_var_puritys = [files[i].Get(this_num+"_"+this_var+"_Asso") for i in range(len(files))] #JH : hit association
@@ -150,7 +157,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
     if this_proc == "Bs":
       ptval = array.array('d', [5, 10, 15, 20, 25, 30, 40, 50, 60, 120, 200]) #JH
     if this_proc == "Jpsi":
-      ptval = array.array('d', [5, 10, 15, 20, 25, 30, 40, 50, 60, 120]) #JH
+      #ptval = array.array('d', [5, 10, 15, 20, 25, 30, 40, 50, 60, 120]) #JH
+      ptval = array.array('d', [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5, 13.0, 13.5, 14.0, 14.5, 15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0, 18.5, 19.0, 19.5, 20.0, 20.5, 21.0, 21.5, 22.0, 22.5, 23.0, 23.5, 24.0, 24.5, 25.0, 25.5, 26.0, 26.5, 27.0, 27.5, 28.0, 28.5, 29.0, 29.5, 30.0]) #JH
     if this_proc == "Gun":
       ptval = array.array('d', [5, 10, 15, 20, 25, 30, 40, 50, 60, 120, 200, 300, 500, 700, 1000]) #JH
     if this_proc == "Zprime":
@@ -490,7 +498,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
             yran1 = TMath.MinElement(len(gr_den_var_eff_num.GetY()),gr_den_var_eff_num.GetY())*0.95 #JH : You cannot use gr.GetMinimum() or gr.GetMaximum. see https://root-forum.cern.ch/t/tgraph-getmaximum-getminimum/8867/2
             yran2 = TMath.MaxElement(len(gr_den_var_eff_num.GetY()),gr_den_var_eff_num.GetY())*2. #JH : Iter2 eff drop
 
-          gr_den_var_eff_num.GetYaxis().SetRangeUser(yran1,yran2) #JH : TODO
+          if this_var == "pt" and this_proc == "Jpsi" and 'TPtoL3Track' in this_num:
+            gr_den_var_eff_num.GetYaxis().SetRangeUser(0.,1.) #JH : FIXME later
+          else:
+            gr_den_var_eff_num.GetYaxis().SetRangeUser(yran1,yran2) #JH : TODO
           
         gr_den_var_eff_num.Draw(option_gr)
         #gr_den_var_eff_nums = [gr_den_var_eff_num] + gr_den_var_eff_nums
@@ -556,7 +567,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           den_tmp = gr_den_var_eff_nums[0].GetY()[i]
           den_err_tmp = gr_den_var_eff_nums[0].GetErrorYhigh(i) if gr_den_var_eff_nums[0].GetErrorYhigh(i) > gr_den_var_eff_nums[0].GetErrorYlow(i) else gr_den_var_eff_nums[0].GetErrorYlow(i)
           eff_ratio_tmp = num_tmp/den_tmp if den_tmp > 0. else 0.
-          eff_ratio_err_tmp = eff_ratio_tmp * math.sqrt(pow(num_err_tmp/num_tmp,2) + pow(den_err_tmp/den_tmp,2))
+          eff_ratio_err_tmp = eff_ratio_tmp * math.sqrt(pow(num_err_tmp/num_tmp,2) + pow(den_err_tmp/den_tmp,2)) if den_tmp > 0. else 0.
           try:
             gr_ratio_den_var_eff_num.SetPoint(i,gr_den_var_eff_nums[0].GetX()[i],eff_ratio_tmp)
             gr_ratio_den_var_eff_num.SetPointError(i,(vals[this_var][i+1]-vals[this_var][i])/2,eff_ratio_err_tmp)
@@ -596,8 +607,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
             yran1 = TMath.MinElement(len(gr_ratio_den_var_eff_num.GetY()),gr_ratio_den_var_eff_num.GetY())*0.95 #JH : You cannot use gr.GetMinimum() or gr.GetMaximum. see https://root-forum.cern.ch/t/tgraph-getmaximum-getminimum/8867/2
             yran2 = TMath.MaxElement(len(gr_ratio_den_var_eff_num.GetY()),gr_ratio_den_var_eff_num.GetY())*2. #JH : Iter2 eff drop
 
-          gr_ratio_den_var_eff_num.GetYaxis().SetRangeUser(yran1,yran2) #JH : TODO
-          #gr_ratio_den_var_eff_num.GetYaxis().SetRangeUser(0.9,1.1) #JH : TODO
+          if this_var == "pt" and this_proc == "Jpsi" and 'TPtoL3Track' in this_num:
+            gr_ratio_den_var_eff_num.GetYaxis().SetRangeUser(0.,1.2) #JH : FIXME later
+          else:
+            gr_ratio_den_var_eff_num.GetYaxis().SetRangeUser(yran1,yran2) #JH : TODO
 
         gr_ratio_den_var_eff_num.Draw(option_rat)
         gr_ratio_den_var_eff_nums.append(gr_ratio_den_var_eff_num) #JH : I really don't know why but this appending prevent the bug (???)
