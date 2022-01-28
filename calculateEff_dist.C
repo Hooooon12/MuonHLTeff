@@ -470,12 +470,12 @@ void do_neweff_pt(vector<Object> TPs, double weight){
     if(TPs.at(j).hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt() > -1){
       FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIter2FromL1",TPs.at(j).Pt(),weight,12000,0,6000);
     }
-    if(TPs.at(j).hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
-      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIOFromL2",TPs.at(j).Pt(),weight,12000,0,6000);
-    }
-    if(TPs.at(j).hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt() > -1){
-      FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIOFromL1",TPs.at(j).Pt(),weight,12000,0,6000);
-    }
+    //if(TPs.at(j).hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
+    //  FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIOFromL2",TPs.at(j).Pt(),weight,12000,0,6000);
+    //}
+    //if(TPs.at(j).hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt() > -1){
+    //  FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoIOFromL1",TPs.at(j).Pt(),weight,12000,0,6000);
+    //} //JH : deprecated?
     if(TPs.at(j).hltIterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
       FillHist(TPs.at(j).Tag()+"_pt_eff_TPtoUpToFromL2",TPs.at(j).Pt(),weight,12000,0,6000);
     }
@@ -526,16 +526,16 @@ void do_neweff_others(vector<Object> TPs, double turn_on, double weight){
         FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIter2FromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
         FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIter2FromL1",TPs.at(j).truePU(),weight,100,0,100);
       }
-      if(TPs.at(j).hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
-        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIOFromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
-        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIOFromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
-        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIOFromL2",TPs.at(j).truePU(),weight,100,0,100);
-      }
-      if(TPs.at(j).hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt() > -1){
-        FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIOFromL1",TPs.at(j).Eta(),weight,48,-2.4,2.4);
-        FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIOFromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
-        FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIOFromL1",TPs.at(j).truePU(),weight,100,0,100);
-      }
+      //if(TPs.at(j).hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
+      //  FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIOFromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+      //  FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIOFromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+      //  FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIOFromL2",TPs.at(j).truePU(),weight,100,0,100);
+      //}
+      //if(TPs.at(j).hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt() > -1){
+      //  FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoIOFromL1",TPs.at(j).Eta(),weight,48,-2.4,2.4);
+      //  FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoIOFromL1",TPs.at(j).Phi(),weight,63,-3.15,3.15);
+      //  FillHist(TPs.at(j).Tag()+"_truePU_eff_TPtoIOFromL1",TPs.at(j).truePU(),weight,100,0,100);
+      //} //JH : deprecated?
       if(TPs.at(j).hltIterL3MuonMergedAssociated_bestMatchTrk_pt() > -1){
         FillHist(TPs.at(j).Tag()+"_eta_eff_TPtoUpToFromL2",TPs.at(j).Eta(),weight,48,-2.4,2.4);
         FillHist(TPs.at(j).Tag()+"_phi_eff_TPtoUpToFromL2",TPs.at(j).Phi(),weight,63,-3.15,3.15);
@@ -975,7 +975,7 @@ void calculateEff_dist(TString input, TString output){
 
   int runNum;
   int lumiBlockNum;
-	unsigned long long eventNum;
+  unsigned long long eventNum;
   double genEventWeight;
   int truePU;
   int nGenParticle;
@@ -1840,8 +1840,8 @@ void calculateEff_dist(TString input, TString output){
         TP.SetHltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3MuonTrackAssociated_bestMatchTrk_pt->at(j));
         TP.SetHltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j));
         TP.SetHltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTrk_pt->at(j));
-        TP.SetHltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j));
-        TP.SetHltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j));
+        //TP.SetHltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3MuonMergedAssociated_bestMatchTrk_pt->at(j));
+        //TP.SetHltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIter2IterL3FromL1MuonMergedAssociated_bestMatchTrk_pt->at(j)); //JH : deprecated?
         TP.SetHltIterL3MuonMergedAssociated_bestMatchTrk_pt(tpTo_hltIterL3MuonMergedAssociated_bestMatchTrk_pt->at(j));
         TP.SetHltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt(tpTo_hltIterL3MuonAndMuonFromL1MergedAssociated_bestMatchTrk_pt->at(j));
         TP.SetIterL3MuonNoIDTrackAssociated_bestMatchTrk_pt(tpTo_iterL3MuonNoIDTrackAssociated_bestMatchTrk_pt->at(j));
@@ -2137,7 +2137,7 @@ void calculateEff_dist(TString input, TString output){
     Tracks.push_back(Iter0L3FromL1Tracks);
     Tracks.push_back(Iter2L3FromL1Tracks);
 
-
+    /*
   //====================================Efficiency vs pt========================================//
 
     //do_eff_den_pt(hardPs, genEventWeight);
@@ -2382,6 +2382,8 @@ void calculateEff_dist(TString input, TString output){
     draw_dR(hardPs, L3Muons_NoID, genEventWeight);
     draw_dR(hardPs, L3Muons, genEventWeight);
     
+    */ //JH : restore this later when needed
+
   //==========================================track vs sigmoid MVA===================================================//
 
     for(int j=0; j<nhltIter2IterL3MuonTrackAssociated; j++){
@@ -2392,6 +2394,24 @@ void calculateEff_dist(TString input, TString output){
       else{
         FillHist("Iter2FromL2_fake_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
       }
+      if(hltIter2IterL3MuonTrackAssociated_pt->at(j)<8.){
+        FillHist("Iter2FromL2_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter2FromL2_sig_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+        else{
+          FillHist("Iter2FromL2_fake_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+      }
+      else if(hltIter2IterL3MuonTrackAssociated_pt->at(j)>=8.){
+        FillHist("Iter2FromL2_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter2FromL2_sig_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+        else{
+          FillHist("Iter2FromL2_fake_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+      }
     }
     for(int j=0; j<nhltIter2IterL3FromL1MuonTrackAssociated; j++){
       FillHist("Iter2FromL1_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
@@ -2400,6 +2420,24 @@ void calculateEff_dist(TString input, TString output){
       }
       else{
         FillHist("Iter2FromL1_fake_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      }
+      if(hltIter2IterL3FromL1MuonTrackAssociated_pt->at(j)<8.){
+        FillHist("Iter2FromL1_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter2FromL1_sig_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+        else{
+          FillHist("Iter2FromL1_fake_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+      }
+      else if(hltIter2IterL3FromL1MuonTrackAssociated_pt->at(j)>=8.){
+        FillHist("Iter2FromL1_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter2FromL1_sig_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
+        else{
+          FillHist("Iter2FromL1_fake_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        }
       }
     }
 

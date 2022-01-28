@@ -70,14 +70,17 @@ SetLogX = {'DY' : 0, 'TT' : 0, 'Jpsi' : 0, 'Bs' : 0, 'QCD' : 0, 'DY4' : 0, 'Gun'
 
 #Graph colors
 #graphColors = [kRed+1, kRed-2, kAzure+2, kAzure-1, kViolet+5]
-graphColors = [kBlack, kGreen+2, kBlue, kRed]
+#graphColors = [kBlack, kGreen+2, kBlue, kRed]
+graphColors = [kRed+1, kRed-2, kGreen+2, kAzure+2, kAzure-1, kViolet+5] #JH : when file is 6
 markerStyles = {
                 'eff' : [20, 22, 33, 34],
-                'purity' : [20, 20, 20, 20],
+                #'purity' : [20, 20, 20, 20],
+                'purity' : [20, 20, 20, 20, 20, 20], #JH : when file is 6
                }
 markerSizes = {
                'eff' : [1.75, 2., 2.3, 1.4],
-               'purity' : [1, 1, 1, 1],
+               #'purity' : [1, 1, 1, 1],
+               'purity' : [1, 1, 1, 1, 1, 1], #JH : when file is 6
               }
 
 #Other comments on the plot
@@ -88,6 +91,7 @@ txt_mupt = TLatex()
 txt_sample = TLatex()
 txt_sample_setting = {
                       'Zprime' : [0.74,0.91,"#scale[0.8]{Zprime (14TeV)}"],
+                      'Wprime' : [0.74,0.91,"#scale[0.8]{Wprime (14TeV)}"],
                       'DY'     : [0.78,0.91,"#scale[0.8]{DY (14TeV)}"],
                       'TT'     : [0.75,0.91,"#scale[0.8]{TTbar (14TeV)}"],
                       'Jpsi'   : [0.77,0.91,"#scale[0.8]{Jpsi (14TeV)}"],
@@ -96,6 +100,7 @@ txt_sample_setting = {
                      }
 txt_sample_setting_onepad = {
                              'Zprime' : [0.73,0.91,"#scale[0.6]{Zprime (14TeV)}"],
+                             'Wprime' : [0.73,0.91,"#scale[0.6]{Wprime (14TeV)}"],
                              'DY'     : [0.78,0.91,"#scale[0.6]{DY (14TeV)}"],
                              'TT'     : [0.74,0.91,"#scale[0.6]{TTbar (14TeV)}"],
                              'Jpsi'   : [0.76,0.91,"#scale[0.6]{Jpsi (14TeV)}"],
@@ -116,6 +121,15 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
   elif this_fltr == "N":
     this_files = ["result_"+this_proc+"_WP00.root","result_"+this_proc+"_N50.root","result_"+this_proc+"_N10.root","result_"+this_proc+"_N5.root"]
     #this_files = ["Run3_result_"+this_proc+"_WP00.root","Run3_result_"+this_proc+"_N50.root","Run3_result_"+this_proc+"_N10.root","Run3_result_"+this_proc+"_N5.root","Run3_result_"+this_proc+"_N0.root"]
+  elif this_fltr == "Upgrade": #JH : at KNU, -m mva, profile ONLY!
+    this_files = [
+                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Run2.root",
+                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Baseline.root",
+                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade.root",
+                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade_L1METTkMuTri.root",
+                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade_ROI1p2.root",
+                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade_ROI1p5.root",
+                 ]
   
   files = [TFile.Open(this_files[i]) for i in range(len(this_files))]
   
@@ -131,7 +145,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       this_den_vars = [files[i].Get(this_den+this_trigLabel+"_"+this_var) for i in range(len(files))]
       this_den_var_eff_nums = [files[i].Get(this_den+this_trigLabel+"_"+this_var+"_eff_"+this_num) for i in range(len(files))]
     else:
-      if 'L1' in this_num: #JH : special case to check (L1+L3)/gen efficiency.
+      if 'L1' in this_num and '__' in this_num: #JH : special case to check (L1+L3)/gen efficiency.
         this_den_tmp = this_num.split('__')[0]
         this_num_tmp = this_num.split('__')[1]
         this_den_vars = [files[i].Get(this_den+"_"+this_var) for i in range(len(files))] #JH : this should be TP, but
@@ -149,6 +163,9 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
     elif this_fltr == "N":
       #lg_names = ["Nocut","N50","N10","N5"]
       lg_names = ["Nocut","N50","N10","N5","N0"]
+    elif this_fltr == "Upgrade":
+      #lg_names = ["Nocut","N50","N10","N5"]
+      lg_names = ["Run2","Baseline","Upgrade","Upgrade_L1METTkMuTri","Upgrade_ROI1p2","Upgrade_ROI1p5"]
     
     #Bins
     ptval = array.array('d', [5, 10, 15, 20, 25, 30, 40, 50, 60, 120, 200]) #JH : Avoid starting from 0. hardP_L1_pt histo starts with pt 8 --> ZeroDivisionError
@@ -249,7 +266,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       txt_sample.DrawLatexNDC(txt_sample_setting[this_proc][0],txt_sample_setting[this_proc][1],txt_sample_setting[this_proc][2])
       if "L1" in this_den:
         if this_trig == "single":
-          txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) > 22GeV}")
+          txt_L1pt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{gen #mu matched with p_{T}(L1 #mu) >}")
           if this_var != "pt":
             txt_mupt.DrawLatexNDC(0.12,0.82,"#scale[0.8]{p_{T}(#mu) > 26GeV}")
         if this_trig == "double":
@@ -850,54 +867,64 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
       #print files[0]
       #print files[0].Get(this_num+"_mva")
+      mva_tags = ["","_below8","_above8"]
+      trackpt_tags = ["","track pt < 8 GeV","track pt > 8 GeV"]
+      file_tags = ["Run2","Baseline","Upgrade","Upgrade_L1METTkMuTri","Upgrade_ROI1p2","Upgrade_ROI1p5"]
 
-      this_mva      = files[0].Get(this_num+"_mva")
-      this_sig_mva  = files[0].Get(this_num+"_sig_mva")
-      this_fake_mva = files[0].Get(this_num+"_fake_mva")
-      this_cu_sig_mva  = this_sig_mva.GetCumulative(kFALSE)
-      this_cu_fake_mva = this_fake_mva.GetCumulative(kFALSE)
-      this_cu_sig_mva.Scale(1./this_cu_sig_mva.GetBinContent(1))
-      this_cu_fake_mva.Scale(1./this_cu_fake_mva.GetBinContent(1))
-      this_cu_sig_mva.SetStats(0)
-      this_cu_fake_mva.SetStats(0)
+      for i in range(len(files)):
 
-      c_mva = TCanvas("c_mva","c_mva",200,200,900,800)
-      c_mva.cd()
+        for j in range(len(mva_tags)):
 
-      gPad.SetLogy()
+          this_mva      = files[i].Get(this_num+"_mva"+mva_tags[j])
+          this_sig_mva  = files[i].Get(this_num+"_sig_mva"+mva_tags[j])
+          this_fake_mva = files[i].Get(this_num+"_fake_mva"+mva_tags[j])
+          this_cu_sig_mva  = this_sig_mva.GetCumulative(kFALSE)
+          this_cu_fake_mva = this_fake_mva.GetCumulative(kFALSE)
+          this_cu_sig_mva.Scale(1./this_cu_sig_mva.GetBinContent(1))
+          this_cu_fake_mva.Scale(1./this_cu_fake_mva.GetBinContent(1))
+          this_cu_sig_mva.SetStats(0)
+          this_cu_fake_mva.SetStats(0)
 
-      this_cu_fake_mva.SetMarkerStyle(20)
-      this_cu_fake_mva.SetMarkerSize(1)
-      this_cu_fake_mva.SetMarkerColor(kRed)
-      this_cu_fake_mva.SetLineColor(kRed)
-      this_cu_fake_mva.GetXaxis().SetTitle("MVA threshold")
-      this_cu_fake_mva.GetYaxis().SetTitleOffset(1.2)
-      this_cu_fake_mva.GetYaxis().SetLabelSize(0.03)
-      this_cu_fake_mva.GetYaxis().SetTitle("Fraction of tracks with score > threshold")
-      this_cu_fake_mva.GetYaxis().SetRangeUser(0.0001,100.)
-      this_cu_sig_mva.SetMarkerStyle(20)
-      this_cu_sig_mva.SetMarkerSize(1)
-      this_cu_sig_mva.SetMarkerColor(kBlack)
-      this_cu_sig_mva.SetLineColor(kBlack)
+          c_mva = TCanvas("c_mva","c_mva",200,200,900,800)
+          c_mva.cd()
 
-      this_cu_fake_mva.Draw()
-      this_cu_sig_mva.Draw("same")
+          gPad.SetLogy()
 
-      lg_mva = TLegend(0.15,0.7,0.7,0.8)
-      lg_mva.SetBorderSize(0)
-      lg_mva.AddEntry(this_cu_sig_mva,"Muon matched tracks")
-      lg_mva.AddEntry(this_cu_fake_mva,"Combinatorial tracks")
-      lg_mva.Draw()
+          this_cu_fake_mva.SetMarkerStyle(20)
+          this_cu_fake_mva.SetMarkerSize(1)
+          this_cu_fake_mva.SetMarkerColor(kRed)
+          this_cu_fake_mva.SetLineColor(kRed)
+          this_cu_fake_mva.GetXaxis().SetTitle("MVA threshold")
+          this_cu_fake_mva.GetYaxis().SetTitleOffset(1.2)
+          this_cu_fake_mva.GetYaxis().SetLabelSize(0.03)
+          this_cu_fake_mva.GetYaxis().SetTitle("Fraction of tracks with score > threshold")
+          this_cu_fake_mva.GetYaxis().SetRangeUser(0.0001,100.)
+          this_cu_sig_mva.SetMarkerStyle(20)
+          this_cu_sig_mva.SetMarkerSize(1)
+          this_cu_sig_mva.SetMarkerColor(kBlack)
+          this_cu_sig_mva.SetLineColor(kBlack)
 
-      txt_CMS = TText(0.1,0.905,"CMS simulation")
-      txt_CMS.SetNDC()
-      txt_CMS.SetTextSize(0.04)
-      txt_CMS.Draw()
-      txt_sample.DrawLatexNDC(txt_sample_setting_onepad[this_proc][0],txt_sample_setting_onepad[this_proc][1],txt_sample_setting_onepad[this_proc][2])
-      #txt_sample.SetTextSize(0.035)
+          this_cu_fake_mva.Draw()
+          this_cu_sig_mva.Draw("same")
 
-      os.system("mkdir -p Winter21_new/"+this_proc+"/mva/")
-      c_mva.SaveAs("Winter21_new/"+this_proc+"/mva/"+this_proc+"_"+this_fltr+"_"+this_num+"_mva.png")
+          txt_trackpt = TLatex()
+          txt_trackpt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{"+trackpt_tags[j]+"}")
+
+          lg_mva = TLegend(0.15,0.7,0.7,0.8)
+          lg_mva.SetBorderSize(0)
+          lg_mva.AddEntry(this_cu_sig_mva,"Muon matched tracks")
+          lg_mva.AddEntry(this_cu_fake_mva,"Combinatorial tracks")
+          lg_mva.Draw()
+
+          txt_CMS = TText(0.1,0.905,"CMS simulation")
+          txt_CMS.SetNDC()
+          txt_CMS.SetTextSize(0.04)
+          txt_CMS.Draw()
+          txt_sample.DrawLatexNDC(txt_sample_setting_onepad[this_proc][0],txt_sample_setting_onepad[this_proc][1],txt_sample_setting_onepad[this_proc][2])
+          #txt_sample.SetTextSize(0.035)
+
+          os.system("mkdir -p Summer21/"+this_proc+"/mva/"+file_tags[i])
+          c_mva.SaveAs("Summer21/"+this_proc+"/mva/"+file_tags[i]+"/"+this_proc+"_"+file_tags[i]+"_"+this_num+"_mva"+mva_tags[j]+".png")
 
 
 ########truePU vs #tracks profile########
@@ -906,7 +933,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         c_pf_track = TCanvas("pf_trackFromL1","pf_trackFromL1",200,200,900,800)
         c_pf_track.cd()
 
-        lg_pf_track = TLegend(0.7,0.75,0.9,0.9)
+        lg_pf_track = TLegend(0.65,0.75,0.9,0.9)
         for igr in range(len(this_num_vars)):
 
           if igr == 0:
@@ -950,8 +977,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         txt_CMS.Draw()
         txt_sample.DrawLatexNDC(txt_sample_setting_onepad[this_proc][0],txt_sample_setting_onepad[this_proc][1],txt_sample_setting_onepad[this_proc][2])
 
-        os.system("mkdir -p Winter21_new/"+this_proc+"/profile/")
-        c_pf_track.SaveAs("Winter21_new/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
+        #os.system("mkdir -p Winter21_new/"+this_proc+"/profile/")
+        #c_pf_track.SaveAs("Winter21_new/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
+        os.system("mkdir -p Summer21/"+this_proc+"/profile/")
+        c_pf_track.SaveAs("Summer21/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
 
 
 """

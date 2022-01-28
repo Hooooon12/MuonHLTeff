@@ -17,6 +17,12 @@ nIter=$4
 SCRIPT=condor_calculateEff_dist_${nIter}.sh
 echo "#!/bin/bash" > $SCRIPT
 
+if [[ $HOSTNAME == *"knu"* ]]
+then
+    echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:/usr/lib64/dcap\"" >> $SCRIPT
+    echo "echo KNU here!" >> $SCRIPT
+    echo "echo LD_LIBRARY_PATH : \$LD_LIBRARY_PATH" >> $SCRIPT
+fi
 echo cd $runningDir >> $SCRIPT
 echo "echo I\'m here:" >> $SCRIPT
 echo pwd >> $SCRIPT
@@ -34,7 +40,7 @@ error = condor_calculateEff_dist_${nIter}_error.txt
 getenv = True
 #request_cpus = 10
 #request_memory = 8G
-request_memory = 30G
+#request_memory = 30G
 accounting_group = group_cms
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
