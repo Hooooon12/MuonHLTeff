@@ -73,12 +73,11 @@ if __name__ == "__main__":
   #processes = ["DY","TT","Jpsi","QCD","Zprime6000"]
   #processes = ["DY","TT","Jpsi","Bs","DY4"]
   #processes = ["DY","Jpsi","Wprime","Zprime"]
-  processes = ["subset_Jpsi","subset_Wprime","subset_Zprime"]
+  #processes = ["subset_DY","subset_Jpsi","subset_Wprime","subset_Zprime","subset_Bs"]
+  processes = ["subset_Bs"]
   #WPs = ["WP00","WP02","WP04","WP10","N50","N10","N5","N0"]
-  #WPs = ["Run2","Baseline","Upgrade","Upgrade_L1METTkMuTri","Upgrade_ROI1p2","Upgrade_ROI1p5"]
-  WPs = ["Run2","Baseline","Upgrade_L1METTkMuTri","Upgrade_ROI1p2","Upgrade_ROI1p5"]
-  #WPs = ["Upgrade"]
-  #WPs = ["Baseline"]
+  #WPs = ["Run2","Baseline","Upgrade","Upgrade_ROI1p2","Upgrade_ROI1p5"]
+  WPs = ["Upgrade"]
  
   #samples = {
   #           'Run3_Winter21_Zprime6000_WP00' : "/data9/Users/wonjun/public/crab_Zprime_M6000_113X_hlt_muon_Run3_mc_20210703/210703_041027/0000/*.root",
@@ -123,49 +122,46 @@ if __name__ == "__main__":
              'Run3_Summer21_subset_DY_Run2'                     : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*run2*/*/*/*11*.root",
              'Run3_Summer21_subset_DY_Baseline'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*baseline*/*/*/*11*.root",
              'Run3_Summer21_subset_DY_Upgrade'                  : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*11*.root",
-             'Run3_Summer21_subset_DY_Upgrade_L1METTkMuTri'     : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*L1METTkMuTri*/*/*/*11*.root",
              'Run3_Summer21_subset_DY_Upgrade_ROI1p2'           : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*11*.root",
              'Run3_Summer21_subset_DY_Upgrade_ROI1p5'           : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*11*.root",
              'Run3_Summer21_subset_Jpsi_Run2'                   : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*run2*/*/*/*11*.root",
              'Run3_Summer21_subset_Jpsi_Baseline'               : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*baseline*/*/*/*11*.root",
              'Run3_Summer21_subset_Jpsi_Upgrade'                : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*upgrade_20220124/*/*/*11*.root",
-             'Run3_Summer21_subset_Jpsi_Upgrade_L1METTkMuTri'   : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*L1METTkMuTri*/*/*/*11*.root",
              'Run3_Summer21_subset_Jpsi_Upgrade_ROI1p2'         : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*ROI1p2*/*/*/*11*.root",
              'Run3_Summer21_subset_Jpsi_Upgrade_ROI1p5'         : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*ROI1p5*/*/*/*11*.root",
-             'Run3_Summer21_subset_Wprime_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*run2*/*/*/*11*.root",
-             'Run3_Summer21_subset_Wprime_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*baseline*/*/*/*11*.root",
-             'Run3_Summer21_subset_Wprime_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*11*.root",
-             'Run3_Summer21_subset_Wprime_Upgrade_L1METTkMuTri' : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*L1METTkMuTri*/*/*/*11*.root",
-             'Run3_Summer21_subset_Wprime_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*11*.root",
-             'Run3_Summer21_subset_Wprime_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*11*.root",
-             'Run3_Summer21_subset_Zprime_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*run2*/*/*/*11*.root",
-             'Run3_Summer21_subset_Zprime_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*baseline*/*/*/*11*.root",
-             'Run3_Summer21_subset_Zprime_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*11*.root",
-             'Run3_Summer21_subset_Zprime_Upgrade_L1METTkMuTri' : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*L1METTkMuTri*/*/*/*11*.root",
-             'Run3_Summer21_subset_Zprime_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*11*.root",
-             'Run3_Summer21_subset_Zprime_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*11*.root",
+             'Run3_Summer21_subset_Wprime_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*run2*/*/*/*1*.root",
+             'Run3_Summer21_subset_Wprime_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*baseline*/*/*/*1*.root",
+             'Run3_Summer21_subset_Wprime_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*1*.root",
+             'Run3_Summer21_subset_Wprime_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*1*.root",
+             'Run3_Summer21_subset_Wprime_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*1*.root",
+             'Run3_Summer21_subset_Zprime_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*run2*/*/*/*1*.root",
+             'Run3_Summer21_subset_Zprime_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*baseline*/*/*/*1*.root",
+             'Run3_Summer21_subset_Zprime_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*1*.root",
+             'Run3_Summer21_subset_Zprime_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*1*.root",
+             'Run3_Summer21_subset_Zprime_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*1*.root",
+             'Run3_Summer21_subset_Bs_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220125/BsToMuMuG_MuGFilter_SoftQCDnonD_TuneCP5_14TeV-pythia8-evtgen/*run2*/*/*/*1*.root",
+             'Run3_Summer21_subset_Bs_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220125/BsToMuMuG_MuGFilter_SoftQCDnonD_TuneCP5_14TeV-pythia8-evtgen/*baseline*/*/*/*1*.root",
+             'Run3_Summer21_subset_Bs_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220125/BsToMuMuG_MuGFilter_SoftQCDnonD_TuneCP5_14TeV-pythia8-evtgen/*upgrade_20220125/*/*/*1*.root",
+             'Run3_Summer21_subset_Bs_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220125/BsToMuMuG_MuGFilter_SoftQCDnonD_TuneCP5_14TeV-pythia8-evtgen/*ROI1p2*/*/*/*1*.root",
+             'Run3_Summer21_subset_Bs_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220125/BsToMuMuG_MuGFilter_SoftQCDnonD_TuneCP5_14TeV-pythia8-evtgen/*ROI1p5*/*/*/*1*.root",
              'Run3_Summer21_DY_Run2'                     : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*run2*/*/*/*.root",
              'Run3_Summer21_DY_Baseline'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*baseline*/*/*/*.root",
              'Run3_Summer21_DY_Upgrade'                  : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*.root",
-             'Run3_Summer21_DY_Upgrade_L1METTkMuTri'     : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*L1METTkMuTri*/*/*/*.root",
              'Run3_Summer21_DY_Upgrade_ROI1p2'           : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*.root",
              'Run3_Summer21_DY_Upgrade_ROI1p5'           : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/DYToLL_M-50_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*.root",
              'Run3_Summer21_Jpsi_Run2'                   : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*run2*/*/*/*.root",
              'Run3_Summer21_Jpsi_Baseline'               : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*baseline*/*/*/*.root",
              'Run3_Summer21_Jpsi_Upgrade'                : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*upgrade_20220124/*/*/*.root",
-             'Run3_Summer21_Jpsi_Upgrade_L1METTkMuTri'   : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*L1METTkMuTri*/*/*/*.root",
              'Run3_Summer21_Jpsi_Upgrade_ROI1p2'         : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*ROI1p2*/*/*/*.root",
              'Run3_Summer21_Jpsi_Upgrade_ROI1p5'         : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/JPsiToMuMu_Pt-0To100-pythia8-gun/*ROI1p5*/*/*/*.root",
              'Run3_Summer21_Wprime_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*run2*/*/*/*.root",
              'Run3_Summer21_Wprime_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*baseline*/*/*/*.root",
              'Run3_Summer21_Wprime_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*.root",
-             'Run3_Summer21_Wprime_Upgrade_L1METTkMuTri' : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*L1METTkMuTri*/*/*/*.root",
              'Run3_Summer21_Wprime_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*.root",
              'Run3_Summer21_Wprime_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/WprimeToMuNu_M-5000_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*.root",
              'Run3_Summer21_Zprime_Run2'                 : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*run2*/*/*/*.root",
              'Run3_Summer21_Zprime_Baseline'             : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*baseline*/*/*/*.root",
              'Run3_Summer21_Zprime_Upgrade'              : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*upgrade_20220124/*/*/*.root",
-             'Run3_Summer21_Zprime_Upgrade_L1METTkMuTri' : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*L1METTkMuTri*/*/*/*.root",
              'Run3_Summer21_Zprime_Upgrade_ROI1p2'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*ROI1p2*/*/*/*.root",
              'Run3_Summer21_Zprime_Upgrade_ROI1p5'       : "/pnfs/knu.ac.kr/data/cms/store/user/wjun/MuonHLTRun3_cmssw1220/20220124/ZprimeToMuMu_M-6000_TuneCP5_14TeV-pythia8/*ROI1p5*/*/*/*.root",
             }

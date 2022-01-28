@@ -71,16 +71,16 @@ SetLogX = {'DY' : 0, 'TT' : 0, 'Jpsi' : 0, 'Bs' : 0, 'QCD' : 0, 'DY4' : 0, 'Gun'
 #Graph colors
 #graphColors = [kRed+1, kRed-2, kAzure+2, kAzure-1, kViolet+5]
 #graphColors = [kBlack, kGreen+2, kBlue, kRed]
-graphColors = [kRed+1, kRed-2, kGreen+2, kAzure+2, kAzure-1, kViolet+5] #JH : when file is 6
+graphColors = [kBlack, kRed, kBlue, kGreen+2, kViolet+5] #JH : when file is more than 4
 markerStyles = {
                 'eff' : [20, 22, 33, 34],
-                #'purity' : [20, 20, 20, 20],
-                'purity' : [20, 20, 20, 20, 20, 20], #JH : when file is 6
+                'purity' : [20, 20, 20, 20],
+                'profile' : [20, 22, 33, 34, 35, 36, 37, 38], #JH : when file is more than 4
                }
 markerSizes = {
                'eff' : [1.75, 2., 2.3, 1.4],
-               #'purity' : [1, 1, 1, 1],
-               'purity' : [1, 1, 1, 1, 1, 1], #JH : when file is 6
+               'purity' : [1, 1, 1, 1],
+               'profile' : [1.5, 2, 2, 2, 1.5, 2, 2, 2], #JH : when file is more than 4
               }
 
 #Other comments on the plot
@@ -126,7 +126,6 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
                   "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Run2.root",
                   "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Baseline.root",
                   "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade.root",
-                  "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade_L1METTkMuTri.root",
                   "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade_ROI1p2.root",
                   "calculateEff_result/Run3_Summer21_subset_"+this_proc+"_Upgrade_ROI1p5.root",
                  ]
@@ -165,7 +164,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       lg_names = ["Nocut","N50","N10","N5","N0"]
     elif this_fltr == "Upgrade":
       #lg_names = ["Nocut","N50","N10","N5"]
-      lg_names = ["Run2","Baseline","Upgrade","Upgrade_L1METTkMuTri","Upgrade_ROI1p2","Upgrade_ROI1p5"]
+      lg_names = ["Run2","Baseline","Upgrade","Upgrade_ROI1p2","Upgrade_ROI1p5"]
     
     #Bins
     ptval = array.array('d', [5, 10, 15, 20, 25, 30, 40, 50, 60, 120, 200]) #JH : Avoid starting from 0. hardP_L1_pt histo starts with pt 8 --> ZeroDivisionError
@@ -869,9 +868,11 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
       #print files[0].Get(this_num+"_mva")
       mva_tags = ["","_below8","_above8"]
       trackpt_tags = ["","track pt < 8 GeV","track pt > 8 GeV"]
-      file_tags = ["Run2","Baseline","Upgrade","Upgrade_L1METTkMuTri","Upgrade_ROI1p2","Upgrade_ROI1p5"]
+      file_tags = ["Run2","Baseline","Upgrade","Upgrade_ROI1p2","Upgrade_ROI1p5"]
+      #file_tags = ["Baseline"]
 
       for i in range(len(files)):
+        if file_tags[i]!="Baseline": continue #JH : only Baseline for now
 
         for j in range(len(mva_tags)):
 
@@ -929,21 +930,32 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
 
 ########truePU vs #tracks profile########
     if this_measure == "profile":
-      if this_num == "Iter2FromL1":
-        c_pf_track = TCanvas("pf_trackFromL1","pf_trackFromL1",200,200,900,800)
+
+      mva_tags = ["","_below8","_above8"]
+      trackpt_tags = ["","track pt < 8 GeV","track pt > 8 GeV"]
+      if this_num == "Iter0FromL2": this_num_pf_tmp = "pf_track"
+      elif this_num == "Iter0FromL1": this_num_pf_tmp = "pf_trackFromL1"
+
+      for j in range(len(mva_tags)):
+        this_num_pf = this_num_pf_tmp+mva_tags[j] # complete the histo name
+
+        c_pf_track = TCanvas(this_num_pf,this_num_pf,200,200,900,800)
         c_pf_track.cd()
 
-        lg_pf_track = TLegend(0.65,0.75,0.9,0.9)
+        lg_pf_track = TLegend(0.7,0.75,0.9,0.9)
         for igr in range(len(this_num_vars)):
+          this_pf = files[igr].Get(this_num_pf)
+          this_pf.Approximate() #JH : this handles the zero error when profile entry is only 1. see https://root.cern.ch/doc/master/classTProfile.html
 
           if igr == 0:
+            #DEBUG
+            #for i in range(this_pf.GetNbinsX()): print this_pf.GetBinCenter(i+1), this_pf.GetBinContent(i+1), this_pf.GetBinError(i+1)
+            #
             option_gr = "" #JH : Don't use "AP" or "P" option for TProfile... idk the axis will be disappeared.
-
-            this_pf = files[igr].Get("pf_trackFromL1")
             this_pf.SetStats(0)
             this_pf.SetTitle("")
-            this_pf.SetMarkerStyle(markerStyles['purity'][igr])
-            this_pf.SetMarkerSize(markerSizes['purity'][igr])
+            this_pf.SetMarkerStyle(markerStyles['profile'][igr])
+            this_pf.SetMarkerSize(markerSizes['profile'][igr])
             this_pf.SetMarkerColor(graphColors[igr])
             this_pf.SetLineColor(graphColors[igr])
             this_pf.SetLineWidth(2)
@@ -951,17 +963,16 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
             this_pf.GetXaxis().SetTickLength(0.025)
             this_pf.GetXaxis().SetLabelSize(0.025)
             this_pf.GetYaxis().SetLabelSize(0.025)
-            this_pf.GetYaxis().SetTitle("average # of Iter2FromL1 tracks")
+            this_pf.GetYaxis().SetTitle("average # of "+this_num+" tracks")
             this_pf.GetXaxis().SetRangeUser(30.,80.)
-            this_pf.GetYaxis().SetRangeUser(0.,20.)
+            #this_pf.GetYaxis().SetRangeUser(0.,50.)
+            this_pf.GetYaxis().SetRangeUser(0.,this_pf.GetMaximum()*5)
 
           else:
             option_gr = "SAME"
-
-            this_pf = files[igr].Get("pf_trackFromL1")
             this_pf.SetStats(0)
-            this_pf.SetMarkerStyle(markerStyles['purity'][igr])
-            this_pf.SetMarkerSize(markerSizes['purity'][igr])
+            this_pf.SetMarkerStyle(markerStyles['profile'][igr])
+            this_pf.SetMarkerSize(markerSizes['profile'][igr])
             this_pf.SetMarkerColor(graphColors[igr])
             this_pf.SetLineColor(graphColors[igr])
             this_pf.SetLineWidth(2)
@@ -970,7 +981,10 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
           lg_pf_track.AddEntry(this_pf,lg_names[igr])
 
         lg_pf_track.Draw()
-        
+       
+        txt_trackpt = TLatex()
+        txt_trackpt.DrawLatexNDC(0.12,0.86,"#scale[0.8]{"+trackpt_tags[j]+"}")
+ 
         txt_CMS = TText(0.1,0.905,"CMS simulation")
         txt_CMS.SetNDC()
         txt_CMS.SetTextSize(0.04)
@@ -980,7 +994,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         #os.system("mkdir -p Winter21_new/"+this_proc+"/profile/")
         #c_pf_track.SaveAs("Winter21_new/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
         os.system("mkdir -p Summer21/"+this_proc+"/profile/")
-        c_pf_track.SaveAs("Summer21/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
+        c_pf_track.SaveAs("Summer21/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile"+mva_tags[j]+".png")
 
 
 """

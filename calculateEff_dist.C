@@ -76,6 +76,12 @@ private:
   int j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status;
   int j_hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId;
   int j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId;
+  float j_hltIter0IterL3MuonTrackAssociated_mva;
+  float j_hltIter0IterL3FromL1MuonTrackAssociated_mva;
+  int j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_status;
+  int j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status;
+  int j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId;
+  int j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId;
 
 public:
 
@@ -108,6 +114,12 @@ public:
     j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status = -999.;
     j_hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId = -999.;
     j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId = -999.;
+    j_hltIter0IterL3MuonTrackAssociated_mva = -999.;
+    j_hltIter0IterL3FromL1MuonTrackAssociated_mva = -999.;
+    j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_status = -999.;
+    j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status = -999.;
+    j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId = -999.;
+    j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId = -999.;
   }
 
   ~Object() {}
@@ -194,6 +206,24 @@ public:
   void SetHltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId(int this_pdgId){
     j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId = this_pdgId;
   }
+  void SetHltIter0IterL3MuonTrackAssociated_mva(float this_mva){
+    j_hltIter0IterL3MuonTrackAssociated_mva = this_mva;
+  }
+  void SetHltIter0IterL3FromL1MuonTrackAssociated_mva(float this_mva){
+    j_hltIter0IterL3FromL1MuonTrackAssociated_mva = this_mva;
+  }
+  void SetHltIter0IterL3MuonTrackAssociated_bestMatchTP_status(int this_status){
+    j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_status = this_status;
+  }
+  void SetHltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status(int this_status){
+    j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status = this_status;
+  }
+  void SetHltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId(int this_pdgId){
+    j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId = this_pdgId;
+  }
+  void SetHltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId(int this_pdgId){
+    j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId = this_pdgId;
+  }
 
 //Call the variables
   TString Tag(){
@@ -276,6 +306,24 @@ public:
   }
   int hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId(){
     return j_hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId;
+  }
+  float hltIter0IterL3MuonTrackAssociated_mva(){
+    return j_hltIter0IterL3MuonTrackAssociated_mva;
+  }
+  float hltIter0IterL3FromL1MuonTrackAssociated_mva(){
+    return j_hltIter0IterL3FromL1MuonTrackAssociated_mva;
+  }
+  int hltIter0IterL3MuonTrackAssociated_bestMatchTP_status(){
+    return j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_status;
+  }
+  int hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status(){
+    return j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status;
+  }
+  int hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId(){
+    return j_hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId;
+  }
+  int hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId(){
+    return j_hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId;
   }
 
 };
@@ -1072,6 +1120,7 @@ void calculateEff_dist(TString input, TString output){
   vector<double> *hltIter0IterL3MuonTrackAssociated_pt = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_eta = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_phi = 0;
+  vector<float> *hltIter0IterL3MuonTrackAssociated_mva = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi = 0;
@@ -1107,6 +1156,7 @@ void calculateEff_dist(TString input, TString output){
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_pt = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_eta = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_phi = 0;
+  vector<float> *hltIter0IterL3FromL1MuonTrackAssociated_mva = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta = 0;
   vector<double> *hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi = 0;
@@ -1334,6 +1384,7 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_pt", &hltIter0IterL3MuonTrackAssociated_pt);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_eta",&hltIter0IterL3MuonTrackAssociated_eta);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_phi",&hltIter0IterL3MuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_mva",&hltIter0IterL3MuonTrackAssociated_mva);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt", &hltIter0IterL3MuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta",&hltIter0IterL3MuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi",&hltIter0IterL3MuonTrackAssociated_bestMatchTP_phi);
@@ -1369,6 +1420,7 @@ void calculateEff_dist(TString input, TString output){
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_pt", &hltIter0IterL3FromL1MuonTrackAssociated_pt);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_eta",&hltIter0IterL3FromL1MuonTrackAssociated_eta);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_phi",&hltIter0IterL3FromL1MuonTrackAssociated_phi);
+  fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_mva",&hltIter0IterL3FromL1MuonTrackAssociated_mva);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt", &hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pt);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta",&hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_eta);
   fChain->SetBranchAddress("hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi",&hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_phi);
@@ -1535,7 +1587,11 @@ void calculateEff_dist(TString input, TString output){
   hists_2D.clear();
   pfs.clear();
   TProfile *pf_track = new TProfile("pf_track","pf_track",25,30,80,0,5000);
+  TProfile *pf_track_below8 = new TProfile("pf_track_below8","pf_track_below8",25,30,80,0,5000);
+  TProfile *pf_track_above8 = new TProfile("pf_track_above8","pf_track_above8",25,30,80,0,5000);
   TProfile *pf_trackFromL1 = new TProfile("pf_trackFromL1","pf_trackFromL1",25,30,80,0,5000);
+  TProfile *pf_trackFromL1_below8 = new TProfile("pf_trackFromL1_below8","pf_trackFromL1_below8",25,30,80,0,5000);
+  TProfile *pf_trackFromL1_above8 = new TProfile("pf_trackFromL1_above8","pf_trackFromL1_above8",25,30,80,0,5000);
 
   //To avoid double counting//
   vector<int> this_matched;
@@ -2386,65 +2442,85 @@ void calculateEff_dist(TString input, TString output){
 
   //==========================================track vs sigmoid MVA===================================================//
 
-    for(int j=0; j<nhltIter2IterL3MuonTrackAssociated; j++){
-      FillHist("Iter2FromL2_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-        FillHist("Iter2FromL2_sig_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    //JH : Note that only Iter0s are allowed with the patatrack!
+
+    for(int j=0; j<nhltIter0IterL3MuonTrackAssociated; j++){
+      FillHist("Iter0FromL2_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      if( hltIter0IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+        FillHist("Iter0FromL2_sig_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
       }
       else{
-        FillHist("Iter2FromL2_fake_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        FillHist("Iter0FromL2_fake_mva",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
       }
-      if(hltIter2IterL3MuonTrackAssociated_pt->at(j)<8.){
-        FillHist("Iter2FromL2_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-        if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-          FillHist("Iter2FromL2_sig_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      if(hltIter0IterL3MuonTrackAssociated_pt->at(j)<8.){
+        FillHist("Iter0FromL2_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter0IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter0FromL2_sig_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
         else{
-          FillHist("Iter2FromL2_fake_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+          FillHist("Iter0FromL2_fake_mva_below8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
       }
-      else if(hltIter2IterL3MuonTrackAssociated_pt->at(j)>=8.){
-        FillHist("Iter2FromL2_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-        if( hltIter2IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-          FillHist("Iter2FromL2_sig_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      else if(hltIter0IterL3MuonTrackAssociated_pt->at(j)>=8.){
+        FillHist("Iter0FromL2_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter0IterL3MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter0FromL2_sig_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
         else{
-          FillHist("Iter2FromL2_fake_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+          FillHist("Iter0FromL2_fake_mva_above8",1./(1.+exp(-1.*hltIter2IterL3MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
       }
     }
-    for(int j=0; j<nhltIter2IterL3FromL1MuonTrackAssociated; j++){
-      FillHist("Iter2FromL1_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-      if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-        FillHist("Iter2FromL1_sig_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+    for(int j=0; j<nhltIter0IterL3FromL1MuonTrackAssociated; j++){
+      FillHist("Iter0FromL1_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      if( hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+        FillHist("Iter0FromL1_sig_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
       }
       else{
-        FillHist("Iter2FromL1_fake_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        FillHist("Iter0FromL1_fake_mva",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
       }
-      if(hltIter2IterL3FromL1MuonTrackAssociated_pt->at(j)<8.){
-        FillHist("Iter2FromL1_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-        if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-          FillHist("Iter2FromL1_sig_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      if(hltIter0IterL3FromL1MuonTrackAssociated_pt->at(j)<8.){
+        FillHist("Iter0FromL1_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter0FromL1_sig_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
         else{
-          FillHist("Iter2FromL1_fake_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+          FillHist("Iter0FromL1_fake_mva_below8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
       }
-      else if(hltIter2IterL3FromL1MuonTrackAssociated_pt->at(j)>=8.){
-        FillHist("Iter2FromL1_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
-        if( hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter2IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
-          FillHist("Iter2FromL1_sig_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+      else if(hltIter0IterL3FromL1MuonTrackAssociated_pt->at(j)>=8.){
+        FillHist("Iter0FromL1_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+        if( hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_status->at(j) == 1 && fabs(hltIter0IterL3FromL1MuonTrackAssociated_bestMatchTP_pdgId->at(j)) == 13 ){
+          FillHist("Iter0FromL1_sig_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
         else{
-          FillHist("Iter2FromL1_fake_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
+          FillHist("Iter0FromL1_fake_mva_above8",1./(1.+exp(-1.*hltIter2IterL3FromL1MuonTrackAssociated_mva->at(j))),genEventWeight,100,0,1);
         }
       }
-    }
+    } //JH : FIXME why call Iter2 as Iter0? For now, Ntupler is not consistent so Iter2 actually contains Iter0. In addition, Iter0 hasn't been filled with info(!).
 
   //==========================================track profile vs pileup===================================================//
 
-    pf_track->Fill(truePU,nhltIter2IterL3MuonTrack);
-    pf_trackFromL1->Fill(truePU,nhltIter2IterL3FromL1MuonTrack);
+    //JH : pt-dependent profile
+    int nhltIter0IterL3MuonTrack_below8 = 0;
+    int nhltIter0IterL3MuonTrack_above8 = 0;
+    int nhltIter0IterL3FromL1MuonTrack_below8 = 0;
+    int nhltIter0IterL3FromL1MuonTrack_above8 = 0;
+    for(unsigned int i=0; i<nhltIter0IterL3MuonTrack; i++){
+      if(hltIter0IterL3MuonTrack_pt->at(i)<8.) nhltIter0IterL3MuonTrack_below8++;
+      else if(hltIter0IterL3MuonTrack_pt->at(i)>=8.) nhltIter0IterL3MuonTrack_above8++;
+    }
+    for(unsigned int i=0; i<nhltIter0IterL3FromL1MuonTrack; i++){
+      if(hltIter0IterL3FromL1MuonTrack_pt->at(i)<8.) nhltIter0IterL3FromL1MuonTrack_below8++;
+      else if(hltIter0IterL3FromL1MuonTrack_pt->at(i)>=8.) nhltIter0IterL3FromL1MuonTrack_above8++;
+    }
+
+    pf_track->Fill(truePU,nhltIter0IterL3MuonTrack);
+    pf_track_below8->Fill(truePU,nhltIter0IterL3MuonTrack_below8);
+    pf_track_above8->Fill(truePU,nhltIter0IterL3MuonTrack_above8);
+    pf_trackFromL1->Fill(truePU,nhltIter0IterL3FromL1MuonTrack);
+    pf_trackFromL1_below8->Fill(truePU,nhltIter0IterL3FromL1MuonTrack_below8);
+    pf_trackFromL1_above8->Fill(truePU,nhltIter0IterL3FromL1MuonTrack_above8);
 
   }
   
@@ -2484,7 +2560,11 @@ void calculateEff_dist(TString input, TString output){
     pf->Write();
   }
   pf_track->Write();
+  pf_track_below8->Write();
+  pf_track_above8->Write();
   pf_trackFromL1->Write();
+  pf_trackFromL1_below8->Write();
+  pf_trackFromL1_above8->Write();
   fout.Close();
 
   for(auto& [histname,hist]:hists){
@@ -2497,7 +2577,11 @@ void calculateEff_dist(TString input, TString output){
     delete pfs[pfname];
   }
   delete pf_track;
+  delete pf_track_below8;
+  delete pf_track_above8;
   delete pf_trackFromL1;
+  delete pf_trackFromL1_below8;
+  delete pf_trackFromL1_above8;
 
 }
 
