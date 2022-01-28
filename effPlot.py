@@ -965,8 +965,8 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
             this_pf.GetYaxis().SetLabelSize(0.025)
             this_pf.GetYaxis().SetTitle("average # of "+this_num+" tracks")
             this_pf.GetXaxis().SetRangeUser(30.,80.)
-            #this_pf.GetYaxis().SetRangeUser(0.,50.)
             this_pf.GetYaxis().SetRangeUser(0.,this_pf.GetMaximum()*5)
+            if this_num=="Iter0FromL1": this_pf.GetYaxis().SetRangeUser(0.,20.)
 
           else:
             option_gr = "SAME"
@@ -994,7 +994,7 @@ for this_proc, this_fltr in [(this_proc,this_fltr) for this_proc in args.proc fo
         #os.system("mkdir -p Winter21_new/"+this_proc+"/profile/")
         #c_pf_track.SaveAs("Winter21_new/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile.png")
         os.system("mkdir -p Summer21/"+this_proc+"/profile/")
-        c_pf_track.SaveAs("Summer21/"+this_proc+"/profile/"+this_proc+"_"+this_fltr+"_"+this_num+"_profile"+mva_tags[j]+".png")
+        c_pf_track.SaveAs("Summer21/"+this_proc+"/profile/"+this_proc+"_"+this_num+"_profile"+mva_tags[j]+".png")
 
 
 """
